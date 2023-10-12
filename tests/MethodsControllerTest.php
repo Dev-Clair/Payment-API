@@ -106,7 +106,7 @@ class MethodsControllerTest extends TestCase
     /**
      * Test the "getDeactivate" endpoint.
      */
-    public function testGetDeactivate(): void
+    public function testDeactivate(): void
     {
         $response = $this->http->request('GET', 'v1/methods/deactivate/{id:[0-9]+}' . rand(1, 5));
 
@@ -122,7 +122,7 @@ class MethodsControllerTest extends TestCase
     /**
      * Test the "getReactivate" endpoint.
      */
-    public function testGetReactivate(): void
+    public function testReactivate(): void
     {
         $response = $this->http->request('GET', 'v1/methods/reactivate/{id:[0-9]+}');
 

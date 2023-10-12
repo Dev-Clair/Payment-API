@@ -106,7 +106,7 @@ class CustomersControllerTest extends TestCase
     /**
      * Test the "getDeactivate" endpoint.
      */
-    public function testGetDeactivate(): void
+    public function testDeactivate(): void
     {
         $response = $this->http->request('GET', 'v1/customers/deactivate/{id:[0-9]+}' . rand(1, 5));
 
@@ -122,7 +122,7 @@ class CustomersControllerTest extends TestCase
     /**
      * Test the "getReactivate" endpoint.
      */
-    public function testGetReactivate(): void
+    public function testReactivate(): void
     {
         $response = $this->http->request('GET', 'v1/customers/reactivate/{id:[0-9]+}');
 
