@@ -109,7 +109,7 @@ class CustomersController implements ControllerContract
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Updated customer data",
+     *         description="Update customer data",
      *         @OA\JsonContent(ref="#/components/schemas/UpdatedCustomerData")
      *     ),
      *     @OA\Response(

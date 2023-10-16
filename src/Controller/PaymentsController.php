@@ -104,12 +104,12 @@ class PaymentsController implements ControllerContract
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the payment to update.",
+     *         description="ID of the payment record to update.",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Updated payment data",
+     *         description="Update of payment data",
      *         @OA\JsonContent(ref="#/components/schemas/UpdatedMethodData")
      *     ),
      *     @OA\Response(
@@ -149,7 +149,7 @@ class PaymentsController implements ControllerContract
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the payment to delete.",
+     *         description="ID of the payment record to delete.",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(

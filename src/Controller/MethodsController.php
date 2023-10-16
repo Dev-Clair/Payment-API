@@ -109,7 +109,7 @@ class MethodsController implements ControllerContract
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Updated method data",
+     *         description="Update method data",
      *         @OA\JsonContent(ref="#/components/schemas/UpdatedMethodData")
      *     ),
      *     @OA\Response(
