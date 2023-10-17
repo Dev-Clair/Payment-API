@@ -2,9 +2,10 @@ version: "3.1"
 services:
   mariadb:
     image: "mariadb:11.0"
+    container_name: payment_api_mariadb
     working_dir: /application
     volumes:
-      - 'C:\Users\Samuel Ebuka\Desktop\Payment-API.:/application'
+      - ".:/application"
     environment:
       - "MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_USER}"
       - "MYSQL_DATABASE=${MARIADB_DB_NAME}"
@@ -15,16 +16,41 @@ services:
 
   webserver:
     image: "nginx:alpine"
+    container_name: payment_api_webserver
     working_dir: /application
     volumes:
-      - 'C:\Users\Samuel Ebuka\Desktop\Payment-API.:/application'
+      - ".:/application"
       - "./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf"
     ports:
       - "26000:80"
 
   php-fpm:
     build: phpdocker/php-fpm
+    container_name: payment_api_php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     working_dir: /application
+    expose:
+      - 9000
+    environment:
+      - PHP_IDE_CONFIG=serverName=localhost
     volumes:
-      - 'C:\Users\Samuel Ebuka\Desktop\Payment-API.:/application'
+      - ".:/application"
       - "./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/8.2/fpm/conf.d/99-overrides.ini"
+      - "./phpdocker/php-fpm/error_reporting.ini:/etc/php/8.2/fpm/conf.d/error_reporting.ini"
+
+  phpmyadmin:
+    image: "phpmyadmin/phpmyadmin:latest"
+    container_name: payment_api_phpmyadmin
+    ports:
+      - "26000:80"
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+
+  composer:
+    image: "composer:latest"
+    container_name: payment_api_composer
+    command: ["composer", "update"]
+    volumes:
+      - ".:/app"
