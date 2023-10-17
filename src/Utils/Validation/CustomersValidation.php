@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Payment_API\Utils;
+namespace Payment_API\Utils\Validation;
 
 class CustomersValidation
 {
