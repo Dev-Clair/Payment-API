@@ -7,7 +7,7 @@ namespace Payment_API\Middleware;
 use Slim\Psr7\Response as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Payment_API\Trait\Response_405_Trait as Response_405;
+use Payment_API\Utils\Trait\Response_405_Trait as Response_405;
 
 class MethodTypeMiddleware
 {
