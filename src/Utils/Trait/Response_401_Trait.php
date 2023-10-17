@@ -9,18 +9,18 @@ use Slim\Psr7\Response as Response;
 
 trait Response_401_Trait
 {
-    public function response_401(array|string $message, array|string|bool|null $data): Response
+    public function response_401(array|string $message, array|string|bool|null $resource): Response
     {
         $status = [
-            'status' =>   "Unauthorized",
+            'status' => StatusCodeInterface::STATUS_UNAUTHORIZED,
             'message' => $message,
-            'data' => $data ?? null
+            'resource' => $resource ?? null
         ];
 
         $response = new Response(StatusCodeInterface::STATUS_UNAUTHORIZED);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
-        return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
+        return $response;
     }
 }

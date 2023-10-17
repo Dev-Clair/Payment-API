@@ -25,43 +25,51 @@ class JSONResponse
     use Response_422;
     use Response_500;
 
-    public static function response_200(): Response
+    public static function response_200(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_200();
+        return static::response_200(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_201(): Response
+    public static function response_201(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_201();
+        return static::response_201(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_400(): Response
+    public static function response_400(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_400();
+        return static::response_400(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_401(): Response
+    public static function response_401(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_401();
+        return static::response_401(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_404(): Response
+    public static function response_404(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_404();
+        return static::response_404(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_405(): Response
+    public static function response_405(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_405();
+        return static::response_405(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_422(): Response
+    public static function response_422(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_422();
+        return static::response_422(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function response_500(): Response
+    public static function response_500(array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_500();
+        return static::response_500(message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 }

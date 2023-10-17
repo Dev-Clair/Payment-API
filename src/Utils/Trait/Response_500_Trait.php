@@ -9,18 +9,18 @@ use Slim\Psr7\Response as Response;
 
 trait Response_500_Trait
 {
-    public function response_500(array|string $message, array|string|bool|null $data): Response
+    public function response_500(array|string $message, array|string|bool|null $resource): Response
     {
         $status = [
-            'status' =>   "Internal Server Error",
+            'status' => StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR,
             'message' => $message,
-            'data' => $data ?? null
+            'resource' => $resource ?? null
         ];
 
         $response = new Response(StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
-        return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
+        return $response;
     }
 }

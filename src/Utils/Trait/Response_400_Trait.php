@@ -9,18 +9,18 @@ use Slim\Psr7\Response as Response;
 
 trait Response_400_Trait
 {
-    public function response_400(array|string $message, array|string|bool|null $data): Response
+    public function response_400(array|string $message, array|string|bool|null $resource): Response
     {
         $status = [
-            'status' =>   "Bad Request",
+            'status' => StatusCodeInterface::STATUS_BAD_REQUEST,
             'message' => $message,
-            'data' => $data ?? null
+            'resource' => $resource ?? null
         ];
 
         $response = new Response(StatusCodeInterface::STATUS_BAD_REQUEST);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
-        return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
+        return $response;
     }
 }

@@ -9,18 +9,18 @@ use Slim\Psr7\Response as Response;
 
 trait Response_404_Trait
 {
-    public function response_404(array|string $message, array|string|bool|null $data): Response
+    public function response_404(array|string $message, array|string|bool|null $resource): Response
     {
         $status = [
-            'status' =>   "Not Found",
+            'status' => StatusCodeInterface::STATUS_NOT_FOUND,
             'message' => $message,
-            'data' => $data ?? null
+            'resource' => $resource ?? null
         ];
 
         $response = new Response(StatusCodeInterface::STATUS_NOT_FOUND);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
-        return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
+        return $response;
     }
 }

@@ -46,9 +46,11 @@ class CustomersController implements ControllerContract
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        return JSONResponse::response_200();
+        $resource = "";
 
-        return JSONResponse::response_500();
+        return JSONResponse::response_200("SUCCESS: Retrieved", $resource);
+
+        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
     }
 
 
@@ -82,11 +84,13 @@ class CustomersController implements ControllerContract
      */
     public function post(Request $request, Response $response, array $args): Response
     {
-        return JSONResponse::response_201();
+        $resource = "";
 
-        return JSONResponse::response_422();
+        return JSONResponse::response_201("SUCCESS: Created", $resource);
 
-        return JSONResponse::response_500();
+        return JSONResponse::response_422("ERROR: Unprocessable Entity", $resource);
+
+        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
     }
 
 
@@ -132,13 +136,15 @@ class CustomersController implements ControllerContract
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        return JSONResponse::response_200();
+        $resource = "";
 
-        return JSONResponse::response_404();
+        return JSONResponse::response_200("SUCCESS: Modified", $resource);
 
-        return JSONResponse::response_422();
+        return JSONResponse::response_404("ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500();
+        return JSONResponse::response_422("ERROR: Unprocessable Entity", $resource);
+
+        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
     }
 
 
@@ -174,11 +180,13 @@ class CustomersController implements ControllerContract
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        return JSONResponse::response_200();
+        $resource = "";
 
-        return JSONResponse::response_404();
+        return JSONResponse::response_200("SUCCESS: Deleted", $resource);
 
-        return JSONResponse::response_500();
+        return JSONResponse::response_404("ERROR: Resource Not Found", $resource);
+
+        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
     }
 
 
@@ -209,9 +217,11 @@ class CustomersController implements ControllerContract
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
-        return JSONResponse::response_200();
+        $resource = "";
 
-        return JSONResponse::response_500();
+        return JSONResponse::response_200("SUCCESS: Deactivated", $resource);
+
+        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
     }
 
 
@@ -242,8 +252,10 @@ class CustomersController implements ControllerContract
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
-        return JSONResponse::response_200();
+        $resource = "";
 
-        return JSONResponse::response_500();
+        return JSONResponse::response_200("SUCCESS: Reactivated", $resource);
+
+        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
     }
 }
