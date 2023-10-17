@@ -7,9 +7,10 @@ namespace Payment_API\Controller;
 use Slim\Psr7\Response as Response;
 use Slim\Psr7\Request as Request;
 use Payment_API\Model\PaymentsModel;
-use OpenApi\Annotations as OA;
 use Payment_API\Contracts\ControllerContract;
 use Payment_API\HttpResponse\JSONResponse;
+use Payment_API\Enums\PaymentsResponseTitle;
+use OpenApi\Annotations as OA;
 
 
 /**
@@ -48,9 +49,9 @@ class PaymentsController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Retrieved", $resource);
+        return JSONResponse::response_200(PaymentsResponseTitle::GET, "SUCCESS: Retrieved", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(PaymentsResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -86,11 +87,11 @@ class PaymentsController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_201("SUCCESS: Created", $resource);
+        return JSONResponse::response_201(PaymentsResponseTitle::POST, "SUCCESS: Created", $resource);
 
-        return JSONResponse::response_422("ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(PaymentsResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(PaymentsResponseTitle::POST, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -138,13 +139,13 @@ class PaymentsController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Modified", $resource);
+        return JSONResponse::response_200(PaymentsResponseTitle::PUT, "SUCCESS: Modified", $resource);
 
-        return JSONResponse::response_404("ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(PaymentsResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_422("ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(PaymentsResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(PaymentsResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -182,10 +183,10 @@ class PaymentsController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Deleted", $resource);
+        return JSONResponse::response_200(PaymentsResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
 
-        return JSONResponse::response_404("ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(PaymentsResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(PaymentsResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
     }
 }

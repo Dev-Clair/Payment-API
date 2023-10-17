@@ -7,9 +7,10 @@ namespace Payment_API\Controller;
 use Slim\Psr7\Response as Response;
 use Slim\Psr7\Request as Request;
 use Payment_API\Model\CustomersModel;
-use OpenApi\Annotations as OA;
 use Payment_API\Contracts\ControllerContract;
 use Payment_API\HttpResponse\JSONResponse;
+use Payment_API\Enums\CustomersResponseTitle;
+use OpenApi\Annotations as OA;
 
 
 /**
@@ -48,9 +49,9 @@ class CustomersController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Retrieved", $resource);
+        return JSONResponse::response_200(CustomersResponseTitle::GET, "SUCCESS: Retrieved", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(CustomersResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -86,11 +87,11 @@ class CustomersController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_201("SUCCESS: Created", $resource);
+        return JSONResponse::response_201(CustomersResponseTitle::POST, "SUCCESS: Created", $resource);
 
-        return JSONResponse::response_422("ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(CustomersResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(CustomersResponseTitle::POST, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -138,13 +139,13 @@ class CustomersController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Modified", $resource);
+        return JSONResponse::response_200(CustomersResponseTitle::PUT, "SUCCESS: Modified", $resource);
 
-        return JSONResponse::response_404("ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(CustomersResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_422("ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(CustomersResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(CustomersResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -182,11 +183,11 @@ class CustomersController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Deleted", $resource);
+        return JSONResponse::response_200(CustomersResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
 
-        return JSONResponse::response_404("ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(CustomersResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(CustomersResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -209,6 +210,11 @@ class CustomersController implements ControllerContract
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=500,
      *         description="Internal Server Error",
      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -219,9 +225,11 @@ class CustomersController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Deactivated", $resource);
+        return JSONResponse::response_200(CustomersResponseTitle::DEACTIVATE, "SUCCESS: Deactivated", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_404(CustomersResponseTitle::DEACTIVATE, "ERROR: Resource Not Found", $resource);
+
+        return JSONResponse::response_500(CustomersResponseTitle::DEACTIVATE, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -244,6 +252,11 @@ class CustomersController implements ControllerContract
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=500,
      *         description="Internal Server Error",
      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -254,8 +267,10 @@ class CustomersController implements ControllerContract
     {
         $resource = "";
 
-        return JSONResponse::response_200("SUCCESS: Reactivated", $resource);
+        return JSONResponse::response_200(CustomersResponseTitle::REACTIVATE, "SUCCESS: Reactivated", $resource);
 
-        return JSONResponse::response_500("ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_404(CustomersResponseTitle::REACTIVATE, "ERROR: Resource Not Found", $resource);
+
+        return JSONResponse::response_500(CustomersResponseTitle::REACTIVATE, "ERROR: Internal Server Error", $resource);
     }
 }
