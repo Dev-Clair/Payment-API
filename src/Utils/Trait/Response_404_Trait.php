@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Payment_API\Trait;
+namespace Payment_API\Utils\Trait;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Psr7\Response as Response;
 
-trait Response_500_Trait
+trait Response_404_Trait
 {
-    public function response_500(array|string $message, array|string|bool|null $data): Response
+    public function response_404(array|string $message, array|string|bool|null $data): Response
     {
         $status = [
-            'status' =>   "Internal Server Error",
+            'status' =>   "Not Found",
             'message' => $message,
             'data' => $data ?? null
         ];
 
-        $response = new Response(StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
+        $response = new Response(StatusCodeInterface::STATUS_NOT_FOUND);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 

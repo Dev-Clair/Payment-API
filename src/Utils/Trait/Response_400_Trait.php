@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Payment_API\Trait;
+namespace Payment_API\Utils\Trait;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Psr7\Response as Response;
 
-trait Response_404_Trait
+trait Response_400_Trait
 {
-    public function response_404(array|string $message, array|string|bool|null $data): Response
+    public function response_400(array|string $message, array|string|bool|null $data): Response
     {
         $status = [
-            'status' =>   "Not Found",
+            'status' =>   "Bad Request",
             'message' => $message,
             'data' => $data ?? null
         ];
 
-        $response = new Response(StatusCodeInterface::STATUS_NOT_FOUND);
+        $response = new Response(StatusCodeInterface::STATUS_BAD_REQUEST);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 

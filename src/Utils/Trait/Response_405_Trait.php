@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Payment_API\Trait;
+namespace Payment_API\Utils\Trait;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Psr7\Response as Response;

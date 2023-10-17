@@ -9,12 +9,7 @@ use Slim\Psr7\Request as Request;
 use Payment_API\Model\MethodsModel;
 use OpenApi\Annotations as OA;
 use Payment_API\Contracts\ControllerContract;
-use Payment_API\Trait\Response_200_Trait as Response_200;
-use Payment_API\Trait\Response_201_Trait as Response_201;
-use Payment_API\Trait\Response_400_Trait as Response_400;
-use Payment_API\Trait\Response_404_Trait as Response_404;
-use Payment_API\Trait\Response_422_Trait as Response_422;
-use Payment_API\Trait\Response_500_Trait as Response_500;
+use Payment_API\HttpResponse\JSONResponse;
 
 
 /**
@@ -26,13 +21,6 @@ use Payment_API\Trait\Response_500_Trait as Response_500;
  */
 class MethodsController implements ControllerContract
 {
-    use Response_200;
-    use Response_201;
-    use Response_400;
-    use Response_404;
-    use Response_422;
-    use Response_500;
-
     public function __construct()
     {
     }
@@ -58,6 +46,9 @@ class MethodsController implements ControllerContract
      */
     public function get(Request $request, Response $response, array $args): Response
     {
+        return JSONResponse::response_200();
+
+        return JSONResponse::response_500();
     }
 
 
@@ -91,6 +82,11 @@ class MethodsController implements ControllerContract
      */
     public function post(Request $request, Response $response, array $args): Response
     {
+        return JSONResponse::response_201();
+
+        return JSONResponse::response_422();
+
+        return JSONResponse::response_500();
     }
 
 
@@ -136,6 +132,13 @@ class MethodsController implements ControllerContract
      */
     public function put(Request $request, Response $response, array $args): Response
     {
+        return JSONResponse::response_200();
+
+        return JSONResponse::response_404();
+
+        return JSONResponse::response_422();
+
+        return JSONResponse::response_500();
     }
 
 
@@ -171,6 +174,11 @@ class MethodsController implements ControllerContract
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
+        return JSONResponse::response_200();
+
+        return JSONResponse::response_404();
+
+        return JSONResponse::response_500();
     }
 
 
@@ -201,6 +209,9 @@ class MethodsController implements ControllerContract
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
+        return JSONResponse::response_200();
+
+        return JSONResponse::response_500();
     }
 
 
@@ -231,5 +242,8 @@ class MethodsController implements ControllerContract
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
+        return JSONResponse::response_200();
+
+        return JSONResponse::response_500();
     }
 }

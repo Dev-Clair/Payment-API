@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Payment_API\Trait;
+namespace Payment_API\Utils\Trait;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Slim\Psr7\Response as Response;
 
-trait Response_200_Trait
+trait Response_201_Trait
 {
-    public function response_200(array|string $message, array|string|bool|null $data): Response
+    public function response_201(array|string $message, array|string|bool|null $data): Response
     {
         $status = [
-            'status' =>   "OK",
+            'status' =>   "Resource Created",
             'message' => $message,
             'data' => $data
         ];
 
-        $response = new Response(StatusCodeInterface::STATUS_OK);
+        $response = new Response(StatusCodeInterface::STATUS_CREATED);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
