@@ -7,11 +7,10 @@ namespace Payment_API\Controller;
 use Slim\Psr7\Response as Response;
 use Slim\Psr7\Request as Request;
 use Payment_API\Model\PaymentsModel;
-use Payment_API\Contracts\ControllerContract;
+use Payment_API\Interface\ControllerInterface;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\PaymentsResponseTitle;
 use OpenApi\Annotations as OA;
-
 
 /**
  * @OA\Info(
@@ -20,7 +19,7 @@ use OpenApi\Annotations as OA;
  *   description="API for managing customer payments",
  * )
  */
-class PaymentsController implements ControllerContract
+class PaymentsController implements ControllerInterface
 {
     public function __construct()
     {

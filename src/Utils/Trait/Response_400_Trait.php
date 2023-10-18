@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Payment_API\Utils\Trait;
 
 use Fig\Http\Message\StatusCodeInterface;
-use Payment_API\Contracts\EnumsContract;
+use Payment_API\Interface\EnumsInterface;
 use Slim\Psr7\Response as Response;
 
 trait Response_400_Trait
 {
-    public function response_400(EnumsContract $title, array|string $message, array|string|bool|null $resource): Response
+    public function response_400(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
         $status = [
             'title' => $title,
