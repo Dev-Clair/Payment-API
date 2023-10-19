@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Payment_API\Services;
 
-use Payment_API\Interface\ServicesInterface;
+use Payment_API\Interface\InvoiceServiceInterface;
 
-class InvoiceService implements ServicesInterface
+class InvoiceService implements InvoiceServiceInterface
 {
 }

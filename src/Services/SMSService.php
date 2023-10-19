@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Payment_API\Services;
 
-use Payment_API\Interface\ServicesInterface;
+use Payment_API\Interface\SmsServiceInterface;
 
-class SMSService implements ServicesInterface
+class SMSService implements SmsServiceInterface
 {
 }
