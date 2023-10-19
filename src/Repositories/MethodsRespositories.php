@@ -6,6 +6,6 @@ namespace Payment_API\Repositories;
 
 use Payment_API\Interface\RepositoriesInterface;
 
-class MethodsRepositories implements RespositoriesInterface
+class MethodsRepositories implements RepositoriesInterface
 {
 }
