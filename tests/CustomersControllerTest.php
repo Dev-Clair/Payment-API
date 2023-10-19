@@ -21,7 +21,7 @@ class CustomersControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->http = new Client(['base_uri' => 'http://localhost:8888/']);
+        $this->http = new Client(['base_uri' => 'http://localhost:26000/']);
     }
 
     // protected function tearDown(): void
