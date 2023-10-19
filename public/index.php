@@ -4,6 +4,7 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Payment_API\Middleware\CustomErrorHandlerMiddleWare;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\PaymentsController;
@@ -26,7 +27,8 @@ $app->get('/openapi', function () {
 // API Version Info
 $app->get('/v1', function (Request $request, Response $response, $args) {
     $response->getBody()->write(json_encode([
-        "info" => "Payment API",
+        "title" => "Payment API",
+        "description" => "Aggregates several payment gateways to provide customers with an all-in-one payment solution",
         "status" => "valid",
         "version" => "1.0"
     ]));
@@ -53,7 +55,7 @@ $app->group('/v1/customers', function (RouteCollectorProxy $group) {
     $group->get('/reactivate/{id:[0-9]+}', '');
 });
 
-// Payments (transactions) Endpoints
+// Payments Endpoints
 $app->group('/v1/payments', function (RouteCollectorProxy $group) {
     $group->get('', '');
     $group->post('', '');
@@ -62,7 +64,12 @@ $app->group('/v1/payments', function (RouteCollectorProxy $group) {
 });
 
 // Add Error Middleware
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $displayErrors = $_ENV['APP_ENV'] != 'development';
+
+$displayErrors = true;
+$customErrorHandler = new CustomErrorHandlerMiddleWare($app);
+
+$errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 $app->run();
