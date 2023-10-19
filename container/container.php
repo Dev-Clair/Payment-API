@@ -6,7 +6,7 @@ use Dotenv\Dotenv;
 use DI\Container;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
@@ -54,9 +54,9 @@ $container->set('settings', function ($container) {
                 'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
                 'host' => $_ENV['MARIADB_HOST'] ?? 'localhost',
                 'port' => 3306,
-                'dbname' => $_ENV['MARIADB_DB_NAME'] ?? 'mydb',
-                'user' => $_ENV['MARIADB_DB_USER'] ?? 'user',
-                'password' => $_ENV['MARIADB_DB_USER_PASSWORD'] ?? 'pass'
+                'dbname' => $_ENV['MARIADB_DB_NAME'] ?? 'payments',
+                'user' => $_ENV['MARIADB_DB_USER'] ?? 'root',
+                'password' => $_ENV['MARIADB_DB_USER_PASSWORD'] ?? ''
             ]
         ]
 
@@ -73,14 +73,14 @@ $container->set(EntityManager::class, function (Container $c): EntityManager {
         DoctrineProvider::wrap(new ArrayAdapter()) :
         DoctrineProvider::wrap(new FilesystemAdapter(directory: $settings['doctrine']['cache_dir']));
 
-    $config = Setup::createAttributeMetadataConfiguration(
+    $config = ORMSetup::createAttributeMetadataConfiguration(
         $settings['doctrine']['metadata_dirs'],
         $settings['doctrine']['dev_mode'],
         null,
-        $cache
+        null
     );
 
-    return EntityManager::create($settings['doctrine']['connection'], $config);
+    return new EntityManager($settings['doctrine']['connection'], $config);
 });
 
 $container->set(MethodsRepositories::class, function (Container $container) {
