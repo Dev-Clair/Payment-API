@@ -26,7 +26,7 @@ $container = new Container;
 
 const APP_ROOT = __DIR__ . "/..";
 
-$container->set('settings', function ($container) {
+$container->set('settings', function () {
     return [
         'displayErrorDetails' => true,
         'determineRouteBeforeAppMiddleware' => false,
