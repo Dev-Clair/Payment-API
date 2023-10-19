@@ -63,9 +63,11 @@ $container->set('settings', function () {
     ];
 });
 
-$container->set(EntityManager::class, function (Container $c): EntityManager {
-    /** @var array $settings */
-    $settings = $c->get('settings');
+$container->set(EntityManager::class, function (Container $container): EntityManager {
+    /**
+     * @var array $settings
+     */
+    $settings = $container->get('settings');
 
     // Use the ArrayAdapter or the FilesystemAdapter depending on the value of the 'dev_mode' setting
     // You can substitute the FilesystemAdapter for any other cache you prefer from the symfony/cache library
@@ -101,8 +103,8 @@ $container->set(PaymentsRepositories::class, function (Container $container) {
 
 $container->set(Logger::class, function (Container $container) {
     $logger = new Logger('Payment_API');
-    $logger->pushHandler((new StreamHandler(__DIR__ . '/../logs/alert.log', Level::Alert)));
-    $logger->pushHandler((new StreamHandler(__DIR__ . '/../logs/critical.log', Level::Critical)));
+    $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/alert.log', Level::Alert));
+    $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/critical.log', Level::Critical));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/error.log', Level::Error));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/warning.log', Level::Warning));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/notice.log', Level::Notice));
