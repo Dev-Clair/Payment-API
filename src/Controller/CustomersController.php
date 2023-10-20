@@ -301,8 +301,6 @@ class CustomersController implements ControllerInterface
 
         return JSONResponse::response_200(CustomersResponseTitle::DEACTIVATE, "SUCCESS: Deactivated", $resource);
 
-        return JSONResponse::response_404(CustomersResponseTitle::DEACTIVATE, "ERROR: Resource Not Found", $resource);
-
         $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::DEACTIVATE, "ERROR: Internal Server Error", $resource);
     }
@@ -350,8 +348,6 @@ class CustomersController implements ControllerInterface
         $resource = "";
 
         return JSONResponse::response_200(CustomersResponseTitle::REACTIVATE, "SUCCESS: Reactivated", $resource);
-
-        return JSONResponse::response_404(CustomersResponseTitle::REACTIVATE, "ERROR: Resource Not Found", $resource);
 
         $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::REACTIVATE, "ERROR: Internal Server Error", $resource);
