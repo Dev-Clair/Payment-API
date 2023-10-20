@@ -97,8 +97,8 @@ class CustomersController implements ControllerInterface
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
-     *         response=404,
-     *         description="Not Found",
+     *         response=400,
+     *         description="Bad Request",
      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     ),
      *     @OA\Response(
