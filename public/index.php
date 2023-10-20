@@ -47,7 +47,7 @@ $app->group('/v1/methods', function (RouteCollectorProxy $group) {
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
-    $group->get('', '');
+    $group->get('', [CustomersController::class, 'get']);
     $group->post('', '');
     $group->put('/{id:[0-9]+}', '');
     $group->delete('/{id:[0-9]+}', '');
