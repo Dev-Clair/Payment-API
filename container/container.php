@@ -36,7 +36,7 @@ $container->set('settings', function () {
         'determineRouteBeforeAppMiddleware' => false,
         'doctrine' => [
             'dev_mode' => true,
-            'metadata_dirs' => [APP_ROOT . '/src/Entity'],
+            'metadata_dirs' => [APP_ROOT . '/src'],
             'connection' => [
                 'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
                 'host' => $_ENV['MARIADB_HOST'] ?? 'localhost',
@@ -66,47 +66,31 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
     return new EntityManager($conn, $config);
 });
 
-// $container->set(MethodsRepository::class, function (Container $container) {
-//     $entityManager = $container->get(EntityManager::class);
-//     return new MethodsRepository($entityManager);
-// });
-
-// $container->set(CustomersRepository::class, function (Container $container) {
-//     $entityManager = $container->get(EntityManager::class);
-//     return new CustomersRepository($entityManager);
-// });
-
-// $container->set(PaymentsRepository::class, function (Container $container) {
-//     $entityManager = $container->get(EntityManager::class);
-//     return new PaymentsRepository($entityManager);
-// });
-
-$container->set(RepositoryInterface::class, function (Container $container, string $repositoryType) {
+$container->set(MethodsRepository::class, function (Container $container) {
     $entityManager = $container->get(EntityManager::class);
-
-    switch ($repositoryType) {
-        case 'MethodsRepository':
-            return new MethodsRepository($entityManager);
-        case 'CustomersRepository':
-            return new CustomersRepository($entityManager);
-        case 'PaymentsRepository':
-            return new PaymentsRepository($entityManager);
-        default:
-            throw new InvalidArgumentException("Invalid repository type: $repositoryType");
-    }
+    return new MethodsRepository($entityManager);
 });
 
-$container->set(EntityInterface::class, function (Container $container, string $entityType) {
-    switch ($entityType) {
-        case 'MethodsEntity':
-            return new MethodsEntity;
-        case 'CustomersEntity':
-            return new CustomersEntity;
-        case 'PaymentsEntity':
-            return new PaymentsEntity;
-        default:
-            throw new InvalidArgumentException("Invalid entity type: $entityType");
-    }
+$container->set(CustomersRepository::class, function (Container $container) {
+    $entityManager = $container->get(EntityManager::class);
+    return new CustomersRepository($entityManager);
+});
+
+$container->set(PaymentsRepository::class, function (Container $container) {
+    $entityManager = $container->get(EntityManager::class);
+    return new PaymentsRepository($entityManager);
+});
+
+$container->set(MethodsEntity::class, function (Container $container) {
+    return new MethodsEntity;
+});
+
+$container->set(CustomersEntity::class, function (Container $container) {
+    return new CustomersEntity;
+});
+
+$container->set(PaymentsEntity::class, function (Container $container) {
+    return new PaymentsEntity;
 });
 
 $container->set(

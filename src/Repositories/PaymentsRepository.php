@@ -16,12 +16,12 @@ class PaymentsRepository implements RepositoryInterface
 
     public function findAll(): array
     {
-        $this->entityManager->getRepository(PaymentsEntity::class)->findAll();
+        return $this->entityManager->getRepository(PaymentsEntity::class)->findAll();
     }
 
     public function findById(int $id): PaymentsEntity|null
     {
-        $this->entityManager->getRepository(PaymentsEntity::class)->find($id);
+        return $this->entityManager->getRepository(PaymentsEntity::class)->find($id);
     }
 
     public function store(PaymentsEntity $paymentsEntity): void

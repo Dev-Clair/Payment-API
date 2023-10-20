@@ -16,12 +16,12 @@ class MethodsRepository implements RepositoryInterface
 
     public function findAll(): array
     {
-        $this->entityManager->getRepository(MethodsEntity::class)->findAll();
+        return $this->entityManager->getRepository(MethodsEntity::class)->findAll();
     }
 
     public function findById(int $id): MethodsEntity|null
     {
-        $this->entityManager->getRepository(MethodsEntity::class)->find($id);
+        return $this->entityManager->getRepository(MethodsEntity::class)->find($id);
     }
 
     public function store(MethodsEntity $methodsEntity): void

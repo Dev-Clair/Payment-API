@@ -16,12 +16,12 @@ class CustomersRepository implements RepositoryInterface
 
     public function findAll(): array
     {
-        $this->entityManager->getRepository(CustomersEntity::class)->findAll();
+        return $this->entityManager->getRepository(CustomersEntity::class)->findAll();
     }
 
     public function findById(int $id): CustomersEntity|null
     {
-        $this->entityManager->getRepository(CustomersEntity::class)->find($id);
+        return $this->entityManager->getRepository(CustomersEntity::class)->find($id);
     }
 
     public function store(CustomersEntity $customersEntity): void
