@@ -30,6 +30,9 @@ $container = new Container;
 
 const APP_ROOT = __DIR__ . "/..";
 
+/**
+ *  Register binding: Configuration Settings
+ */
 $container->set('settings', function () {
     return [
         'displayErrorDetails' => true,
@@ -50,6 +53,9 @@ $container->set('settings', function () {
     ];
 });
 
+/**
+ * Register binding: ORM EntityManager
+ */
 $container->set(EntityManager::class, function (Container $container): EntityManager {
     /**
      * @var array $settings
@@ -66,6 +72,9 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
     return new EntityManager($conn, $config);
 });
 
+/**
+ * Register binding: Repositories
+ */
 $container->set(MethodsRepository::class, function (Container $container) {
     $entityManager = $container->get(EntityManager::class);
     return new MethodsRepository($entityManager);
@@ -81,6 +90,9 @@ $container->set(PaymentsRepository::class, function (Container $container) {
     return new PaymentsRepository($entityManager);
 });
 
+/**
+ * Register binding: Entities
+ */
 $container->set(MethodsEntity::class, function (Container $container) {
     return new MethodsEntity;
 });
@@ -93,6 +105,9 @@ $container->set(PaymentsEntity::class, function (Container $container) {
     return new PaymentsEntity;
 });
 
+/**
+ * Register binding: Services Interface
+ */
 $container->set(
     SmsServiceInterface::class,
     function (Container $container) {
@@ -100,6 +115,9 @@ $container->set(
     }
 );
 
+/**
+ * Register binding: Logger
+ */
 $container->set(Logger::class, function (Container $container) {
     $logger = new Logger('Payment_API');
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/alert.log', Level::Alert));
