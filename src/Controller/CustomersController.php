@@ -28,18 +28,20 @@ use OpenApi\Annotations as OA;
  */
 class CustomersController implements ControllerInterface
 {
-    protected CustomersEntity $customersEntity;
-
-    protected CustomersRepository $customersRepository;
-
-    protected Logger $logger;
-
     protected EmailValidationService $emailValidationService;
 
     protected SmsService $smsService;
 
     public function __construct(
+
+        protected CustomersEntity $customersEntity,
+
+        protected CustomersRepository $customersRepository,
+
+        protected Logger $logger,
+
         EmailValidationServiceInterface $emailValidationService,
+
         SmsServiceInterface $smsService
     ) {
         $this->emailValidationService = $emailValidationService;
@@ -73,7 +75,7 @@ class CustomersController implements ControllerInterface
             return JSONResponse::response_200(CustomersResponseTitle::GET, "SUCCESS: Retrieved", $resource);
         }
 
-        $this->logger->info('No Resource Found for Request', ['Internal Server Error' => $resource]);
+        $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 
@@ -95,6 +97,11 @@ class CustomersController implements ControllerInterface
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=422,
      *         description="Unprocessable Entity",
      *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
@@ -108,6 +115,13 @@ class CustomersController implements ControllerInterface
      */
     public function post(Request $request, Response $response, array $args): Response
     {
+        $requestBody = json_decode($request->getBody()->getContents(), true);
+
+        if (empty($requestBody)) {
+            $this->logger->alert('Bad Request', ['Request Body' => 'Empty']);
+            return JSONResponse::response_400(CustomersResponseTitle::POST, "ERROR: Bad Request", $requestBody);
+        }
+
         $resource = "";
 
         return JSONResponse::response_201(CustomersResponseTitle::POST, "SUCCESS: Created", $resource);

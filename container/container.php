@@ -129,6 +129,7 @@ $container->set(
  */
 $container->set(Logger::class, function (Container $container) {
     $logger = new Logger('Payment_API');
+    $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/emergency.log', Level::Emergency));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/alert.log', Level::Alert));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/critical.log', Level::Critical));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/error.log', Level::Error));
