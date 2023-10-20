@@ -11,9 +11,9 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
 use Payment_API\Interface\RepositoriesInterface;
-use Payment_API\Repositories\MethodsRepositories;
-use Payment_API\Repositories\CustomersRepositories;
-use Payment_API\Repositories\PaymentsRepositories;
+use Payment_API\Repositories\MethodsRepository;
+use Payment_API\Repositories\CustomersRepository;
+use Payment_API\Repositories\PaymentsRepository;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
