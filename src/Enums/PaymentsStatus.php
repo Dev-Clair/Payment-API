@@ -6,7 +6,7 @@ namespace Payment_API\Enums;
 
 use Payment_API\Interface\EnumsInterface;
 
-enum PaymentStatus: string implements EnumsInterface
+enum PaymentsStatus: string implements EnumsInterface
 {
     case PAID = "paid";
     case PENDING = "pending";
