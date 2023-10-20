@@ -122,12 +122,16 @@ class CustomersController implements ControllerInterface
             return JSONResponse::response_400(CustomersResponseTitle::POST, "ERROR: Bad Request", $requestBody);
         }
 
+        $validateRequestContent = "";
+        if (empty($validateRequestContent)) {
+            return JSONResponse::response_422(CustomersResponseTitle::POST, "ERROR: Unprocessable Entity", $validateRequestContent);
+        }
+
         $resource = "";
 
         return JSONResponse::response_201(CustomersResponseTitle::POST, "SUCCESS: Created", $resource);
 
-        return JSONResponse::response_422(CustomersResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
-
+        $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::POST, "ERROR: Internal Server Error", $resource);
     }
 
@@ -156,9 +160,14 @@ class CustomersController implements ControllerInterface
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -174,14 +183,29 @@ class CustomersController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = $args['id'];
+        $requestBody = json_decode($request->getBody()->getContents(), true);
+
+        if (empty($requestBody)) {
+            $this->logger->alert('Bad Request', ['Request Body' => 'Empty']);
+            return JSONResponse::response_400(CustomersResponseTitle::POST, "ERROR: Bad Request", $requestBody);
+        }
+
+        $validateRequestContent = "";
+        if (empty($validateRequestContent)) {
+            return JSONResponse::response_422(CustomersResponseTitle::POST, "ERROR: Unprocessable Entity", $validateRequestContent);
+        }
+
+        $validateResource = "";
+        if ($validateResource) {
+            return JSONResponse::response_404(CustomersResponseTitle::PUT, "ERROR: Resource Not Found", ['Invalid Resource ID' => $requestAttribute]);;
+        }
+
         $resource = "";
 
         return JSONResponse::response_200(CustomersResponseTitle::PUT, "SUCCESS: Modified", $resource);
 
-        return JSONResponse::response_404(CustomersResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
-
-        return JSONResponse::response_422(CustomersResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
-
+        $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
     }
 
@@ -218,12 +242,18 @@ class CustomersController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = $args['id'];
+
+        $validateResource = "";
+        if ($validateResource) {
+            return JSONResponse::response_404(CustomersResponseTitle::PUT, "ERROR: Resource Not Found", ['Invalid Resource ID' => $requestAttribute]);;
+        }
+
         $resource = "";
 
         return JSONResponse::response_200(CustomersResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
 
-        return JSONResponse::response_404(CustomersResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
-
+        $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
     }
 
@@ -260,12 +290,20 @@ class CustomersController implements ControllerInterface
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = $args['id'];
+
+        $validateResource = "";
+        if ($validateResource) {
+            return JSONResponse::response_404(CustomersResponseTitle::PUT, "ERROR: Resource Not Found", ['Invalid Resource ID' => $requestAttribute]);;
+        }
+
         $resource = "";
 
         return JSONResponse::response_200(CustomersResponseTitle::DEACTIVATE, "SUCCESS: Deactivated", $resource);
 
         return JSONResponse::response_404(CustomersResponseTitle::DEACTIVATE, "ERROR: Resource Not Found", $resource);
 
+        $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::DEACTIVATE, "ERROR: Internal Server Error", $resource);
     }
 
@@ -302,12 +340,20 @@ class CustomersController implements ControllerInterface
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = $args['id'];
+
+        $validateResource = "";
+        if ($validateResource) {
+            return JSONResponse::response_404(CustomersResponseTitle::PUT, "ERROR: Resource Not Found", ['Invalid Resource ID' => $requestAttribute]);;
+        }
+
         $resource = "";
 
         return JSONResponse::response_200(CustomersResponseTitle::REACTIVATE, "SUCCESS: Reactivated", $resource);
 
         return JSONResponse::response_404(CustomersResponseTitle::REACTIVATE, "ERROR: Resource Not Found", $resource);
 
+        $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::REACTIVATE, "ERROR: Internal Server Error", $resource);
     }
 }
