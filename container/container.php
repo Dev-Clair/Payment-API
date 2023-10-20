@@ -18,6 +18,8 @@ use Payment_API\Interface\EntityInterface;
 use Payment_API\Entity\MethodsEntity;
 use Payment_API\Entity\CustomersEntity;
 use Payment_API\Entity\PaymentsEntity;
+use Payment_API\Interface\EmailValidationServiceInterface;
+use Payment_API\Services\EmailValidationService;
 use Payment_API\Interface\SmsServiceInterface;
 use Payment_API\Services\SmsService;
 
@@ -112,6 +114,13 @@ $container->set(
     SmsServiceInterface::class,
     function (Container $container) {
         return new SmsService;
+    }
+);
+
+$container->set(
+    EmailValidationServiceInterface::class,
+    function (Container $container) {
+        return new EmailValidationService;
     }
 );
 
