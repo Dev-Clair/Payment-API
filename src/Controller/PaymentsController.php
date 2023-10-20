@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Payment_API\Interface\ControllerInterface;
-use Payment_API\Model\PaymentsModel;
+use Payment_API\Entity\PaymentsEntity;
 use Payment_API\Repositories\PaymentsRepositories;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\PaymentsResponseTitle;
