@@ -10,6 +10,7 @@ use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use Payment_API\Interface\RepositoryInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Repositories\PaymentsRepository;
@@ -59,19 +60,34 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
     return new EntityManager($conn, $config);
 });
 
-$container->set(MethodsRepository::class, function (Container $container) {
-    $em = $container->get(EntityManager::class);
-    return new MethodsRepository($em);
-});
+// $container->set(MethodsRepository::class, function (Container $container) {
+//     $entityManager = $container->get(EntityManager::class);
+//     return new MethodsRepository($entityManager);
+// });
 
-$container->set(CustomersRepository::class, function (Container $container) {
-    $em = $container->get(EntityManager::class);
-    return new CustomersRepository($em);
-});
+// $container->set(CustomersRepository::class, function (Container $container) {
+//     $entityManager = $container->get(EntityManager::class);
+//     return new CustomersRepository($entityManager);
+// });
 
-$container->set(PaymentsRepository::class, function (Container $container) {
-    $em = $container->get(EntityManager::class);
-    return new PaymentsRepository($em);
+// $container->set(PaymentsRepository::class, function (Container $container) {
+//     $entityManager = $container->get(EntityManager::class);
+//     return new PaymentsRepository($entityManager);
+// });
+
+$container->set(RepositoryInterface::class, function (Container $container, string $entityType) {
+    $entityManager = $container->get(EntityManager::class);
+
+    switch ($entityType) {
+        case 'Methods':
+            return new MethodsRepository($entityManager);
+        case 'Customers':
+            return new CustomersRepository($entityManager);
+        case 'Payments':
+            return new PaymentsRepository($entityManager);
+        default:
+            throw new InvalidArgumentException("Invalid entity type: $entityType");
+    }
 });
 
 
