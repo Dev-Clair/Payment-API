@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'payments')]
-class CustomersEntity implements EntityInterface
+class PaymentsEntity implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
