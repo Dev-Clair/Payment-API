@@ -14,29 +14,29 @@ class PaymentsRepository implements RepositoryInterface
     {
     }
 
-    public function retrieveAll()
+    public function findAll(): array
     {
         $this->entityManager->getRepository(PaymentsEntity::class)->findAll();
     }
 
-    public function retrieveById(int $id)
+    public function findById(int $id): PaymentsEntity|null
     {
         $this->entityManager->getRepository(PaymentsEntity::class)->find($id);
     }
 
-    public function store(PaymentsEntity $paymentsEntity)
+    public function store(PaymentsEntity $paymentsEntity): void
     {
         $this->entityManager->persist($paymentsEntity);
         $this->entityManager->flush();
     }
 
-    public function update(PaymentsEntity $paymentsEntity)
+    public function update(PaymentsEntity $paymentsEntity): void
     {
         $this->entityManager->persist($paymentsEntity);
         $this->entityManager->flush();
     }
 
-    public function remove(PaymentsEntity $paymentsEntity)
+    public function remove(PaymentsEntity $paymentsEntity): void
     {
         $this->entityManager->persist($paymentsEntity);
         $this->entityManager->flush();

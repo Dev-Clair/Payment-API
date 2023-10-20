@@ -14,29 +14,29 @@ class MethodsRepository implements RepositoryInterface
     {
     }
 
-    public function retrieveAll()
+    public function findAll(): array
     {
         $this->entityManager->getRepository(MethodsEntity::class)->findAll();
     }
 
-    public function retrieveById(int $id)
+    public function findById(int $id): MethodsEntity|null
     {
         $this->entityManager->getRepository(MethodsEntity::class)->find($id);
     }
 
-    public function store(MethodsEntity $methodsEntity)
+    public function store(MethodsEntity $methodsEntity): void
     {
         $this->entityManager->persist($methodsEntity);
         $this->entityManager->flush();
     }
 
-    public function update(MethodsEntity $methodsEntity)
+    public function update(MethodsEntity $methodsEntity): void
     {
         $this->entityManager->persist($methodsEntity);
         $this->entityManager->flush();
     }
 
-    public function remove(MethodsEntity $methodsEntity)
+    public function remove(MethodsEntity $methodsEntity): void
     {
         $this->entityManager->persist($methodsEntity);
         $this->entityManager->flush();

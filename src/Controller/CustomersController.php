@@ -8,9 +8,15 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Payment_API\Interface\ControllerInterface;
+use Payment_API\Interface\EmailValidationServiceInterface;
+use Payment_API\Interface\SmsServiceInterface;
+use Payment_API\Services\EmailValidationService;
+use Payment_API\Services\SmsService;
+use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Entity\CustomersEntity;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\CustomersResponseTitle;
+use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
 /**
@@ -22,8 +28,22 @@ use OpenApi\Annotations as OA;
  */
 class CustomersController implements ControllerInterface
 {
-    public function __construct()
-    {
+    protected CustomersEntity $customersEntity;
+
+    protected CustomersRepository $customersRepository;
+
+    protected Logger $logger;
+
+    protected EmailValidationService $emailValidationService;
+
+    protected SmsService $smsService;
+
+    public function __construct(
+        EmailValidationServiceInterface $emailValidationService,
+        SmsServiceInterface $smsService
+    ) {
+        $this->emailValidationService = $emailValidationService;
+        $this->smsService = $smsService;
     }
 
 
@@ -47,10 +67,13 @@ class CustomersController implements ControllerInterface
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        $resource = "";
+        $resource = $this->customersRepository->findAll();
 
-        return JSONResponse::response_200(CustomersResponseTitle::GET, "SUCCESS: Retrieved", $resource);
+        if (is_array($resource)) {
+            return JSONResponse::response_200(CustomersResponseTitle::GET, "SUCCESS: Retrieved", $resource);
+        }
 
+        $this->logger->info('No Resource Found for Request', ['Internal Server Error' => $resource]);
         return JSONResponse::response_500(CustomersResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 

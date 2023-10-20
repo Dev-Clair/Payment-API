@@ -14,29 +14,29 @@ class CustomersRepository implements RepositoryInterface
     {
     }
 
-    public function retrieveAll()
+    public function findAll(): array
     {
         $this->entityManager->getRepository(CustomersEntity::class)->findAll();
     }
 
-    public function retrieveById(int $id)
+    public function findById(int $id): CustomersEntity|null
     {
-        $this->entityManager->getRepository(CustomersEntity::class)->findAll();
+        $this->entityManager->getRepository(CustomersEntity::class)->find($id);
     }
 
-    public function store(CustomersEntity $customersEntity)
+    public function store(CustomersEntity $customersEntity): void
     {
         $this->entityManager->persist($customersEntity);
         $this->entityManager->flush();
     }
 
-    public function update(CustomersEntity $customersEntity)
+    public function update(CustomersEntity $customersEntity): void
     {
         $this->entityManager->persist($customersEntity);
         $this->entityManager->flush();
     }
 
-    public function remove(CustomersEntity $customersEntity)
+    public function remove(CustomersEntity $customersEntity): void
     {
         $this->entityManager->persist($customersEntity);
         $this->entityManager->flush();

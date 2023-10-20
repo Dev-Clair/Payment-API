@@ -6,6 +6,6 @@ namespace Payment_API\Services;
 
 use Payment_API\Interface\SmsServiceInterface;
 
-class SMSService implements SmsServiceInterface
+class SmsService implements SmsServiceInterface
 {
 }

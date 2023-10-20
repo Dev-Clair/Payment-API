@@ -14,6 +14,12 @@ use Payment_API\Interface\RepositoryInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Repositories\PaymentsRepository;
+use Payment_API\Interface\EntityInterface;
+use Payment_API\Entity\MethodsEntity;
+use Payment_API\Entity\CustomersEntity;
+use Payment_API\Entity\PaymentsEntity;
+use Payment_API\Interface\SmsServiceInterface;
+use Payment_API\Services\SmsService;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -75,21 +81,40 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
 //     return new PaymentsRepository($entityManager);
 // });
 
-$container->set(RepositoryInterface::class, function (Container $container, string $entityType) {
+$container->set(RepositoryInterface::class, function (Container $container, string $repositoryType) {
     $entityManager = $container->get(EntityManager::class);
 
-    switch ($entityType) {
-        case 'Methods':
+    switch ($repositoryType) {
+        case 'MethodsRepository':
             return new MethodsRepository($entityManager);
-        case 'Customers':
+        case 'CustomersRepository':
             return new CustomersRepository($entityManager);
-        case 'Payments':
+        case 'PaymentsRepository':
             return new PaymentsRepository($entityManager);
+        default:
+            throw new InvalidArgumentException("Invalid repository type: $repositoryType");
+    }
+});
+
+$container->set(EntityInterface::class, function (Container $container, string $entityType) {
+    switch ($entityType) {
+        case 'MethodsEntity':
+            return new MethodsEntity;
+        case 'CustomersEntity':
+            return new CustomersEntity;
+        case 'PaymentsEntity':
+            return new PaymentsEntity;
         default:
             throw new InvalidArgumentException("Invalid entity type: $entityType");
     }
 });
 
+$container->set(
+    SmsServiceInterface::class,
+    function (Container $container) {
+        return new SmsService;
+    }
+);
 
 $container->set(Logger::class, function (Container $container) {
     $logger = new Logger('Payment_API');

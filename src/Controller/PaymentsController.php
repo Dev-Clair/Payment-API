@@ -8,10 +8,11 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Payment_API\Interface\ControllerInterface;
+use Payment_API\Repositories\PaymentsRepository;
 use Payment_API\Entity\PaymentsEntity;
-use Payment_API\Repositories\PaymentsRepositories;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\PaymentsResponseTitle;
+use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
 /**
@@ -23,6 +24,12 @@ use OpenApi\Annotations as OA;
  */
 class PaymentsController implements ControllerInterface
 {
+    protected PaymentsEntity $paymentsEntity;
+
+    protected PaymentsRepository $paymentsRepository;
+
+    protected Logger $logger;
+
     public function __construct()
     {
     }

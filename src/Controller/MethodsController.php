@@ -8,9 +8,11 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Payment_API\Interface\ControllerInterface;
+use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Entity\MethodsEntity;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\MethodsResponseTitle;
+use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
 /**
@@ -22,6 +24,12 @@ use OpenApi\Annotations as OA;
  */
 class MethodsController implements ControllerInterface
 {
+    protected MethodsEntity $methodsEntity;
+
+    protected MethodsRepository $methodsRepository;
+
+    protected Logger $logger;
+
     public function __construct()
     {
     }
@@ -51,7 +59,7 @@ class MethodsController implements ControllerInterface
 
         return JSONResponse::response_200(MethodsResponseTitle::GET, "SUCCESS: Retrieved", $resource);
 
-        // return JSONResponse::response_500(MethodsResponseTitle::GET, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(MethodsResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 
 
