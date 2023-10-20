@@ -10,7 +10,7 @@ use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use Payment_API\Interface\RepositoriesInterface;
+use Payment_API\Interface\RepositoryInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Repositories\PaymentsRepository;
@@ -85,19 +85,19 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
     return new EntityManager($settings['doctrine']['connection'], $config);
 });
 
-$container->set(MethodsRepositories::class, function (Container $container) {
+$container->set(MethodsRepository::class, function (Container $container) {
     $em = $container->get(EntityManager::class);
-    return new MethodsRepositories($em);
+    return new MethodsRepository($em);
 });
 
-$container->set(CustomersRepositories::class, function (Container $container) {
+$container->set(CustomersRepository::class, function (Container $container) {
     $em = $container->get(EntityManager::class);
-    return new CustomersRepositories($em);
+    return new CustomersRepository($em);
 });
 
-$container->set(PaymentsRepositories::class, function (Container $container) {
+$container->set(PaymentsRepository::class, function (Container $container) {
     $em = $container->get(EntityManager::class);
-    return new PaymentsRepositories($em);
+    return new PaymentsRepository($em);
 });
 
 
