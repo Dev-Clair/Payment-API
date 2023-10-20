@@ -20,7 +20,7 @@
     "slim/psr7": "^1.6",
     "guzzlehttp/guzzle": "^7.8",
     "vlucas/phpdotenv": "^5.5",
-    "doctrine/orm": "^2.11.0",
+    "doctrine/orm": "2.16.2",
     "doctrine/dbal": "^3.2",
     "symfony/yaml": "^5.4",
     "symfony/cache": "^5.4",
