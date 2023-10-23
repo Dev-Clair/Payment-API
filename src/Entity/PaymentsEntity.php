@@ -28,10 +28,10 @@ class PaymentsEntity implements EntityInterface
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
     private DateTime $created_at; // Date and Time of Payment
 
-    #[ORM\Column(type: 'string', columnDefinition: 'ENUM("paid", "pending", "invalid", "failed")')]
+    #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("paid", "pending", "invalid", "failed")')]
     private PaymentsStatus $status; // Payment Status
 
-    #[ORM\Column(type: 'string', columnDefinition: 'ENUM("credit", "debit")')]
+    #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("credit", "debit")')]
     private PaymentsType $type; // Payment Type
 
     public function __construct()

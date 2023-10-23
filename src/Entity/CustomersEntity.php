@@ -37,10 +37,10 @@ class CustomersEntity implements EntityInterface
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
     private DateTime $created_at; // Date and Time of Account Creation
 
-    #[ORM\Column(type: 'string', columnDefinition: 'ENUM("active", "inactive")')]
+    #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
     private CustomerStatus $status; // Customer Account Status
 
-    #[ORM\Column(type: 'string', columnDefinition: 'ENUM("individual", "organization")')]
+    #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("individual", "organization")')]
     private CustomerType $type; // Customer Type
 
     public function __construct()

@@ -28,10 +28,10 @@ class MethodsEntity implements EntityInterface
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
     private DateTime $created_at; // Date and Time of Method Creation
 
-    #[ORM\Column(type: 'string', columnDefinition: 'ENUM("active", "inactive")')]
+    #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
     private MethodStatus $status; // Method Status
 
-    #[ORM\Column(type: 'string', columnDefinition: 'ENUM("card", "bank")')]
+    #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("card", "bank")')]
     private MethodType $type; // Method Type
 
     public function __construct()
