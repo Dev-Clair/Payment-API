@@ -6,8 +6,8 @@ namespace Payment_API\Entity;
 
 use DateTime;
 use Payment_API\Interface\EntityInterface;
-use Payment_API\Enums\CustomersStatus;
-use Payment_API\Enums\CustomersType;
+use Payment_API\Enums\CustomerStatus;
+use Payment_API\Enums\CustomerType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -38,14 +38,16 @@ class CustomersEntity implements EntityInterface
     private DateTime $created_at; // Date and Time of Account Creation
 
     #[ORM\Column(type: 'string', columnDefinition: 'ENUM("active", "inactive")')]
-    private CustomersStatus $status; // Customer Account Status
+    private CustomerStatus $status; // Customer Account Status
 
     #[ORM\Column(type: 'string', columnDefinition: 'ENUM("individual", "organization")')]
-    private CustomersType $type; // Customer Type
+    private CustomerType $type; // Customer Type
 
     public function __construct()
     {
         $this->created_at = new DateTime('now');
+        $this->status = CustomerStatus::ACTIVE;
+        $this->type = CustomerType::INDIVIDUAL;
     }
 
     public function getID(): int
@@ -108,7 +110,7 @@ class CustomersEntity implements EntityInterface
         return $this->created_at;
     }
 
-    public function getStatus(): CustomersStatus
+    public function getStatus(): CustomerStatus
     {
         return $this->status;
     }
@@ -118,7 +120,7 @@ class CustomersEntity implements EntityInterface
         $this->status = $status;
     }
 
-    public function getType(): CustomersType
+    public function getType(): CustomerType
     {
         return $this->type;
     }

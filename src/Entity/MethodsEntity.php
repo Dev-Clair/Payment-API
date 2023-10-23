@@ -6,8 +6,8 @@ namespace Payment_API\Entity;
 
 use DateTime;
 use Payment_API\Interface\EntityInterface;
-use Payment_API\Enums\MethodsStatus;
-use Payment_API\Enums\MethodsType;
+use Payment_API\Enums\MethodStatus;
+use Payment_API\Enums\MethodType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -29,14 +29,16 @@ class MethodsEntity implements EntityInterface
     private DateTime $created_at; // Date and Time of Method Creation
 
     #[ORM\Column(type: 'string', columnDefinition: 'ENUM("active", "inactive")')]
-    private MethodsStatus $status; // Method Status
+    private MethodStatus $status; // Method Status
 
     #[ORM\Column(type: 'string', columnDefinition: 'ENUM("card", "bank")')]
-    private MethodsType $type; // Method Type
+    private MethodType $type; // Method Type
 
     public function __construct()
     {
         $this->created_at = new DateTime('now');
+        $this->status = MethodStatus::ACTIVE;
+        $this->type = MethodType::CARD;
     }
 
     public function getID(): int
@@ -69,7 +71,7 @@ class MethodsEntity implements EntityInterface
         return $this->created_at;
     }
 
-    public function getStatus(): MethodsStatus
+    public function getStatus(): MethodStatus
     {
         return $this->status;
     }
@@ -79,7 +81,7 @@ class MethodsEntity implements EntityInterface
         $this->status = $status;
     }
 
-    public function getType(): MethodsType
+    public function getType(): MethodType
     {
         return $this->type;
     }

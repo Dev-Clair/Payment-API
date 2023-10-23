@@ -6,7 +6,7 @@ namespace Payment_API\Enums;
 
 use Payment_API\Interface\EnumsInterface;
 
-enum MethodsStatus: string implements EnumsInterface
+enum CustomerStatus: string implements EnumsInterface
 {
     case ACTIVE = "active";
     case INACTIVE = "inactive";

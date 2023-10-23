@@ -6,7 +6,7 @@ namespace Payment_API\Enums;
 
 use Payment_API\Interface\EnumsInterface;
 
-enum MethodsType: string implements EnumsInterface
+enum MethodType: string implements EnumsInterface
 {
     case CARD = "card";
     case BANK = "bank";
