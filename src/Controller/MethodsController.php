@@ -11,7 +11,7 @@ use Payment_API\Interface\ControllerInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Entity\MethodsEntity;
 use Payment_API\HttpResponse\JSONResponse;
-use Payment_API\Enums\MethodsResponseTitle;
+use Payment_API\Enums\MethodsResponseTitle as ResponseTitle;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
@@ -57,9 +57,9 @@ class MethodsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(MethodsResponseTitle::GET, "SUCCESS: Retrieved", $resource);
+        return JSONResponse::response_200(ResponseTitle::GET, "SUCCESS: Retrieved", $resource);
 
-        return JSONResponse::response_500(MethodsResponseTitle::GET, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -95,11 +95,11 @@ class MethodsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_201(MethodsResponseTitle::POST, "SUCCESS: Created", $resource);
+        return JSONResponse::response_201(ResponseTitle::POST, "SUCCESS: Created", $resource);
 
-        return JSONResponse::response_422(MethodsResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(ResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500(MethodsResponseTitle::POST, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::POST, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -147,13 +147,13 @@ class MethodsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(MethodsResponseTitle::PUT, "SUCCESS: Modified", $resource);
+        return JSONResponse::response_200(ResponseTitle::PUT, "SUCCESS: Modified", $resource);
 
-        return JSONResponse::response_404(MethodsResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(ResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_422(MethodsResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(ResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500(MethodsResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -191,11 +191,11 @@ class MethodsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(MethodsResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
+        return JSONResponse::response_200(ResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
 
-        return JSONResponse::response_404(MethodsResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(ResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500(MethodsResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -233,11 +233,11 @@ class MethodsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(MethodsResponseTitle::DEACTIVATE, "SUCCESS: Deactivated", $resource);
+        return JSONResponse::response_200(ResponseTitle::DEACTIVATE, "SUCCESS: Deactivated", $resource);
 
-        return JSONResponse::response_404(MethodsResponseTitle::DEACTIVATE, "ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(ResponseTitle::DEACTIVATE, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500(MethodsResponseTitle::DEACTIVATE, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::DEACTIVATE, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -275,10 +275,10 @@ class MethodsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(MethodsResponseTitle::REACTIVATE, "SUCCESS: Reactivated", $resource);
+        return JSONResponse::response_200(ResponseTitle::REACTIVATE, "SUCCESS: Reactivated", $resource);
 
-        return JSONResponse::response_404(MethodsResponseTitle::REACTIVATE, "ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(ResponseTitle::REACTIVATE, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500(MethodsResponseTitle::REACTIVATE, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::REACTIVATE, "ERROR: Internal Server Error", $resource);
     }
 }

@@ -11,7 +11,7 @@ use Payment_API\Interface\ControllerInterface;
 use Payment_API\Repositories\PaymentsRepository;
 use Payment_API\Entity\PaymentsEntity;
 use Payment_API\HttpResponse\JSONResponse;
-use Payment_API\Enums\PaymentsResponseTitle;
+use Payment_API\Enums\PaymentsResponseTitle as ResponseTitle;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
@@ -57,9 +57,9 @@ class PaymentsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(PaymentsResponseTitle::GET, "SUCCESS: Retrieved", $resource);
+        return JSONResponse::response_200(ResponseTitle::GET, "SUCCESS: Retrieved", $resource);
 
-        return JSONResponse::response_500(PaymentsResponseTitle::GET, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::GET, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -95,11 +95,11 @@ class PaymentsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_201(PaymentsResponseTitle::POST, "SUCCESS: Created", $resource);
+        return JSONResponse::response_201(ResponseTitle::POST, "SUCCESS: Created", $resource);
 
-        return JSONResponse::response_422(PaymentsResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(ResponseTitle::POST, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500(PaymentsResponseTitle::POST, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::POST, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -147,13 +147,13 @@ class PaymentsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(PaymentsResponseTitle::PUT, "SUCCESS: Modified", $resource);
+        return JSONResponse::response_200(ResponseTitle::PUT, "SUCCESS: Modified", $resource);
 
-        return JSONResponse::response_404(PaymentsResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(ResponseTitle::PUT, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_422(PaymentsResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
+        return JSONResponse::response_422(ResponseTitle::PUT, "ERROR: Unprocessable Entity", $resource);
 
-        return JSONResponse::response_500(PaymentsResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::PUT, "ERROR: Internal Server Error", $resource);
     }
 
 
@@ -191,10 +191,10 @@ class PaymentsController implements ControllerInterface
     {
         $resource = "";
 
-        return JSONResponse::response_200(PaymentsResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
+        return JSONResponse::response_200(ResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
 
-        return JSONResponse::response_404(PaymentsResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
+        return JSONResponse::response_404(ResponseTitle::DELETE, "ERROR: Resource Not Found", $resource);
 
-        return JSONResponse::response_500(PaymentsResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
+        return JSONResponse::response_500(ResponseTitle::DELETE, "ERROR: Internal Server Error", $resource);
     }
 }
