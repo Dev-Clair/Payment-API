@@ -8,6 +8,8 @@ use Payment_API\Middleware\CustomErrorHandlerMiddleWare;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\PaymentsController;
+use Payment_API\Middleware\ContentTypeMiddleware;
+use Payment_API\Middleware\MethodTypeMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../container/container.php';
@@ -36,35 +38,57 @@ $app->get('/v1', function (Request $request, Response $response, $args) {
     ]));
     return $response
         ->withStatus(200, 'OK')
-        ->withHeader('Content-Type', 'application/json; charset=UTF+8');
+        ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
 // Methods Endpoints
 $app->group('/v1/methods', function (RouteCollectorProxy $group) {
-    $group->get('', [MethodsController::class, 'get']);
-    $group->post('', [MethodsController::class, 'post']);
-    $group->put('/{id:[0-9]+}', [MethodsController::class, 'put']);
-    $group->delete('/{id:[0-9]+}', [MethodsController::class, 'delete']);
-    $group->get('/deactivate/{id:[0-9]+}', [MethodsController::class, 'deactivate']);
-    $group->get('/reactivate/{id:[0-9]+}', [MethodsController::class, 'reactivate']);
+    $group->get('', [MethodsController::class, 'get'])
+        ->add(new MethodTypeMiddleware(['GET', 'POST']));
+    $group->post('', [MethodsController::class, 'post'])
+        ->add(new MethodTypeMiddleware(['GET', 'POST']))
+        ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
+    $group->put('/{id:[0-9]+}', [MethodsController::class, 'put'])
+        ->add(new MethodTypeMiddleware(['PUT', 'DELETE']))
+        ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
+    $group->delete('/{id:[0-9]+}', [MethodsController::class, 'delete'])
+        ->add(new MethodTypeMiddleware(['PUT', 'DELETE']));
+    $group->get('/deactivate/{id:[0-9]+}', [MethodsController::class, 'deactivate'])
+        ->add(new MethodTypeMiddleware(['GET']));
+    $group->get('/reactivate/{id:[0-9]+}', [MethodsController::class, 'reactivate'])
+        ->add(new MethodTypeMiddleware(['GET']));
 });
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
-    $group->get('', [CustomersController::class, 'get']);
-    $group->post('', [CustomersController::class, 'post']);
-    $group->put('/{id:[0-9]+}', [CustomersController::class, 'put']);
-    $group->delete('/{id:[0-9]+}', [CustomersController::class, 'delete']);
-    $group->get('/deactivate/{id:[0-9]+}', [CustomersController::class, 'deactivate']);
-    $group->get('/reactivate/{id:[0-9]+}', [CustomersController::class, 'reactivate']);
+    $group->get('', [CustomersController::class, 'get'])
+        ->add(new MethodTypeMiddleware(['GET', 'POST']));
+    $group->post('', [CustomersController::class, 'post'])
+        ->add(new MethodTypeMiddleware(['GET', 'POST']))
+        ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
+    $group->put('/{id:[0-9]+}', [CustomersController::class, 'put'])
+        ->add(new MethodTypeMiddleware(['PUT', 'DELETE']))
+        ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
+    $group->delete('/{id:[0-9]+}', [CustomersController::class, 'delete'])
+        ->add(new MethodTypeMiddleware(['PUT', 'DELETE']));
+    $group->get('/deactivate/{id:[0-9]+}', [CustomersController::class, 'deactivate'])
+        ->add(new MethodTypeMiddleware(['GET']));
+    $group->get('/reactivate/{id:[0-9]+}', [CustomersController::class, 'reactivate'])
+        ->add(new MethodTypeMiddleware(['GET']));
 });
 
 // Payments Endpoints
 $app->group('/v1/payments', function (RouteCollectorProxy $group) {
-    $group->get('', [PaymentsController::class, 'get']);
-    $group->post('', [PaymentsController::class, 'post']);
-    $group->put('/{id:[0-9]+}', [PaymentsController::class, 'put']);
-    $group->delete('/{id:[0-9]+}', [PaymentsController::class, 'delete']);
+    $group->get('', [PaymentsController::class, 'get'])
+        ->add(new MethodTypeMiddleware(['GET', 'POST']));
+    $group->post('', [PaymentsController::class, 'post'])
+        ->add(new MethodTypeMiddleware(['GET', 'POST']))
+        ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
+    $group->put('/{id:[0-9]+}', [PaymentsController::class, 'put'])
+        ->add(new MethodTypeMiddleware(['PUT', 'DELETE']))
+        ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
+    $group->delete('/{id:[0-9]+}', [PaymentsController::class, 'delete'])
+        ->add(new MethodTypeMiddleware(['PUT', 'DELETE']));
 });
 
 // Add Error Middleware
