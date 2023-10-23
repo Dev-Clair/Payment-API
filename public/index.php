@@ -23,8 +23,10 @@ $app->get('/openapi', function () {
     require __DIR__ . '/openapi/index.php';
 });
 
-// Routes to Application Endpoints and Middlewares for CRUD Related Operations
-// API Version Info
+/**
+ * Routes to Application Endpoints and Middlewares for CRUD Related Operations
+ */
+// API Description and Version Info
 $app->get('/v1', function (Request $request, Response $response, $args) {
     $response->getBody()->write(json_encode([
         "title" => "Payment API",
@@ -37,30 +39,30 @@ $app->get('/v1', function (Request $request, Response $response, $args) {
 
 // Methods Endpoints
 $app->group('/v1/methods', function (RouteCollectorProxy $group) {
-    $group->get('', '');
-    $group->post('', '');
-    $group->put('/{id:[0-9]+}', '');
-    $group->delete('/{id:[0-9]+}', '');
-    $group->get('/deactivate/{id:[0-9]+}', '');
-    $group->get('/reactivate/{id:[0-9]+}', '');
+    $group->get('', [MethodsController::class, 'get']);
+    $group->post('', [MethodsController::class, 'post']);
+    $group->put('/{id:[0-9]+}', [MethodsController::class, 'put']);
+    $group->delete('/{id:[0-9]+}', [MethodsController::class, 'delete']);
+    $group->get('/deactivate/{id:[0-9]+}', [MethodsController::class, 'deactivate']);
+    $group->get('/reactivate/{id:[0-9]+}', [MethodsController::class, 'reactivate']);
 });
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
     $group->get('', [CustomersController::class, 'get']);
     $group->post('', [CustomersController::class, 'post']);
-    $group->put('/{id:[0-9]+}', '');
-    $group->delete('/{id:[0-9]+}', '');
-    $group->get('/deactivate/{id:[0-9]+}', '');
-    $group->get('/reactivate/{id:[0-9]+}', '');
+    $group->put('/{id:[0-9]+}', [CustomersController::class, 'put']);
+    $group->delete('/{id:[0-9]+}', [CustomersController::class, 'delete']);
+    $group->get('/deactivate/{id:[0-9]+}', [CustomersController::class, 'deactivate']);
+    $group->get('/reactivate/{id:[0-9]+}', [CustomersController::class, 'reactivate']);
 });
 
 // Payments Endpoints
 $app->group('/v1/payments', function (RouteCollectorProxy $group) {
-    $group->get('', '');
-    $group->post('', '');
-    $group->put('/{id:[0-9]+}', '');
-    $group->delete('/{id:[0-9]+}', '');
+    $group->get('', [PaymentsController::class, 'get']);
+    $group->post('', [PaymentsController::class, 'post']);
+    $group->put('/{id:[0-9]+}', [PaymentsController::class, 'put']);
+    $group->delete('/{id:[0-9]+}', [PaymentsController::class, 'delete']);
 });
 
 // Add Error Middleware
