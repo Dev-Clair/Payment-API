@@ -13,7 +13,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../container/container.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
-$dotenv->safeLoad();
+$dotenv->load();
 
 //Create New App Instance
 $app = AppFactory::createFromContainer(container: $container);
@@ -30,11 +30,13 @@ $app->get('/openapi', function () {
 $app->get('/v1', function (Request $request, Response $response, $args) {
     $response->getBody()->write(json_encode([
         "title" => "Payment API",
-        "description" => "Aggregates several payment gateways to provide customers with an all-in-one payment solution",
+        "description" => "All-in-one payment gateway aggregator",
         "status" => "valid",
         "version" => "1.0"
     ]));
-    return $response;
+    return $response
+        ->withStatus(200, 'OK')
+        ->withHeader('Content-Type', 'application/json; charset=UTF+8');
 });
 
 // Methods Endpoints

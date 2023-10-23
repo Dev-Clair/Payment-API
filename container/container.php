@@ -26,7 +26,7 @@ use Payment_API\Services\SmsService;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__ . "/../");
-$dotenv->safeLoad();
+$dotenv->load();
 
 $container = new Container;
 
@@ -41,14 +41,14 @@ $container->set('settings', function () {
         'determineRouteBeforeAppMiddleware' => false,
         'doctrine' => [
             'dev_mode' => true,
-            'metadata_dirs' => [APP_ROOT . '/src/Entity'],
+            'metadata_dirs' => [APP_ROOT . '/src'],
             'connection' => [
                 'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
                 'host' => $_ENV['MARIADB_HOST'] ?? 'localhost',
                 'port' => 3306,
                 'dbname' => $_ENV['MARIADB_DB_NAME'] ?? 'payments',
                 'user' => $_ENV['MARIADB_DB_USER'] ?? 'root',
-                'password' => $_ENV['MARIADB_DB_USER_PASSWORD'] ?? ''
+                'password' => $_ENV['MARIADB_DB_USER_PASSWORD'] ?? 'payment_api_mariadb'
             ]
         ]
 
