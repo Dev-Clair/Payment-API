@@ -7,12 +7,16 @@ namespace Payment_API\Middleware;
 use Slim\Psr7\Response as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Psr\Container\ContainerInterface;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\MiddlewareResponseTitle as ResponseTitle;
+use Monolog\Logger;
 
 class ContentTypeMiddleware
 {
     protected string $allowedContentType;
+
+    protected Logger $logger;
 
     public function __construct(string $allowedContentType)
     {
@@ -24,6 +28,8 @@ class ContentTypeMiddleware
         $contentType = $request->getHeaderLine('Content-Type');
 
         if ($contentType !== $this->allowedContentType) {
+
+            $this->logger->alert('Bad Request', ['Content-Type' => 'Invalid']);
 
             return JSONResponse::response_400(
                 ResponseTitle::BAD_REQUEST,
