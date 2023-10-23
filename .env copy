@@ -1,0 +1,10 @@
+# Database Credentials
+DB_DRIVER=pdo_mysql
+MARIADB_HOST=localhost
+MARIADB_ROOT_USER=root
+MARIADB_DB_NAME=payments
+MARIADB_DB_USER=root
+MARIADB_DB_USER_PASSWORD=payment_api_mariadb
+
+# Development Cycle
+APP_ENV = production|staging|development
