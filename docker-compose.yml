@@ -7,10 +7,10 @@ services:
     volumes:
       - ".:/application"
     environment:
-      - "MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_USER}"
-      - "MYSQL_DATABASE=${MARIADB_DB_NAME}"
-      - "MYSQL_USER=${MARIADB_DB_USER}"
-      - "MYSQL_PASSWORD=${MARIADB_DB_USER_PASSWORD}"
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_USER}
+      - MYSQL_DATABASE=${MARIADB_DB_NAME}
+      - MYSQL_USER=${MARIADB_DB_USER}
+      - MYSQL_PASSWORD=${MARIADB_DB_USER_PASSWORD}
     ports:
       - "26003:3306"
 
@@ -46,7 +46,7 @@ services:
       - "26001:80"
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=mariadb
+      - PMA_HOST=payment_api_mariadb
 
   composer:
     image: "composer:latest"
