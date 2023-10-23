@@ -118,17 +118,18 @@ class CustomersController implements ControllerInterface
         $requestBody = json_decode($request->getBody()->getContents(), true);
 
         if (empty($requestBody)) {
-            $this->logger->alert('Bad Request', ['Request Body' => 'Empty']);
+            $this->logger->alert('Bad Request', ['Request' => 'None or Empty Request Body']);
             return JSONResponse::response_400(ResponseTitle::POST, "ERROR: Bad Request", $requestBody);
         }
 
         $validateRequestContent = "";
         if (empty($validateRequestContent)) {
+            $this->logger->alert('Unprocessable Entity', ['Request' => 'Invalid JSON Content']);
             return JSONResponse::response_422(ResponseTitle::POST, "ERROR: Unprocessable Entity", $validateRequestContent);
         }
 
         $resource = "";
-
+        $this->logger->info('Successful', ['Response' => 'New Resource Created']);
         return JSONResponse::response_201(ResponseTitle::POST, "SUCCESS: Created", $resource);
 
         $this->logger->emergency('No Resource Found for Request', ['Internal Server Error' => $resource]);
