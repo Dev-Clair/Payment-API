@@ -20,11 +20,13 @@ class PaymentsValidation extends Abs_Validation
 
     private array $sanitizedData;
 
-    public array $validationErrors;
+    public array $validationError;
+
+    public array $validationResult;
 
     public PaymentsEntity $paymentsEntity;
 
-    public function __construct(protected ?array $requestContent = null)
+    public function __construct(protected array $requestContent)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
         $this->validateRequestContent();
@@ -38,54 +40,67 @@ class PaymentsValidation extends Abs_Validation
         $this->validatePaymentType();
     }
 
-    private function generateUPID(): null
+    private function generateUPID(): void
     {
-        $amount = $this->sanitizedData['amount'] ?? null;
-        if (is_null($amount)) {
-            return null;
+        $amount = $this->sanitizedData['amount'];
+        if (empty($amount)) {
+            return;
         }
 
-        $upid = 'pay' . bin2hex($amount);
+        $upid = 'pay_' . bin2hex($amount);
         $this->upid = substr($upid, 0, 20);
     }
 
-    private function validatePaymentAmount(): null
+    private function validatePaymentAmount(): void
     {
-        $amount = $this->sanitizedData['amount'] ?? null;
-        if (is_null($amount)) {
-            return null;
+        $amount = $this->sanitizedData['amount'];
+        if (empty($amount)) {
+            return;
         }
 
         $amount = filter_var($amount, FILTER_VALIDATE_FLOAT);
 
         if ($amount === false) {
-            $this->validationErrors['amount'] = "Invalid payment amount";
+            $this->validationError['amount'] = "Invalid amount";
+            return;
         }
 
-        $this->amount = $amount;
+        $this->amount = $this->validationResult['amount'] = $amount;
     }
 
-    private function validatePaymentStatus(): null
+    private function validatePaymentStatus(): void
     {
-        $email = $this->sanitizedData['email'] ?? null;
-        if (is_null($email)) {
-            return null;
+        $status = $this->sanitizedData['status'];
+        if (empty($status)) {
+            return;
         }
 
-        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-        if ($email === false) {
-            $this->validationErrors['email'] = "Please enter a valid email address";
+        if ($status !== PaymentStatus::PAID || $status !== PaymentStatus::PENDING) {
+            $this->validationError['status'] = "Please enter a valid status";
+            return;
         }
 
-        $this->email = $email;
-
-        // Add extra validation using any third-party email validation api service
+        $this->status = $this->validationResult['status'] = $status;
     }
 
-    public function getEntities(): paymentsEntity
+    public function validatePaymentType(): void
     {
-        $paymentsEntity = new paymentsEntity;
+        $type = $this->sanitizedData['type'];
+        if (empty($type)) {
+            return;
+        }
+
+        if ($type !== PaymentType::CREDIT || $type !== PaymentType::DEBIT) {
+            $this->validationError['type'] = "Please enter a valid payment type";
+            return;
+        }
+
+        $this->type = $this->validationResult['type'] = $type;
+    }
+
+    public function getEntities(): PaymentsEntity
+    {
+        $paymentsEntity = new PaymentsEntity;
 
         $this->upid ?? $paymentsEntity->setUPID($this->upid);
         $this->amount ?? $paymentsEntity->setAmount($this->amount);

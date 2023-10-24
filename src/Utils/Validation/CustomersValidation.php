@@ -18,7 +18,7 @@ class CustomersValidation extends Abs_Validation
 
     private string $address;
 
-    public array $sanitizedData;
+    private array $sanitizedData;
 
     public array $validationError;
 
@@ -48,7 +48,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $ucid = 'cus' . bin2hex($name);
+        $ucid = 'cus_' . bin2hex($name);
         $this->ucid = substr($ucid, 0, 20);
     }
 
@@ -64,6 +64,7 @@ class CustomersValidation extends Abs_Validation
 
         if ($name === false) {
             $this->validationError['name'] = "Name should contain only letters and spaces; please enter a valid first and/or last name";
+            return;
         }
 
         $this->name = $this->validationResult['name'] = $name;
@@ -80,6 +81,7 @@ class CustomersValidation extends Abs_Validation
 
         if ($email === false) {
             $this->validationError['email'] = "Please enter a valid email address";
+            return;
         }
 
         $this->email = $this->validationError['email'] = $email;
@@ -105,6 +107,7 @@ class CustomersValidation extends Abs_Validation
 
         if ($password !== $confirm_password) {
             $this->validationError['password'] = "Passwords do not match; please enter a valid password";
+            return;
         }
 
         $this->password = $this->validationResult['password'] = $password;
@@ -119,6 +122,7 @@ class CustomersValidation extends Abs_Validation
 
         if (!is_string($address)) {
             $this->validationError['address'] = "Please enter a valid home or office address";
+            return;
         }
 
         $this->address = $this->validationResult['address'] = $address;

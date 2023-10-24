@@ -12,6 +12,7 @@ use Payment_API\Repositories\PaymentsRepository;
 use Payment_API\Entity\PaymentsEntity;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\PaymentsResponseTitle as ResponseTitle;
+use Payment_API\Utils\Validation\PaymentsValidation;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
@@ -84,6 +85,11 @@ class PaymentsController implements ControllerInterface
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=422,
      *         description="Unprocessable Entity",
      *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
@@ -105,12 +111,12 @@ class PaymentsController implements ControllerInterface
 
         $paymentsEntity = new PaymentsValidation($requestBody);
 
-        if (empty($paymentsEntity->validationErrors)) {
+        if (empty($paymentsEntity->validationError)) {
             $this->paymentsRepository->store($paymentsEntity->getEntities());
 
             return JSONResponse::response_201(ResponseTitle::POST, "Created", "");
         } else {
-            return JSONResponse::response_422(ResponseTitle::POST, "Unprocessable Entity", $paymentsEntity->validationErrors);
+            return JSONResponse::response_422(ResponseTitle::POST, "Unprocessable Entity", $paymentsEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
@@ -141,6 +147,11 @@ class PaymentsController implements ControllerInterface
      *         response=200,
      *         description="Payment updated successfully",
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -174,14 +185,22 @@ class PaymentsController implements ControllerInterface
             return JSONResponse::response_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $paymentsEntity = new PaymentsValidation($requestBody);
+        $paymentsEntity = $this->paymentsRepository->findById($requestAttribute);
 
-        if (empty($paymentsEntity->validationErrors)) {
-            $this->paymentsRepository->update($paymentsEntity->getEntities());
+        $validatePaymentEntity = new PaymentsValidation($requestBody);
+
+        if (empty($validatePaymentEntity->validationError)) {
+            $paymentsEntity->setAmount($validatePaymentEntity->validationResult['amount']);
+
+            $paymentsEntity->setStatus($validatePaymentEntity->validationResult['status']);
+
+            $paymentsEntity->setType($validatePaymentEntity->validationResult['ype']);
+
+            $this->paymentsRepository->update($paymentsEntity);
 
             return JSONResponse::response_200(ResponseTitle::PUT, "Modified", "");
         } else {
-            return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $paymentsEntity->validationErrors);
+            return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $validatePaymentEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
