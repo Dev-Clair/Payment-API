@@ -6,8 +6,8 @@ namespace Payment_API\Entity;
 
 use DateTime;
 use Payment_API\Interface\EntityInterface;
-use Payment_API\Enums\PaymentsStatus;
-use Payment_API\Enums\PaymentsType;
+use Payment_API\Enums\PaymentStatus;
+use Payment_API\Enums\PaymentType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -29,10 +29,10 @@ class PaymentsEntity implements EntityInterface
     private DateTime $created_at; // Date and Time of Payment
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("paid", "pending", "invalid", "failed")')]
-    private PaymentsStatus $status; // Payment Status
+    private PaymentStatus $status; // Payment Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("credit", "debit")')]
-    private PaymentsType $type; // Payment Type
+    private PaymentType $type; // Payment Type
 
     public function __construct()
     {
@@ -50,7 +50,7 @@ class PaymentsEntity implements EntityInterface
         return $this->upid;
     }
 
-    public function setUPID($upid): void
+    public function setUPID(string $upid): void
     {
         $this->upid = $upid;
     }
@@ -60,7 +60,7 @@ class PaymentsEntity implements EntityInterface
         return $this->amount;
     }
 
-    public function setAmount($amount): void
+    public function setAmount(float $amount): void
     {
         $this->amount = $amount;
     }
@@ -70,22 +70,22 @@ class PaymentsEntity implements EntityInterface
         return $this->created_at;
     }
 
-    public function getStatus(): PaymentsStatus
+    public function getStatus(): PaymentStatus
     {
         return $this->status;
     }
 
-    public function setStatus($status): void
+    public function setStatus(PaymentStatus $status): void
     {
         $this->status = $status;
     }
 
-    public function getType(): PaymentsType
+    public function getType(): PaymentType
     {
         return $this->type;
     }
 
-    public function setType($type): void
+    public function setType(PaymentType $type): void
     {
         $this->type = $type;
     }

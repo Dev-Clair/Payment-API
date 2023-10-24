@@ -6,7 +6,7 @@ namespace Payment_API\Enums;
 
 use Payment_API\Interface\EnumsInterface;
 
-enum PaymentsType: string implements EnumsInterface
+enum PaymentType: string implements EnumsInterface
 {
     case CREDIT = "credit";
     case DEBIT = "debit";

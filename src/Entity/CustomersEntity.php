@@ -47,7 +47,7 @@ class CustomersEntity implements EntityInterface
     {
         $this->created_at = new DateTime('now');
         $this->status = CustomerStatus::ACTIVE;
-        $this->type = CustomerType::INDIVIDUAL;
+        $this->type = CustomerType::IND;
     }
 
     public function getID(): int
@@ -60,7 +60,7 @@ class CustomersEntity implements EntityInterface
         return $this->ucid;
     }
 
-    public function setUCID($ucid): void
+    public function setUCID(string $ucid): void
     {
         $this->ucid = $ucid;
     }
@@ -70,7 +70,7 @@ class CustomersEntity implements EntityInterface
         return $this->name;
     }
 
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -80,7 +80,7 @@ class CustomersEntity implements EntityInterface
         return $this->email;
     }
 
-    public function setEmail($email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
@@ -90,7 +90,7 @@ class CustomersEntity implements EntityInterface
         return $this->password;
     }
 
-    public function setPassword($password): void
+    public function setPassword(string $password): void
     {
         $this->password = hash(PASSWORD_BCRYPT, $password);
     }
@@ -100,7 +100,7 @@ class CustomersEntity implements EntityInterface
         return $this->address;
     }
 
-    public function setAddress($address): void
+    public function setAddress(string $address): void
     {
         $this->address = $address;
     }
@@ -115,7 +115,7 @@ class CustomersEntity implements EntityInterface
         return $this->status;
     }
 
-    public function setStatus($status): void
+    public function setStatus(CustomerStatus $status): void
     {
         $this->status = $status;
     }
@@ -125,7 +125,7 @@ class CustomersEntity implements EntityInterface
         return $this->type;
     }
 
-    public function setType($type): void
+    public function setType(CustomerType $type): void
     {
         $this->type = $type;
     }

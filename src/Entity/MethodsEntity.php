@@ -51,7 +51,7 @@ class MethodsEntity implements EntityInterface
         return $this->umid;
     }
 
-    public function setUMID($umid): void
+    public function setUMID(string $umid): void
     {
         $this->umid = $umid;
     }
@@ -61,7 +61,7 @@ class MethodsEntity implements EntityInterface
         return $this->name;
     }
 
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -76,7 +76,7 @@ class MethodsEntity implements EntityInterface
         return $this->status;
     }
 
-    public function setStatus($status): void
+    public function setStatus(MethodStatus $status): void
     {
         $this->status = $status;
     }
@@ -86,7 +86,7 @@ class MethodsEntity implements EntityInterface
         return $this->type;
     }
 
-    public function setType($type): void
+    public function setType(MethodType $type): void
     {
         $this->type = $type;
     }
