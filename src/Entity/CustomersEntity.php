@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Payment_API\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\CustomerStatus;
 use Payment_API\Enums\CustomerType;
@@ -35,7 +35,7 @@ class CustomersEntity implements EntityInterface
     private string $address; // Customer Address
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
-    private DateTime $created_at; // Date and Time of Account Creation
+    private DateTimeImmutable $created_at; // Date and Time of Account Creation
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
     private CustomerStatus $status; // Customer Account Status
@@ -45,7 +45,7 @@ class CustomersEntity implements EntityInterface
 
     public function __construct()
     {
-        $this->created_at = new DateTime('now');
+        $this->created_at = new DateTimeImmutable('now');
         $this->status = CustomerStatus::ACTIVE;
         $this->type = CustomerType::IND;
     }
@@ -105,7 +105,7 @@ class CustomersEntity implements EntityInterface
         $this->address = $address;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->created_at;
     }

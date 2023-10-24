@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Payment_API\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\MethodStatus;
 use Payment_API\Enums\MethodType;
@@ -26,7 +26,7 @@ class MethodsEntity implements EntityInterface
     private string $umid; // Unique Method Identifier
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
-    private DateTime $created_at; // Date and Time of Method Creation
+    private DateTimeImmutable $created_at; // Date and Time of Method Creation
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
     private MethodStatus $status; // Method Status
@@ -36,7 +36,7 @@ class MethodsEntity implements EntityInterface
 
     public function __construct()
     {
-        $this->created_at = new DateTime('now');
+        $this->created_at = new DateTimeImmutable('now');
         $this->status = MethodStatus::ACTIVE;
         $this->type = MethodType::CARD;
     }
@@ -66,7 +66,7 @@ class MethodsEntity implements EntityInterface
         $this->name = $name;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->created_at;
     }

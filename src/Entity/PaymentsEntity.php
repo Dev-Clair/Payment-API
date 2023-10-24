@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Payment_API\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\PaymentStatus;
 use Payment_API\Enums\PaymentType;
@@ -26,7 +26,7 @@ class PaymentsEntity implements EntityInterface
     private float $amount; // Total Amount Paid
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
-    private DateTime $created_at; // Date and Time of Payment
+    private DateTimeImmutable $created_at; // Date and Time of Payment
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("paid", "pending", "invalid", "failed")')]
     private PaymentStatus $status; // Payment Status
@@ -37,7 +37,7 @@ class PaymentsEntity implements EntityInterface
     public function __construct()
     {
         $this->amount = 0.00;
-        $this->created_at = new DateTime('now');
+        $this->created_at = new DateTimeImmutable('now');
     }
 
     public function getID(): int
@@ -65,7 +65,7 @@ class PaymentsEntity implements EntityInterface
         $this->amount = $amount;
     }
 
-    public function getDateTime(): DateTime
+    public function getDateTime(): DateTimeImmutable
     {
         return $this->created_at;
     }
