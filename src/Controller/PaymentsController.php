@@ -20,7 +20,7 @@ use OpenApi\Annotations as OA;
  * @OA\Info(
  *   title="Payment API",
  *   version="1.0.0",
- *   description="API for managing customer payments",
+ *   description="API endpoints for managing payments",
  * )
  */
 class PaymentsController implements ControllerInterface

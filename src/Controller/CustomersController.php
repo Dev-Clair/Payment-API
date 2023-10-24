@@ -23,7 +23,7 @@ use OpenApi\Annotations as OA;
  * @OA\Info(
  *   title="Payment API",
  *   version="1.0.0",
- *   description="API for managing customer payments",
+ *   description="API endpoint for managing customer accounts",
  * )
  */
 class CustomersController implements ControllerInterface
@@ -237,7 +237,7 @@ class CustomersController implements ControllerInterface
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -291,7 +291,7 @@ class CustomersController implements ControllerInterface
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -345,7 +345,7 @@ class CustomersController implements ControllerInterface
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,

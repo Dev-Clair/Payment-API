@@ -12,7 +12,8 @@ use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Entity\MethodsEntity;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\MethodsResponseTitle as ResponseTitle;
-use Payment_API\Utils\Validation\PaymentsValidation;
+use Payment_API\Enums\MethodStatus;
+use Payment_API\Utils\Validation\MethodsValidation;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
@@ -20,7 +21,7 @@ use OpenApi\Annotations as OA;
  * @OA\Info(
  *   title="Payment API",
  *   version="1.0.0",
- *   description="API for managing customer payments",
+ *   description="API endpoint for managing payment methods",
  * )
  */
 class MethodsController implements ControllerInterface
@@ -56,25 +57,15 @@ class MethodsController implements ControllerInterface
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        $resource = $this->methodsRepository->findAll();
+        $methods = $this->methodsRepository->findAll();
 
-        if (is_array($resource)) {
-            return JSONResponse::response_200(
-                ResponseTitle::GET,
-                "SUCCESS: Retrieved",
-                $resource
-            );
+        if (is_array($methods)) {
+            return JSONResponse::response_200(ResponseTitle::GET, "Retrieved", $methods);
         }
 
-        $this->logger->emergency(
-            'ERROR: Internal Server Error',
-            [ResponseTitle::GET]
-        );
-        return JSONResponse::response_500(
-            ResponseTitle::GET,
-            "ERROR: Internal Server Error",
-            $resource
-        );
+        $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
+
+        return JSONResponse::response_500(ResponseTitle::GET, "Internal Server Error", "");
     }
 
 
@@ -95,6 +86,11 @@ class MethodsController implements ControllerInterface
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=422,
      *         description="Unprocessable Entity",
      *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
@@ -111,38 +107,22 @@ class MethodsController implements ControllerInterface
         $requestBody = json_decode($request->getBody()->getContents(), true);
 
         if (empty($requestBody)) {
-            return JSONResponse::response_400(
-                ResponseTitle::POST,
-                "ERROR: Bad Request",
-                $requestBody
-            );
+            return JSONResponse::response_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $validateRequestContent = "";
-        if (empty($validateRequestContent)) {
-            return JSONResponse::response_422(
-                ResponseTitle::POST,
-                "ERROR: Unprocessable Entity",
-                $validateRequestContent
-            );
+        $methodsEntity = new MethodsValidation($requestBody);
+
+        if (empty($methodsEntity->validationError)) {
+            $this->methodsRepository->store($methodsEntity->getEntities());
+
+            return JSONResponse::response_201(ResponseTitle::POST, "Created", "");
+        } else {
+            return JSONResponse::response_422(ResponseTitle::POST, "Unprocessable Entity", $methodsEntity->validationError);
         }
 
-        $resource = "";
-        return JSONResponse::response_201(
-            ResponseTitle::POST,
-            "SUCCESS: Created",
-            $resource
-        );
+        $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
 
-        $this->logger->emergency(
-            'ERROR: Internal Server Error',
-            [ResponseTitle::POST]
-        );
-        return JSONResponse::response_500(
-            ResponseTitle::POST,
-            "ERROR: Internal Server Error",
-            $resource
-        );
+        return JSONResponse::response_500(ResponseTitle::POST, "Internal Server Error", "");
     }
 
 
@@ -170,6 +150,11 @@ class MethodsController implements ControllerInterface
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=404,
      *         description="Not Found",
      *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
@@ -189,46 +174,36 @@ class MethodsController implements ControllerInterface
     public function put(Request $request, Response $response, array $args): Response
     {
         $requestAttribute = $args['id'];
+
+        $validateResource = $this->methodsRepository->validate($requestAttribute);
+        if ($validateResource === false) {
+            return JSONResponse::response_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+        }
+
         $requestBody = json_decode($request->getBody()->getContents(), true);
 
         if (empty($requestBody)) {
-            return JSONResponse::response_400(
-                ResponseTitle::PUT,
-                "ERROR: Bad Request",
-                $requestBody
-            );
+            return JSONResponse::response_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+        }
+        $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+        $validateMethodEntity = new MethodsValidation($requestBody);
+
+        if (empty($validateMethodEntity->validationError)) {
+            $methodsEntity->setName($validateMethodEntity->validationResult['name']);
+
+            $methodsEntity->setType($validateMethodEntity->validationResult['type']);
+
+            $this->methodsRepository->update($methodsEntity);
+
+            return JSONResponse::response_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
+        } else {
+            return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $validateMethodEntity->validationError);
         }
 
-        $validateRequestContent = "";
-        if (empty($validateRequestContent)) {
-            return JSONResponse::response_422(
-                ResponseTitle::PUT,
-                "ERROR: Unprocessable Entity",
-                $validateRequestContent
-            );
-        }
+        $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
 
-        $validateResource = "";
-        if ($validateResource) {
-            return JSONResponse::response_404(
-                ResponseTitle::PUT,
-                "ERROR: Resource Not Found",
-                ['Invalid Resource ID' => $requestAttribute]
-            );
-        }
-
-        $resource = "";
-        return JSONResponse::response_200(ResponseTitle::PUT, "SUCCESS: Modified", $resource);
-
-        $this->logger->emergency(
-            'ERROR: Internal Server Error',
-            [ResponseTitle::PUT]
-        );
-        return JSONResponse::response_500(
-            ResponseTitle::PUT,
-            "ERROR: Internal Server Error",
-            $resource
-        );
+        return JSONResponse::response_500(ResponseTitle::PUT, "Internal Server Error", "");
     }
 
 
@@ -253,7 +228,7 @@ class MethodsController implements ControllerInterface
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -266,27 +241,23 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = "";
-        if ($validateResource) {
-            return JSONResponse::response_404(
-                ResponseTitle::DELETE,
-                "ERROR: Resource Not Found",
-                ['Invalid Resource ID' => $requestAttribute]
-            );;
+        $validateResource = $this->methodsRepository->validate($requestAttribute);
+
+        if ($validateResource === false) {
+            return JSONResponse::response_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
-        $resource = "";
-        return JSONResponse::response_200(ResponseTitle::DELETE, "SUCCESS: Deleted", $resource);
+        if ($validateResource === true) {
+            $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-        $this->logger->emergency(
-            'ERROR: Internal Server Error',
-            [ResponseTitle::DELETE]
-        );
-        return JSONResponse::response_500(
-            ResponseTitle::DELETE,
-            "ERROR: Internal Server Error",
-            $resource
-        );
+            $this->methodsRepository->remove($methodsEntity);
+
+            return JSONResponse::response_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
+        }
+
+        $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
+
+        return JSONResponse::response_500(ResponseTitle::DELETE, "Internal Server Error", "");
     }
 
 
@@ -311,7 +282,7 @@ class MethodsController implements ControllerInterface
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -324,31 +295,23 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = "";
-        if ($validateResource) {
-            return JSONResponse::response_404(
-                ResponseTitle::DEACTIVATE,
-                "ERROR: Resource Not Found",
-                ['Invalid Resource ID' => $requestAttribute]
-            );;
+        $validateResource = $this->methodsRepository->validate($requestAttribute);
+        if ($validateResource === false) {
+            return JSONResponse::response_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
-        $resource = "";
-        return JSONResponse::response_200(
-            ResponseTitle::DEACTIVATE,
-            "SUCCESS: Deactivated",
-            $resource
-        );
+        if ($validateResource === true) {
+            $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-        $this->logger->emergency(
-            'ERROR: Internal Server Error',
-            [ResponseTitle::DEACTIVATE,]
-        );
-        return JSONResponse::response_500(
-            ResponseTitle::DEACTIVATE,
-            "ERROR: Internal Server Error",
-            $resource
-        );
+            $methodsEntity->setStatus(MethodStatus::INACTIVE);
+            $this->methodsRepository->update($methodsEntity);
+
+            return JSONResponse::response_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
+        }
+
+        $this->logger->emergency("Internal Server Error", [ResponseTitle::DEACTIVATE]);
+
+        return JSONResponse::response_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
     }
 
 
@@ -386,30 +349,22 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = "";
+        $validateResource = $this->methodsRepository->validate($requestAttribute);
         if ($validateResource) {
-            return JSONResponse::response_404(
-                ResponseTitle::REACTIVATE,
-                "ERROR: Resource Not Found",
-                ['Invalid Resource ID' => $requestAttribute]
-            );;
+            return JSONResponse::response_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
-        $resource = "";
-        return JSONResponse::response_200(
-            ResponseTitle::REACTIVATE,
-            "SUCCESS: Reactivated",
-            $resource
-        );
+        if ($validateResource === true) {
+            $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-        $this->logger->emergency(
-            'No Resource Found for Request',
-            ['Internal Server Error' => $resource]
-        );
-        return JSONResponse::response_500(
-            ResponseTitle::REACTIVATE,
-            "ERROR: Internal Server Error",
-            $resource
-        );
+            $methodsEntity->setStatus(MethodStatus::ACTIVE);
+            $this->methodsRepository->update($methodsEntity);
+
+            return JSONResponse::response_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");
+        }
+
+        $this->logger->emergency("Internal Server Error", [ResponseTitle::REACTIVATE]);
+
+        return JSONResponse::response_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
     }
 }

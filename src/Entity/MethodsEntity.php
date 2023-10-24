@@ -38,7 +38,6 @@ class MethodsEntity implements EntityInterface
     {
         $this->created_at = new DateTimeImmutable('now');
         $this->status = MethodStatus::ACTIVE;
-        $this->type = MethodType::CARD;
     }
 
     public function getID(): int
