@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Payment_API\Controller;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Payment_API\Interface\ControllerInterface;
