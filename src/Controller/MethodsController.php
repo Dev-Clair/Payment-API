@@ -12,6 +12,7 @@ use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Entity\MethodsEntity;
 use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\MethodsResponseTitle as ResponseTitle;
+use Payment_API\Utils\Validation\PaymentsValidation;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 

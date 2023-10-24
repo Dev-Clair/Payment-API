@@ -176,7 +176,7 @@ class PaymentsController implements ControllerInterface
 
         $validateResource = $this->paymentsRepository->validate($requestAttribute);
         if ($validateResource === false) {
-            return JSONResponse::response_404(ResponseTitle::PUT, "Resource Not Found", ['Invalid Resource ID' => $requestAttribute]);
+            return JSONResponse::response_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         $requestBody = json_decode($request->getBody()->getContents(), true);
@@ -194,11 +194,11 @@ class PaymentsController implements ControllerInterface
 
             $paymentsEntity->setStatus($validatePaymentEntity->validationResult['status']);
 
-            $paymentsEntity->setType($validatePaymentEntity->validationResult['ype']);
+            $paymentsEntity->setType($validatePaymentEntity->validationResult['type']);
 
             $this->paymentsRepository->update($paymentsEntity);
 
-            return JSONResponse::response_200(ResponseTitle::PUT, "Modified", "");
+            return JSONResponse::response_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
         } else {
             return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $validatePaymentEntity->validationError);
         }
@@ -246,7 +246,7 @@ class PaymentsController implements ControllerInterface
         $validateResource = $this->paymentsRepository->validate($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::response_404(ResponseTitle::DELETE, "Resource Not Found", ['Invalid Resource ID' => $requestAttribute]);
+            return JSONResponse::response_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -254,7 +254,7 @@ class PaymentsController implements ControllerInterface
 
             $this->paymentsRepository->remove($paymentsEntity);
 
-            return JSONResponse::response_200(ResponseTitle::DELETE, "Deleted", "");
+            return JSONResponse::response_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
