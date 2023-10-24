@@ -24,6 +24,11 @@ class MethodsRepository implements RepositoryInterface
         return $this->entityManager->getRepository(MethodsEntity::class)->find($id);
     }
 
+    public function validate(int $id): bool
+    {
+        return (bool) $this->findById($id);
+    }
+
     public function store(MethodsEntity $methodsEntity): void
     {
         $this->entityManager->persist($methodsEntity);
