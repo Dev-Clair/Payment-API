@@ -268,7 +268,7 @@ class MethodsController implements ControllerInterface
         $validateResource = "";
         if ($validateResource) {
             return JSONResponse::response_404(
-                ResponseTitle::PUT,
+                ResponseTitle::DELETE,
                 "ERROR: Resource Not Found",
                 ['Invalid Resource ID' => $requestAttribute]
             );;
@@ -326,7 +326,7 @@ class MethodsController implements ControllerInterface
         $validateResource = "";
         if ($validateResource) {
             return JSONResponse::response_404(
-                ResponseTitle::PUT,
+                ResponseTitle::DEACTIVATE,
                 "ERROR: Resource Not Found",
                 ['Invalid Resource ID' => $requestAttribute]
             );;
@@ -388,7 +388,7 @@ class MethodsController implements ControllerInterface
         $validateResource = "";
         if ($validateResource) {
             return JSONResponse::response_404(
-                ResponseTitle::PUT,
+                ResponseTitle::REACTIVATE,
                 "ERROR: Resource Not Found",
                 ['Invalid Resource ID' => $requestAttribute]
             );;
