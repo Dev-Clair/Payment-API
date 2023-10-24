@@ -230,7 +230,7 @@ class PaymentsController implements ControllerInterface
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,
