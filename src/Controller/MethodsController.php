@@ -26,14 +26,15 @@ use OpenApi\Annotations as OA;
  */
 class MethodsController implements ControllerInterface
 {
-    protected MethodsEntity $methodsEntity;
-
     protected MethodsRepository $methodsRepository;
-
     protected Logger $logger;
 
-    public function __construct()
-    {
+    public function __construct(
+        MethodsRepository $methodsRepository,
+        Logger $logger
+    ) {
+        $this->methodsRepository = $methodsRepository;
+        $this->logger = $logger;
     }
 
 

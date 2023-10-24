@@ -25,14 +25,16 @@ use OpenApi\Annotations as OA;
  */
 class PaymentsController implements ControllerInterface
 {
-    protected PaymentsEntity $paymentsEntity;
-
     protected PaymentsRepository $paymentsRepository;
 
     protected Logger $logger;
 
-    public function __construct()
-    {
+    public function __construct(
+        PaymentsRepository $paymentsRepository,
+        Logger $logger
+    ) {
+        $this->paymentsRepository = $paymentsRepository;
+        $this->logger = $logger;
     }
 
 

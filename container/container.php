@@ -18,6 +18,10 @@ use Payment_API\Interface\EntityInterface;
 use Payment_API\Entity\MethodsEntity;
 use Payment_API\Entity\CustomersEntity;
 use Payment_API\Entity\PaymentsEntity;
+use Payment_API\Interface\ControllerInterface;
+use Payment_API\Controller\MethodsController;
+use Payment_API\Controller\CustomersController;
+use Payment_API\Controller\PaymentsController;
 use Payment_API\Interface\EmailValidationServiceInterface;
 use Payment_API\Services\EmailValidationService;
 use Payment_API\Interface\SmsServiceInterface;
@@ -107,6 +111,30 @@ $container->set(PaymentsEntity::class, function (Container $container) {
     return new PaymentsEntity;
 });
 
+/**
+ * Register binding: Controllers
+ */
+$container->set(CustomersController::class, function (Container $container) {
+    $smsService = $container->get(SmsServiceInterface::class);
+    $customersRepository = $container->get(CustomersRepository::class);
+    $logger = $container->get(Logger::class);
+
+    return new CustomersController($smsService, $customersRepository, $logger);
+});
+
+$container->set(MethodsController::class, function (Container $container) {
+    $methodsRepository = $container->get(MethodsRepository::class);
+    $logger = $container->get(Logger::class);
+
+    return new MethodsController($methodsRepository, $logger);
+});
+
+$container->set(PaymentsController::class, function (Container $container) {
+    $paymentsRepository = $container->get(PaymentsRepository::class);
+    $logger = $container->get(Logger::class);
+
+    return new PaymentsController($paymentsRepository, $logger);
+});
 /**
  * Register binding: Services Interface
  */

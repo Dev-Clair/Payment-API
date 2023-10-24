@@ -18,9 +18,10 @@ class MethodTypeMiddleware
 
     protected Logger $logger;
 
-    public function __construct(array $allowedMethods)
+    public function __construct(array $allowedMethods, Logger $logger)
     {
         $this->allowedMethods = $allowedMethods;
+        $this->logger = $logger;
     }
 
     public function __invoke(Request $request, Handler $handler): Response

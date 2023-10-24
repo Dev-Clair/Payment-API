@@ -18,9 +18,10 @@ class ContentTypeMiddleware
 
     protected Logger $logger;
 
-    public function __construct(string $allowedContentType)
+    public function __construct(string $allowedContentType, Logger $logger)
     {
         $this->allowedContentType = $allowedContentType;
+        $this->logger = $logger;
     }
 
     public function __invoke(Request $request, Handler $handler): Response
