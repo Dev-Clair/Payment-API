@@ -18,13 +18,15 @@ class CustomersValidation extends Abs_Validation
 
     private string $address;
 
-    private array $sanitizedData;
+    public array $sanitizedData;
 
-    public array $validationErrors;
+    public array $validationError;
+
+    public array $validationResult;
 
     public CustomersEntity $customersEntity;
 
-    public function __construct(protected ?array $requestContent = null)
+    public function __construct(protected array $requestContent)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
         $this->validateRequestContent();
@@ -39,89 +41,89 @@ class CustomersValidation extends Abs_Validation
         $this->validateCustomerAddress();
     }
 
-    private function generateUCID(): null
+    private function generateUCID(): void
     {
-        $name = $this->sanitizedData['name'] ?? null;
-        if (is_null($name)) {
-            return null;
+        $name = $this->sanitizedData['name'];
+        if (empty($name)) {
+            return;
         }
 
         $ucid = 'cus' . bin2hex($name);
         $this->ucid = substr($ucid, 0, 20);
     }
 
-    private function validateCustomerName(): null
+    private function validateCustomerName(): void
     {
-        $name = $this->sanitizedData['name'] ?? null;
-        if (is_null($name)) {
-            return null;
+        $name = $this->sanitizedData['name'];
+        if (empty($name)) {
+            return;
         }
 
         $regex_pattern = '/^[A-Za-z]+(?:\s[A-Za-z]+)?$/';
         $name = filter_var($name, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => $regex_pattern]]);
 
         if ($name === false) {
-            $this->validationErrors['name'] = "Name should contain only letters and spaces; please enter a valid first and/or last name";
+            $this->validationError['name'] = "Name should contain only letters and spaces; please enter a valid first and/or last name";
         }
 
-        $this->name = $name;
+        $this->name = $this->validationResult['name'] = $name;
     }
 
-    private function validateCustomerEmail(): null
+    private function validateCustomerEmail(): void
     {
-        $email = $this->sanitizedData['email'] ?? null;
-        if (is_null($email)) {
-            return null;
+        $email = $this->sanitizedData['email'];
+        if (empty($email)) {
+            return;
         }
 
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);
 
         if ($email === false) {
-            $this->validationErrors['email'] = "Please enter a valid email address";
+            $this->validationError['email'] = "Please enter a valid email address";
         }
 
-        $this->email = $email;
+        $this->email = $this->validationError['email'] = $email;
 
-        // Add extra validation using any third-party email validation api service
+        // Add extra validation using any third-party email validation service
     }
 
-    private function validateCustomerPassword(): null
+    private function validateCustomerPassword(): void
     {
-        $password = $this->sanitizedData['password'] ?? null;
-        if (is_null($password)) {
-            return null;
-        }
-
-        $confirm_password = $this->sanitizedData['confirm_password'] ?? null;
-        if (is_null($confirm_password)) {
-            return null;
-        }
+        $password = $this->sanitizedData['password'];
 
         if (empty($password)) {
-            $this->validationErrors['password'] = "Password is empty; please enter password";
+            $this->validationError['password'] = "Password is empty; please enter password";
+            return;
+        }
+
+        $confirm_password = $this->sanitizedData['confirm_password'];
+
+        if (empty($confirm_password)) {
+            $this->validationError['confirm_password'] = "Password is empty; please enter password";
+            return;
         }
 
         if ($password !== $confirm_password) {
-            $this->validationErrors['password'] = "Passwords do not match; please enter a valid password";
+            $this->validationError['password'] = "Passwords do not match; please enter a valid password";
         }
 
-        $this->password = $password;
+        $this->password = $this->validationResult['password'] = $password;
     }
 
-    private function validateCustomerAddress(): null
+    private function validateCustomerAddress(): void
     {
-        $address = $this->sanitizedData['address'] ?? null;
-        if (is_null($address)) {
-            return null;
+        $address = $this->sanitizedData['address'];
+        if (empty($address)) {
+            return;
         }
 
         if (!is_string($address)) {
-            $this->validationErrors['address'] = "Please enter a valid home or office address";
+            $this->validationError['address'] = "Please enter a valid home or office address";
         }
 
-        $this->address = $address;
+        $this->address = $this->validationResult['address'] = $address;
 
-        // Add extra validation using any third-party email validation api service
+        // Add extra validation using any third-party geo-location validation service
     }
 
     public function getEntities(): CustomersEntity

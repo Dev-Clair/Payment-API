@@ -116,12 +116,12 @@ class CustomersController implements ControllerInterface
 
         $customersEntity = new CustomersValidation($requestBody);
 
-        if (empty($customersEntity->validationErrors)) {
+        if (empty($customersEntity->validationError)) {
             $this->customersRepository->store($customersEntity->getEntities());
 
             return JSONResponse::response_201(ResponseTitle::POST, "Created", "");
         } else {
-            return JSONResponse::response_422(ResponseTitle::POST, "Unprocessable Entity", $customersEntity->validationErrors);
+            return JSONResponse::response_422(ResponseTitle::POST, "Unprocessable Entity", $customersEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
@@ -190,14 +190,24 @@ class CustomersController implements ControllerInterface
             return JSONResponse::response_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $customersEntity = new CustomersValidation($requestBody);
+        $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-        if (empty($customersEntity->validationErrors)) {
-            $this->customersRepository->update($customersEntity->getEntities());
+        $validateCustomerEntity = new CustomersValidation($requestBody);
+
+        if (empty($validateCustomerEntity->validationError)) {
+            $customersEntity->setName($validateCustomerEntity->validationResult['name']);
+
+            $customersEntity->setEmail($validateCustomerEntity->validationResult['email']);
+
+            $customersEntity->setPassword($validateCustomerEntity->validationResult['password']);
+
+            $customersEntity->setAddress($validateCustomerEntity->validationResult['address']);
+
+            $this->customersRepository->update($customersEntity);
 
             return JSONResponse::response_200(ResponseTitle::PUT, "Modified", "");
         } else {
-            return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $customersEntity->validationErrors);
+            return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $validateCustomerEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
