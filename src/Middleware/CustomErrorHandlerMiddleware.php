@@ -37,10 +37,8 @@ final class CustomErrorHandlerMiddleware
             || $exception instanceof \PDOException
         ) {
             $this->logger->critical($exception->getMessage());
-            $statusCode = 500;
         } else if ($exception instanceof A_Exception) {
             $this->logger->alert($exception->getMessage());
-            $statusCode = $exception->getCode();
         }
 
         $payload = [
@@ -52,11 +50,11 @@ final class CustomErrorHandlerMiddleware
             $payload['trace'] = $exception->getTrace();
         }
 
-        $response = $this->app->getResponseFactory()->createResponse();
+        $response = $this->app->getResponseFactory()->createResponse($statusCode);
         $response->getBody()->write(
             json_encode($payload, JSON_UNESCAPED_UNICODE)
         );
 
-        return $response->withStatus($statusCode);
+        return $response;
     }
 }
