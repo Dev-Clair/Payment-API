@@ -69,7 +69,7 @@ class CustomersController implements ControllerInterface
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
 
-        return JSONResponse::response_500(ResponseTitle::GET, "Internal Server Error", $customers);
+        return JSONResponse::response_500(ResponseTitle::GET, "Internal Server Error", "");
     }
 
 
@@ -247,9 +247,9 @@ class CustomersController implements ControllerInterface
         }
 
         if ($validateResource === true) {
-            $customerEntity = $this->customersRepository->findById($requestAttribute);
+            $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $this->customersRepository->remove($customerEntity);
+            $this->customersRepository->remove($customersEntity);
 
             return JSONResponse::response_200(ResponseTitle::DELETE, "Deleted", "");
         }
@@ -300,9 +300,10 @@ class CustomersController implements ControllerInterface
         }
 
         if ($validateResource === true) {
-            $customerEntity = $this->customersRepository->findById($requestAttribute);
+            $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $customerEntity->setStatus(CustomerStatus::INACTIVE);
+            $customersEntity->setStatus(CustomerStatus::INACTIVE);
+            $this->customersRepository->update($customersEntity);
 
             return JSONResponse::response_200(ResponseTitle::DEACTIVATE, "Deactivated", "");
         }
@@ -353,9 +354,10 @@ class CustomersController implements ControllerInterface
         }
 
         if ($validateResource === true) {
-            $customerEntity = $this->customersRepository->findById($requestAttribute);
+            $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $customerEntity->setStatus(CustomerStatus::ACTIVE);
+            $customersEntity->setStatus(CustomerStatus::ACTIVE);
+            $this->customersRepository->update($customersEntity);
 
             return JSONResponse::response_200(ResponseTitle::REACTIVATE, "Reactivated", "");
         }
