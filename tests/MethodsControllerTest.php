@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
 
 /**
- * Test class for MethodsController.
+ * Test class for methodsController.
  * 
  * Extends PHPUnit\Framework\TestCase
  */
@@ -30,25 +30,33 @@ class MethodsControllerTest extends TestCase
     // }
 
     /**
-     * Test the "get" endpoint.
+     * Asserts response header and body content-type is json
      */
-    public function testGet(): void
+    private function assertJsonContent($response): void
     {
-        $response = $this->http->request('GET', 'v1/methods');
-
         $contentType = $response->getHeaders()["Content-Type"][0];
 
-        $this->assertEquals(200, $response->getStatusCode());
-
+        // assert response header is Json
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
 
+        // assert response body is Json
         $this->assertJson($response->getBody()->getContents());
     }
 
     /**
-     * Test the "post" endpoint.
+     * Test "get" endpoint returns status 200 response
      */
-    public function testPost(): void
+    public function get_endpoint_returns_status_200_response(): void
+    {
+        $response = $this->http->request('GET', 'v1/methods');
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "post" endpoint returns status 201 response
+     */
+    public function post_endpoint_returns_status_201_response(): void
     {
         $response = $this->http->request('POST', 'v1/methods', [
             'headers' => [
@@ -57,19 +65,49 @@ class MethodsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $contentType = $response->getHeaders()["Content-Type"][0];
-
         $this->assertEquals(201, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
-        $this->assertJson($response->getBody()->getContents());
+        $this->assertJsonContent($response);
     }
 
     /**
-     * Test the "put" endpoint.
+     * Test "post" endpoint returns status 400 response
      */
-    public function testPut(): void
+    public function post_endpoint_returns_status_400_response(): void
+    {
+        $response = $this->http->request('POST', 'v1/methods', [
+            'headers' => [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ],
+            'body' => json_encode([]),
+        ]);
+
+        $this->assertEquals(400, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "post" endpoint returns status 422 response
+     */
+    public function post_endpoint_returns_status_422_response(): void
+    {
+        $response = $this->http->request('POST', 'v1/methods', [
+            'headers' => [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ],
+            'body' => json_encode([]),
+        ]);
+
+        $this->assertEquals(422, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "put" endpoint returns status 200 response
+     */
+    public function put_endpoint_returns_status_200_response(): void
     {
         $response = $this->http->request('PUT', 'v1/methods/{id:[0-9]+}', [
             'headers' => [
@@ -78,60 +116,131 @@ class MethodsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $contentType = $response->getHeaders()["Content-Type"][0];
-
         $this->assertEquals(200, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
-        $this->assertJson($response->getBody()->getContents());
+        $this->assertJsonContent($response);
     }
 
     /**
-     * Test the "delete" endpoint.
+     * Test "put" endpoint returns status 400 response
      */
-    public function testDelete(): void
+    public function put_endpoint_returns_status_400_response(): void
+    {
+        $response = $this->http->request('PUT', 'v1/methods/{id:[0-9]+}', [
+            'headers' => [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ],
+            'body' => json_encode([]),
+        ]);
+
+        $this->assertEquals(400, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "put" endpoint returns status 404 response
+     */
+    public function put_endpoint_returns_status_404_response(): void
+    {
+        $response = $this->http->request('PUT', 'v1/methods/{id:[0-9]+}', [
+            'headers' => [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ],
+            'body' => json_encode([]),
+        ]);
+
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "put" endpoint returns status 422 response
+     */
+    public function put_endpoint_returns_status_422_response(): void
+    {
+        $response = $this->http->request('PUT', 'v1/methods/{id:[0-9]+}', [
+            'headers' => [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ],
+            'body' => json_encode([]),
+        ]);
+
+        $this->assertEquals(422, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "delete" endpoint returns status 200 response
+     */
+    public function delete_endpoint_returns_status_200_response(): void
     {
         $response = $this->http->request('DELETE', 'v1/methods/{id:[0-9]+}');
 
-        $contentType = $response->getHeaders()["Content-Type"][0];
-
         $this->assertEquals(200, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
-        $this->assertJson($response->getBody()->getContents());
+        $this->assertJsonContent($response);
     }
 
     /**
-     * Test the "getDeactivate" endpoint.
+     * Test "delete" endpoint returns status 404 response
      */
-    public function testDeactivate(): void
+    public function delete_endpoint_returns_status_404_response(): void
     {
-        $response = $this->http->request('GET', 'v1/methods/deactivate/{id:[0-9]+}' . rand(1, 5));
+        $response = $this->http->request('DELETE', 'v1/methods/{id:[0-9]+}');
 
-        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals(404, $response->getStatusCode());
 
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
-
-        $this->assertJson($response->getBody()->getContents());
+        $this->assertJsonContent($response);
     }
 
     /**
-     * Test the "getReactivate" endpoint.
+     * Test "deactivate" endpoint returns status 200 response
      */
-    public function testReactivate(): void
+    public function deactivate_endpoint_returns_status_200_response(): void
+    {
+        $response = $this->http->request('GET', 'v1/methods/deactivate/{id:[0-9]+}');
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "deactivate" endpoint returns status 404 response
+     */
+    public function deactivate_endpoint_returns_status_404_response(): void
+    {
+        $response = $this->http->request('GET', 'v1/methods/deactivate/{id:[0-9]+}');
+
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * Test "reactivate" endpoint returns status 200 response
+     */
+    public function reactivate_endpoint_returns_status_200_response(): void
     {
         $response = $this->http->request('GET', 'v1/methods/reactivate/{id:[0-9]+}');
 
-        $contentType = $response->getHeaders()["Content-Type"][0];
-
         $this->assertEquals(200, $response->getStatusCode());
 
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertJsonContent($response);
+    }
 
-        $this->assertJson($response->getBody()->getContents());
+    /**
+     * Test "reactivate" endpoint returns status 404 response
+     */
+    public function reactivate_endpoint_returns_status_404_response(): void
+    {
+        $response = $this->http->request('GET', 'v1/methods/reactivate/{id:[0-9]+}');
+
+        $this->assertEquals(404, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
     }
 }
