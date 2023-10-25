@@ -14,6 +14,8 @@ class CustomersValidation extends Abs_Validation
 
     private string $email;
 
+    private int $phone;
+
     private string $password;
 
     private string $address;
@@ -37,6 +39,7 @@ class CustomersValidation extends Abs_Validation
         $this->generateUCID();
         $this->validateCustomerName();
         $this->validateCustomerEmail();
+        $this->validateCustomerPhone();
         $this->validateCustomerPassword();
         $this->validateCustomerAddress();
     }
@@ -56,6 +59,7 @@ class CustomersValidation extends Abs_Validation
     {
         $name = $this->sanitizedData['name'];
         if (empty($name)) {
+            $this->validationError['name'] = "Name is empty; Please enter a valid first and/or last name";
             return;
         }
 
@@ -63,7 +67,7 @@ class CustomersValidation extends Abs_Validation
         $name = filter_var($name, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => $regex_pattern]]);
 
         if ($name === false) {
-            $this->validationError['name'] = "Name should contain only letters and spaces; please enter a valid first and/or last name";
+            $this->validationError['name'] = "Name should contain only letters and spaces; Please enter a valid first and/or last name";
             return;
         }
 
@@ -89,24 +93,43 @@ class CustomersValidation extends Abs_Validation
         // Add extra validation using any third-party email validation service
     }
 
+    private function validateCustomerPhone(): void
+    {
+        $phone = $this->sanitizedData['phone'];
+
+        $phone = preg_replace("/[^0-9]/", "", $phone);
+
+        if (empty($phone)) {
+            $this->validationError['phone'] = "Phone number is empty; Please enter a phone/mobile number";
+            return;
+        }
+
+        $regex_pattern = '/^[0-9]{11,}$/';
+
+        if (!preg_match($regex_pattern, $phone)) {
+            $this->validationError['phone'] = "Invalid phone number format; Please enter a valid phone/mobile number";
+            return;
+        }
+
+        $this->phone = $this->validationError['phone'] = $phone;
+    }
+
     private function validateCustomerPassword(): void
     {
         $password = $this->sanitizedData['password'];
-
         if (empty($password)) {
-            $this->validationError['password'] = "Password is empty; please enter password";
+            $this->validationError['password'] = "Password is empty; Please enter password";
             return;
         }
 
         $confirm_password = $this->sanitizedData['confirm_password'];
-
         if (empty($confirm_password)) {
-            $this->validationError['confirm_password'] = "Password is empty; please enter password";
+            $this->validationError['confirm_password'] = "Password is empty; Please enter password";
             return;
         }
 
         if ($password !== $confirm_password) {
-            $this->validationError['password'] = "Passwords do not match; please enter a valid password";
+            $this->validationError['password'] = "Passwords do not match; Please enter a valid password";
             return;
         }
 
@@ -117,11 +140,12 @@ class CustomersValidation extends Abs_Validation
     {
         $address = $this->sanitizedData['address'];
         if (empty($address)) {
+            $this->validationError['address'] = "Address field is empty; Please enter a valid home or office address";
             return;
         }
 
         if (!is_string($address)) {
-            $this->validationError['address'] = "Please enter a valid home or office address";
+            $this->validationError['address'] = "Invalid type; Please enter a valid home or office address";
             return;
         }
 
@@ -137,6 +161,7 @@ class CustomersValidation extends Abs_Validation
         $this->ucid ?? $customersEntity->setUCID($this->ucid);
         $this->name ?? $customersEntity->setName($this->name);
         $this->email ?? $customersEntity->setEmail($this->email);
+        $this->phone ?? $customersEntity->setPhone($this->phone);
         $this->password ?? $customersEntity->setPassword($this->password);
         $this->address ?? $customersEntity->setAddress($this->address);
 

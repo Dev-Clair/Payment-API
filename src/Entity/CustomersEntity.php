@@ -28,6 +28,9 @@ class CustomersEntity implements EntityInterface
     #[ORM\Column(type: 'string', unique: true, length: 255)]
     private string $email; // Customer Email
 
+    #[ORM\Column(type: 'integer', nullable: false, length: 20)]
+    private int $phone; // Customer Phone
+
     #[ORM\Column(type: 'string', nullable: false, length: 255)]
     private string $password; // Customer Password
 
@@ -83,6 +86,16 @@ class CustomersEntity implements EntityInterface
     public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    public function getPhone(): int
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(int $phone): void
+    {
+        $this->phone = $phone;
     }
 
     public function getPassword(): string
