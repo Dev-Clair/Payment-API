@@ -24,7 +24,7 @@ class CustomersRepository implements RepositoryInterface
         return $this->entityManager->getRepository(CustomersEntity::class)->find($id);
     }
 
-    public function validate(int $id): bool
+    public function validateId(int $id): bool
     {
         return (bool) $this->findById($id);
     }

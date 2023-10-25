@@ -175,7 +175,7 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->methodsRepository->validate($requestAttribute);
+        $validateResource = $this->methodsRepository->validateId($requestAttribute);
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -241,7 +241,7 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->methodsRepository->validate($requestAttribute);
+        $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
@@ -295,7 +295,7 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->methodsRepository->validate($requestAttribute);
+        $validateResource = $this->methodsRepository->validateId($requestAttribute);
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -349,7 +349,7 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->methodsRepository->validate($requestAttribute);
+        $validateResource = $this->methodsRepository->validateId($requestAttribute);
         if ($validateResource) {
             return JSONResponse::response_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }

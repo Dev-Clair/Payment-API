@@ -175,7 +175,8 @@ class PaymentsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->paymentsRepository->validate($requestAttribute);
+        $validateResource = $this->paymentsRepository->validateId($requestAttribute);
+
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -244,7 +245,7 @@ class PaymentsController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->paymentsRepository->validate($requestAttribute);
+        $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);

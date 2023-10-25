@@ -180,7 +180,8 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->customersRepository->validate($requestAttribute);
+        $validateResource = $this->customersRepository->validateId($requestAttribute);
+
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -199,6 +200,8 @@ class CustomersController implements ControllerInterface
             $customersEntity->setName($validateCustomerEntity->validationResult['name']);
 
             $customersEntity->setEmail($validateCustomerEntity->validationResult['email']);
+
+            $customersEntity->setPhone($validateCustomerEntity->validationResult['phone']);
 
             $customersEntity->setPassword($validateCustomerEntity->validationResult['password']);
 
@@ -251,7 +254,7 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->customersRepository->validate($requestAttribute);
+        $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
@@ -305,7 +308,8 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->customersRepository->validate($requestAttribute);
+        $validateResource = $this->customersRepository->validateId($requestAttribute);
+
         if ($validateResource === false) {
             return JSONResponse::response_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -314,6 +318,7 @@ class CustomersController implements ControllerInterface
             $customersEntity = $this->customersRepository->findById($requestAttribute);
 
             $customersEntity->setStatus(CustomerStatus::INACTIVE);
+
             $this->customersRepository->update($customersEntity);
 
             return JSONResponse::response_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
@@ -359,7 +364,8 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = $args['id'];
 
-        $validateResource = $this->customersRepository->validate($requestAttribute);
+        $validateResource = $this->customersRepository->validateId($requestAttribute);
+
         if ($validateResource) {
             return JSONResponse::response_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -368,6 +374,7 @@ class CustomersController implements ControllerInterface
             $customersEntity = $this->customersRepository->findById($requestAttribute);
 
             $customersEntity->setStatus(CustomerStatus::ACTIVE);
+
             $this->customersRepository->update($customersEntity);
 
             return JSONResponse::response_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");

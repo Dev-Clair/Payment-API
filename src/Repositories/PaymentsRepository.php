@@ -24,7 +24,7 @@ class PaymentsRepository implements RepositoryInterface
         return $this->entityManager->getRepository(PaymentsEntity::class)->find($id);
     }
 
-    public function validate(int $id): bool
+    public function validateid(int $id): bool
     {
         return (bool) $this->findById($id);
     }
