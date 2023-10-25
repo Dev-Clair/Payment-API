@@ -47,12 +47,12 @@ $container->set('settings', function () {
             'dev_mode' => true,
             'metadata_dirs' => [APP_ROOT . '/src'],
             'connection' => [
-                'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
-                'host' => $_ENV['MARIADB_HOST'] ?? 'localhost',
+                'driver' => $_ENV['DB_DRIVER'],
+                'host' => $_ENV['MARIADB_HOST'],
                 'port' => 3306,
-                'dbname' => $_ENV['MARIADB_DB_NAME'] ?? 'payments',
-                'user' => $_ENV['MARIADB_DB_USER'] ?? 'root',
-                'password' => $_ENV['MARIADB_DB_USER_PASSWORD'] ?? 'payment_api_mariadb'
+                'dbname' => $_ENV['MARIADB_DB_NAME'],
+                'user' => $_ENV['MARIADB_DB_USER'],
+                'password' => $_ENV['MARIADB_DB_USER_PASSWORD']
             ]
         ]
 
@@ -81,17 +81,17 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
 /**
  * Register binding: Repositories
  */
-$container->set(MethodsRepository::class, function (Container $container) {
+$container->set(MethodsRepository::class, function (Container $container): MethodsRepository {
     $entityManager = $container->get(EntityManager::class);
     return new MethodsRepository($entityManager);
 });
 
-$container->set(CustomersRepository::class, function (Container $container) {
+$container->set(CustomersRepository::class, function (Container $container): CustomersRepository {
     $entityManager = $container->get(EntityManager::class);
     return new CustomersRepository($entityManager);
 });
 
-$container->set(PaymentsRepository::class, function (Container $container) {
+$container->set(PaymentsRepository::class, function (Container $container): PaymentsRepository {
     $entityManager = $container->get(EntityManager::class);
     return new PaymentsRepository($entityManager);
 });
@@ -99,22 +99,29 @@ $container->set(PaymentsRepository::class, function (Container $container) {
 /**
  * Register binding: Entities
  */
-$container->set(MethodsEntity::class, function (Container $container) {
+$container->set(MethodsEntity::class, function (Container $container): MethodsEntity {
     return new MethodsEntity;
 });
 
-$container->set(CustomersEntity::class, function (Container $container) {
+$container->set(CustomersEntity::class, function (Container $container): CustomersEntity {
     return new CustomersEntity;
 });
 
-$container->set(PaymentsEntity::class, function (Container $container) {
+$container->set(PaymentsEntity::class, function (Container $container): PaymentsEntity {
     return new PaymentsEntity;
 });
 
 /**
  * Register binding: Controllers
  */
-$container->set(CustomersController::class, function (Container $container) {
+$container->set(MethodsController::class, function (Container $container): MethodsController {
+    $methodsRepository = $container->get(MethodsRepository::class);
+    $logger = $container->get(Logger::class);
+
+    return new MethodsController($methodsRepository, $logger);
+});
+
+$container->set(CustomersController::class, function (Container $container): CustomersController {
     $smsService = $container->get(SmsServiceInterface::class);
     $customersRepository = $container->get(CustomersRepository::class);
     $logger = $container->get(Logger::class);
@@ -122,14 +129,7 @@ $container->set(CustomersController::class, function (Container $container) {
     return new CustomersController($smsService, $customersRepository, $logger);
 });
 
-$container->set(MethodsController::class, function (Container $container) {
-    $methodsRepository = $container->get(MethodsRepository::class);
-    $logger = $container->get(Logger::class);
-
-    return new MethodsController($methodsRepository, $logger);
-});
-
-$container->set(PaymentsController::class, function (Container $container) {
+$container->set(PaymentsController::class, function (Container $container): PaymentsController {
     $paymentsRepository = $container->get(PaymentsRepository::class);
     $logger = $container->get(Logger::class);
 
@@ -140,14 +140,14 @@ $container->set(PaymentsController::class, function (Container $container) {
  */
 $container->set(
     SmsServiceInterface::class,
-    function (Container $container) {
+    function (Container $container): SmsService {
         return new SmsService;
     }
 );
 
 $container->set(
     EmailValidationServiceInterface::class,
-    function (Container $container) {
+    function (Container $container): EmailValidationService {
         return new EmailValidationService;
     }
 );
@@ -155,7 +155,7 @@ $container->set(
 /**
  * Register binding: Logger
  */
-$container->set(Logger::class, function (Container $container) {
+$container->set(Logger::class, function (Container $container): Logger {
     $logger = new Logger('Payment_API');
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/emergency.log', Level::Emergency));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/alert.log', Level::Alert));
