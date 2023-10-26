@@ -48,9 +48,10 @@ class ContentTypeMiddlewareTest extends TestCase
     }
 
     /**
+     * @test
      * @dataProvider invalidContentTypes
      */
-    public function testMiddlewareReturnsBadRequestForInvalidContentType($method, $endpoint): void
+    public function content_type_middleware_returns_bad_request_for_invalid_content_type($method, $endpoint): void
     {
         $response = $this->http->request($method, $endpoint, [
             'headers' => ['Content-Type' => 'text/html; charset=UTF-8']
