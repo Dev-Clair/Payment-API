@@ -33,7 +33,7 @@ class ContentTypeMiddlewareTest extends TestCase
     }
 
     /**
-     * provides method and endpoint values for various test cases
+     * provides method and endpoint data for various test cases
      */
     public function invalidContentTypes(): array
     {
@@ -48,7 +48,6 @@ class ContentTypeMiddlewareTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider invalidContentTypes
      */
     public function testMiddlewareReturnsBadRequestForInvalidContentType($method, $endpoint): void

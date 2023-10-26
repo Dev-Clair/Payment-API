@@ -33,7 +33,7 @@ class MethodTypeMiddlewareTest extends TestCase
     }
 
     /**
-     * Data provider for different endpoints $id
+     * provides id values for various test cases
      */
     public function idDataProvider(): array
     {
