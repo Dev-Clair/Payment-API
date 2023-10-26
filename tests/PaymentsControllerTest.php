@@ -33,6 +33,22 @@ class PaymentsControllerTest extends TestCase
     }
 
     /**
+     * provides valid id values for various test cases
+     */
+    public function validIdDataProvider(): array
+    {
+        return ['1', '2', '3', '4', '5'];
+    }
+
+    /**
+     * provides invalid id values for various test cases
+     */
+    public function invalidIdDataProvider(): array
+    {
+        return ['a', 'b', 'c', 'd', 'e'];
+    }
+
+    /**
      * Helper method: validates the content type and format of the HTTP response
      */
     private function assertJsonContent($response): void
@@ -109,10 +125,11 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider validIdDataProvider
      */
-    public function put_endpoint_returns_status_200_response(): void
+    public function put_endpoint_returns_status_200_response($id): void
     {
-        $response = $this->http->request('PUT', 'v1/payments/{id:[0-9]+}', [
+        $response = $this->http->request('PUT', 'v1/payments/' . $id, [
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
@@ -126,10 +143,11 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider validIdDataProvider
      */
-    public function put_endpoint_returns_status_400_response(): void
+    public function put_endpoint_returns_status_400_response($id): void
     {
-        $response = $this->http->request('PUT', 'v1/payments/{id:[0-9]+}', [
+        $response = $this->http->request('PUT', 'v1/payments/' . $id, [
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
@@ -143,10 +161,11 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalidIdDataProvider
      */
-    public function put_endpoint_returns_status_404_response(): void
+    public function put_endpoint_returns_status_404_response($id): void
     {
-        $response = $this->http->request('PUT', 'v1/payments/{id:[0-9]+}', [
+        $response = $this->http->request('PUT', 'v1/payments/' . $id, [
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
@@ -160,10 +179,11 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider validIdDataProvider
      */
-    public function put_endpoint_returns_status_422_response(): void
+    public function put_endpoint_returns_status_422_response($id): void
     {
-        $response = $this->http->request('PUT', 'v1/payments/{id:[0-9]+}', [
+        $response = $this->http->request('PUT', 'v1/payments/' . $id, [
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
@@ -177,10 +197,11 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider validIdDataProvider
      */
-    public function delete_endpoint_returns_status_200_response(): void
+    public function delete_endpoint_returns_status_200_response($id): void
     {
-        $response = $this->http->request('DELETE', 'v1/payments/{id:[0-9]+}');
+        $response = $this->http->request('DELETE', 'v1/payments/' . $id);
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -189,10 +210,11 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalidIdDataProvider
      */
-    public function delete_endpoint_returns_status_404_response(): void
+    public function delete_endpoint_returns_status_404_response($id): void
     {
-        $response = $this->http->request('DELETE', 'v1/payments/{id:[0-9]+}');
+        $response = $this->http->request('DELETE', 'v1/payments/' . $id);
 
         $this->assertEquals(404, $response->getStatusCode());
 
