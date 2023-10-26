@@ -24,13 +24,16 @@ class CustomersControllerTest extends TestCase
         $this->http = new Client(['base_uri' => 'http://localhost:26000/']);
     }
 
-    // protected function tearDown(): void
-    // {
-    //     $this->http = null;
-    // }
+    /**
+     * Cleans up the HTTP client after each test case
+     */
+    protected function tearDown(): void
+    {
+        $this->http = null;
+    }
 
     /**
-     * Asserts response header and body content-type is json
+     * Helper method: validates the content type and format of the HTTP response
      */
     private function assertJsonContent($response): void
     {
@@ -44,7 +47,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "get" endpoint returns status 200 response
+     * @test
      */
     public function get_endpoint_returns_status_200_response(): void
     {
@@ -54,7 +57,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "post" endpoint returns status 201 response
+     * @test
      */
     public function post_endpoint_returns_status_201_response(): void
     {
@@ -71,7 +74,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "post" endpoint returns status 400 response
+     * @test
      */
     public function post_endpoint_returns_status_400_response(): void
     {
@@ -88,7 +91,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "post" endpoint returns status 422 response
+     * @test
      */
     public function post_endpoint_returns_status_422_response(): void
     {
@@ -105,7 +108,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "put" endpoint returns status 200 response
+     * @test
      */
     public function put_endpoint_returns_status_200_response(): void
     {
@@ -122,7 +125,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "put" endpoint returns status 400 response
+     * @test
      */
     public function put_endpoint_returns_status_400_response(): void
     {
@@ -139,7 +142,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "put" endpoint returns status 404 response
+     * @test
      */
     public function put_endpoint_returns_status_404_response(): void
     {
@@ -156,7 +159,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "put" endpoint returns status 422 response
+     * @test
      */
     public function put_endpoint_returns_status_422_response(): void
     {
@@ -173,7 +176,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "delete" endpoint returns status 200 response
+     * @test
      */
     public function delete_endpoint_returns_status_200_response(): void
     {
@@ -185,7 +188,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "delete" endpoint returns status 404 response
+     * @test
      */
     public function delete_endpoint_returns_status_404_response(): void
     {
@@ -197,7 +200,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "deactivate" endpoint returns status 200 response
+     * @test
      */
     public function deactivate_endpoint_returns_status_200_response(): void
     {
@@ -209,7 +212,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "deactivate" endpoint returns status 404 response
+     * @test
      */
     public function deactivate_endpoint_returns_status_404_response(): void
     {
@@ -221,7 +224,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "reactivate" endpoint returns status 200 response
+     * @test
      */
     public function reactivate_endpoint_returns_status_200_response(): void
     {
@@ -233,7 +236,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Test "reactivate" endpoint returns status 404 response
+     * @test
      */
     public function reactivate_endpoint_returns_status_404_response(): void
     {
