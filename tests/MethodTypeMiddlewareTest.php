@@ -44,7 +44,7 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function get_method_endpoint_middleware_returns_status_405_response(): void
+    public function get_methods_endpoint_middleware_returns_status_405_response_for_invalid_request_method(): void
     {
         $response = $this->http->request('DELETE', 'v1/methods');
 
@@ -54,7 +54,7 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function post_method_endpoint_middleware_returns_status_405_response(): void
+    public function post_methods_endpoint_middleware_returns_status_405_response_for_invalid_request_method(): void
     {
         $response = $this->http->request('PUT', 'v1/methods');
 
@@ -65,7 +65,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function put_method_endpoint_middleware_returns_status_405_response($id): void
+    public function put_methods_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('GET', 'v1/methods/' . $id);
 
@@ -76,7 +76,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function deactivate_method_endpoint_middleware_returns_status_405_response($id): void
+    public function deactivate_methods_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('DELETE', 'v1/methods/deactivate/' . $id);
 
@@ -87,7 +87,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function reactivate_method_endpoint_middleware_returns_status_405_response($id): void
+    public function reactivate_methods_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('DELETE', 'v1/methods/reactivate/' . $id);
 
@@ -98,7 +98,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function delete_method_endpoint_middleware_returns_status_405_response($id): void
+    public function delete_methods_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('POST', 'v1/methods/' . $id);
 
@@ -109,7 +109,7 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function get_customer_endpoint_middleware_returns_status_405_response(): void
+    public function get_customers_endpoint_middleware_returns_status_405_response_for_invalid_request_method(): void
     {
         $response = $this->http->request('DELETE', 'v1/customers');
 
@@ -119,7 +119,7 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function post_customer_endpoint_middleware_returns_status_405_response(): void
+    public function post_customers_endpoint_middleware_returns_status_405_response_for_invalid_request_method(): void
     {
         $response = $this->http->request('PUT', 'v1/customers');
 
@@ -130,7 +130,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function put_customer_endpoint_middleware_returns_status_405_response($id): void
+    public function put_customers_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('GET', 'v1/customers/' . $id);
 
@@ -141,7 +141,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function deactivate_customer_endpoint_middleware_returns_status_405_response($id): void
+    public function deactivate_customers_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('DELETE', 'v1/customers/deactivate/' . $id);
 
@@ -152,7 +152,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function reactivate_customer_endpoint_middleware_returns_status_405_response($id): void
+    public function reactivate_customers_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('DELETE', 'v1/customers/reactivate/' . $id);
 
@@ -163,7 +163,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function delete_customer_endpoint_middleware_returns_status_405_response($id): void
+    public function delete_customers_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('POST', 'v1/customers/' . $id);
 
@@ -174,7 +174,7 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function get_payment_endpoint_middleware_returns_status_405_response(): void
+    public function get_payments_endpoint_middleware_returns_status_405_response_for_invalid_request_method(): void
     {
         $response = $this->http->request('DELETE', 'v1/payments');
 
@@ -184,7 +184,7 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * @test
      */
-    public function post_payment_endpoint_middleware_returns_status_405_response(): void
+    public function post_payments_endpoint_middleware_returns_status_405_response_for_invalid_request_method(): void
     {
         $response = $this->http->request('PUT', 'v1/payments');
 
@@ -195,7 +195,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function put_payment_endpoint_middleware_returns_status_405_response($id): void
+    public function put_payments_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('GET', 'v1/payments/' . $id);
 
@@ -206,7 +206,7 @@ class MethodTypeMiddlewareTest extends TestCase
      * @test
      * @dataProvider idDataProvider
      */
-    public function delete_payment_endpoint_middleware_returns_status_405_response($id): void
+    public function delete_payments_endpoint_middleware_returns_status_405_response_for_invalid_request_method($id): void
     {
         $response = $this->http->request('POST', 'v1/payments/' . $id);
 
