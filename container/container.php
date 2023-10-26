@@ -45,7 +45,7 @@ $container->set('settings', function () {
         'determineRouteBeforeAppMiddleware' => false,
         'doctrine' => [
             'dev_mode' => true,
-            'metadata_dirs' => [APP_ROOT . '/src'],
+            'metadata_dirs' => [APP_ROOT . '/src/Entity'],
             'connection' => [
                 'driver' => $_ENV['DB_DRIVER'],
                 'host' => $_ENV['MARIADB_HOST'],
