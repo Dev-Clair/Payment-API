@@ -197,15 +197,15 @@ class CustomersController implements ControllerInterface
         $validateCustomerEntity = new CustomersValidation($requestBody);
 
         if (empty($validateCustomerEntity->validationError)) {
-            $customersEntity->setName($validateCustomerEntity->validationResult['name']);
+            $customersEntity->setCustomerName($validateCustomerEntity->validationResult['customer_name']);
 
-            $customersEntity->setEmail($validateCustomerEntity->validationResult['email']);
+            $customersEntity->setCustomerEmail($validateCustomerEntity->validationResult['customer_email']);
 
-            $customersEntity->setPhone($validateCustomerEntity->validationResult['phone']);
+            $customersEntity->setCustomerPhone($validateCustomerEntity->validationResult['customer_phone']);
 
-            $customersEntity->setPassword($validateCustomerEntity->validationResult['password']);
+            $customersEntity->setCustomerPassword($validateCustomerEntity->validationResult['customer_password']);
 
-            $customersEntity->setAddress($validateCustomerEntity->validationResult['address']);
+            $customersEntity->setCustomerAddress($validateCustomerEntity->validationResult['customer_address']);
 
             $this->customersRepository->update($customersEntity);
 
@@ -317,7 +317,7 @@ class CustomersController implements ControllerInterface
         if ($validateResource === true) {
             $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $customersEntity->setStatus(CustomerStatus::INACTIVE);
+            $customersEntity->setCustomerStatus(CustomerStatus::INACTIVE);
 
             $this->customersRepository->update($customersEntity);
 
@@ -373,7 +373,7 @@ class CustomersController implements ControllerInterface
         if ($validateResource === true) {
             $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $customersEntity->setStatus(CustomerStatus::ACTIVE);
+            $customersEntity->setCustomerStatus(CustomerStatus::ACTIVE);
 
             $this->customersRepository->update($customersEntity);
 

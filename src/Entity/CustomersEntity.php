@@ -23,33 +23,33 @@ class CustomersEntity implements EntityInterface
     private string $ucid; // Unique Customer Identifier
 
     #[ORM\Column(type: 'string', nullable: false, length: 150)]
-    private string $name; // Customer Name
+    private string $customer_name; // Customer Name
 
     #[ORM\Column(type: 'string', unique: true, length: 255)]
-    private string $email; // Customer Email
+    private string $customer_email; // Customer Email
 
     #[ORM\Column(type: 'integer', nullable: false, length: 20)]
-    private int $phone; // Customer Phone
+    private int $customer_phone; // Customer Phone
 
     #[ORM\Column(type: 'string', nullable: false, length: 255)]
-    private string $password; // Customer Password
+    private string $customer_password; // Customer Password
 
     #[ORM\Column(type: 'string', nullable: true, updatable: true, length: 255)]
-    private string $address; // Customer Address
+    private string $customer_address; // Customer Address
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
     private DateTimeImmutable $created_at; // Date and Time of Account Creation
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
-    private CustomerStatus $status; // Customer Account Status
+    private CustomerStatus $customer_status; // Customer Account Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("individual", "organization")')]
-    private CustomerType $type; // Customer Type
+    private CustomerType $customer_type; // Customer Type
 
     public function __construct()
     {
         $this->created_at = new DateTimeImmutable('now');
-        $this->status = CustomerStatus::ACTIVE;
+        $this->customer_status = CustomerStatus::ACTIVE;
     }
 
     public function getID(): int
@@ -67,54 +67,54 @@ class CustomersEntity implements EntityInterface
         $this->ucid = $ucid;
     }
 
-    public function getName(): string
+    public function getCustomerName(): string
     {
-        return $this->name;
+        return $this->customer_name;
     }
 
-    public function setName(string $name): void
+    public function setCustomerName(string $customer_name): void
     {
-        $this->name = $name;
+        $this->customer_name = $customer_name;
     }
 
-    public function getEmail(): string
+    public function getCustomerEmail(): string
     {
-        return $this->email;
+        return $this->customer_email;
     }
 
-    public function setEmail(string $email): void
+    public function setCustomerEmail(string $customer_email): void
     {
-        $this->email = $email;
+        $this->customer_email = $customer_email;
     }
 
-    public function getPhone(): int
+    public function getCustomerPhone(): int
     {
-        return $this->phone;
+        return $this->customer_phone;
     }
 
-    public function setPhone(int $phone): void
+    public function setCustomerPhone(int $customer_phone): void
     {
-        $this->phone = $phone;
+        $this->customer_phone = $customer_phone;
     }
 
-    public function getPassword(): string
+    public function getCustomerPassword(): string
     {
-        return $this->password;
+        return $this->customer_password;
     }
 
-    public function setPassword(string $password): void
+    public function setCustomerPassword(string $customer_password): void
     {
-        $this->password = hash(PASSWORD_BCRYPT, $password);
+        $this->customer_password = hash(PASSWORD_BCRYPT, $customer_password);
     }
 
-    public function getAddress(): string
+    public function getCustomerAddress(): string
     {
-        return $this->address;
+        return $this->customer_address;
     }
 
-    public function setAddress(string $address): void
+    public function setCustomerAddress(string $customer_address): void
     {
-        $this->address = $address;
+        $this->customer_address = $customer_address;
     }
 
     public function getCreatedAt(): DateTimeImmutable
@@ -122,23 +122,23 @@ class CustomersEntity implements EntityInterface
         return $this->created_at;
     }
 
-    public function getStatus(): CustomerStatus
+    public function getCustomerStatus(): CustomerStatus
     {
-        return $this->status;
+        return $this->customer_status;
     }
 
-    public function setStatus(CustomerStatus $status): void
+    public function setCustomerStatus(CustomerStatus $customer_status): void
     {
-        $this->status = $status;
+        $this->customer_status = $customer_status;
     }
 
-    public function getType(): CustomerType
+    public function getCustomerType(): CustomerType
     {
-        return $this->type;
+        return $this->customer_type;
     }
 
-    public function setType(CustomerType $type): void
+    public function setCustomerType(CustomerType $customer_type): void
     {
-        $this->type = $type;
+        $this->customer_type = $customer_type;
     }
 }
