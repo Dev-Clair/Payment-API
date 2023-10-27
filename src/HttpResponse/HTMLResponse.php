@@ -5,72 +5,72 @@ declare(strict_types=1);
 namespace Payment_API\HttpResponse;
 
 use Payment_API\Interface\EnumsInterface;
-use Payment_API\Utils\Trait\Response_200_Trait as Response_200;
-use Payment_API\Utils\Trait\Response_201_Trait as Response_201;
-use Payment_API\Utils\Trait\Response_400_Trait as Response_400;
-use Payment_API\Utils\Trait\Response_401_Trait as Response_401;
-use Payment_API\Utils\Trait\Response_404_Trait as Response_404;
-use Payment_API\Utils\Trait\Response_405_Trait as Response_405;
-use Payment_API\Utils\Trait\Response_422_Trait as Response_422;
-use Payment_API\Utils\Trait\Response_500_Trait as Response_500;
-use Slim\Psr7\Response as Response;
+use Payment_API\Utils\Response\Status_200 as Status_200;
+use Payment_API\Utils\Response\Status_201 as Status_201;
+use Payment_API\Utils\Response\Status_400 as Status_400;
+use Payment_API\Utils\Response\Status_401 as Status_401;
+use Payment_API\Utils\Response\Status_404 as Status_404;
+use Payment_API\Utils\Response\Status_405 as Status_405;
+use Payment_API\Utils\Response\Status_422 as Status_422;
+use Payment_API\Utils\Response\Status_500 as Status_500;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class HTMLResponse
 {
-    use Response_200;
-    use Response_201;
-    use Response_400;
-    use Response_401;
-    use Response_404;
-    use Response_405;
-    use Response_422;
-    use Response_500;
+    use Status_200;
+    use Status_201;
+    use Status_400;
+    use Status_401;
+    use Status_404;
+    use Status_405;
+    use Status_422;
+    use Status_500;
 
-    public static function response_200(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_200(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_200(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_200(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_201(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_201(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_201(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_201(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_400(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_400(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_400(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_400(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_401(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_401(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_401(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_401(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_404(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_404(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_404(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_404(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_405(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_405(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_405(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_405(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_422(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_422(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_422(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_422(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    public static function response_500(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public static function status_500(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::response_500(title: $title, message: $message, resource: $resource)
-            ->withHeader('Content-Type', 'application/html; charset=UTF-8');
+        return static::status_500(title: $title, message: $message, resource: $resource)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 }
