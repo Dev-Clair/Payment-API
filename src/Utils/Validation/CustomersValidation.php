@@ -126,13 +126,13 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $confirm_password = $this->sanitizedData['confirm_password'];
-        if (empty($confirm_password)) {
-            $this->validationError['confirm_password'] = "Password is empty; Please enter password";
+        $confirm_customer_password = $this->sanitizedData['confirm_customer_password'];
+        if (empty($confirm_customer_password)) {
+            $this->validationError['confirm_customer_password'] = "Password is empty; Please enter password";
             return;
         }
 
-        if ($customer_password !== $confirm_password) {
+        if ($customer_password !== $confirm_customer_password) {
             $this->validationError['customer_password'] = "Passwords do not match; Please enter a valid password";
             return;
         }

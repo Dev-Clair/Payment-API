@@ -110,12 +110,13 @@ class CustomersController implements ControllerInterface
     public function post(Request $request, Response $response, array $args): Response
     {
         $requestBody = json_decode($request->getBody()->getContents(), true);
-
+        var_dump($requestBody);
         if (empty($requestBody)) {
             return JSONResponse::status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
         $customersEntity = new CustomersValidation($requestBody);
+        var_dump($customersEntity);
 
         if (empty($customersEntity->validationError)) {
             $this->customersRepository->store($customersEntity->getEntities());
