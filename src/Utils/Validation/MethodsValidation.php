@@ -11,9 +11,9 @@ class MethodsValidation extends Abs_Validation
 {
     private string $umid;
 
-    private string $name;
+    private string $method_name;
 
-    private MethodType $type;
+    private MethodType $method_type;
 
     private array $sanitizedData;
 
@@ -38,43 +38,43 @@ class MethodsValidation extends Abs_Validation
 
     private function generateUMID(): void
     {
-        $name = $this->sanitizedData['name'];
-        if (empty($name)) {
+        $method_name = $this->sanitizedData['method_name'];
+        if (empty($method_name)) {
             return;
         }
 
-        $umid = 'met_' . bin2hex($name);
+        $umid = 'met_' . bin2hex($method_name);
         $this->umid = substr($umid, 0, 20);
     }
 
     private function validateMethodName(): void
     {
-        $name = $this->sanitizedData['name'];
-        if (empty($name)) {
+        $method_name = $this->sanitizedData['method_name'];
+        if (empty($method_name)) {
             return;
         }
 
-        if (!is_string($name)) {
-            $this->validationError['name'] = "Invalid payment method name";
+        if (!is_string($method_name)) {
+            $this->validationError['method_name'] = "Invalid payment method name";
             return;
         }
 
-        $this->name = $this->validationResult['name'] = $name;
+        $this->method_name = $this->validationResult['method_name'] = $method_name;
     }
 
     public function validateMethodType(): void
     {
-        $type = $this->sanitizedData['type'];
-        if (empty($type)) {
+        $method_type = $this->sanitizedData['method_type'];
+        if (empty($method_type)) {
             return;
         }
 
-        if ($type !== MethodType::CARD || $type !== MethodType::BANK) {
-            $this->validationError['type'] = "Please enter a valid method type";
+        if ($method_type !== MethodType::CARD || $method_type !== MethodType::BANK) {
+            $this->validationError['method_type'] = "Please enter a valid method type";
             return;
         }
 
-        $this->type = $this->validationResult['type'] = $type;
+        $this->method_type = $this->validationResult['method_type'] = $method_type;
     }
 
     public function getEntities(): MethodsEntity
@@ -82,8 +82,8 @@ class MethodsValidation extends Abs_Validation
         $methodsEntity = new MethodsEntity;
 
         $this->umid ?? $methodsEntity->setUMID($this->umid);
-        $this->name ?? $methodsEntity->setName($this->name);
-        $this->type ?? $methodsEntity->setType($this->type);
+        $this->method_name ?? $methodsEntity->setMethodName($this->method_name);
+        $this->method_type ?? $methodsEntity->setMethodType($this->method_type);
 
         return $methodsEntity;
     }

@@ -23,21 +23,21 @@ class MethodsEntity implements EntityInterface
     private string $umid; // Unique Method Identifier
 
     #[ORM\Column(type: 'string', nullable: false, length: 150)]
-    private string $name; // Method Name: GooglePay, ApplePay, AmazonPay
+    private string $method_name; // Method Name: GooglePay, ApplePay, AmazonPay
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
     private DateTimeImmutable $created_at; // Date and Time of Method Creation
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
-    private MethodStatus $status; // Method Status
+    private MethodStatus $method_status; // Method Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("card", "bank")')]
-    private MethodType $type; // Method Type
+    private MethodType $method_type; // Method Type
 
     public function __construct()
     {
         $this->created_at = new DateTimeImmutable('now');
-        $this->status = MethodStatus::ACTIVE;
+        $this->method_status = MethodStatus::ACTIVE;
     }
 
     public function getID(): int
@@ -55,14 +55,14 @@ class MethodsEntity implements EntityInterface
         $this->umid = $umid;
     }
 
-    public function getName(): string
+    public function getMethodName(): string
     {
-        return $this->name;
+        return $this->method_name;
     }
 
-    public function setName(string $name): void
+    public function setMethodName(string $method_name): void
     {
-        $this->name = $name;
+        $this->method_name = $method_name;
     }
 
     public function getCreatedAt(): DateTimeImmutable
@@ -70,23 +70,23 @@ class MethodsEntity implements EntityInterface
         return $this->created_at;
     }
 
-    public function getStatus(): MethodStatus
+    public function getMethodStatus(): MethodStatus
     {
-        return $this->status;
+        return $this->method_status;
     }
 
-    public function setStatus(MethodStatus $status): void
+    public function setMethodStatus(MethodStatus $method_status): void
     {
-        $this->status = $status;
+        $this->method_status = $method_status;
     }
 
-    public function getType(): MethodType
+    public function getMethodType(): MethodType
     {
-        return $this->type;
+        return $this->method_type;
     }
 
-    public function setType(MethodType $type): void
+    public function setMethodType(MethodType $method_type): void
     {
-        $this->type = $type;
+        $this->method_type = $method_type;
     }
 }

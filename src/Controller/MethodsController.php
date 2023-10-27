@@ -192,9 +192,9 @@ class MethodsController implements ControllerInterface
         $validateMethodEntity = new MethodsValidation($requestBody);
 
         if (empty($validateMethodEntity->validationError)) {
-            $methodsEntity->setName($validateMethodEntity->validationResult['name']);
+            $methodsEntity->setMethodName($validateMethodEntity->validationResult['method_name']);
 
-            $methodsEntity->setType($validateMethodEntity->validationResult['type']);
+            $methodsEntity->setMethodType($validateMethodEntity->validationResult['method_type']);
 
             $this->methodsRepository->update($methodsEntity);
 
@@ -306,7 +306,7 @@ class MethodsController implements ControllerInterface
         if ($validateResource === true) {
             $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-            $methodsEntity->setStatus(MethodStatus::INACTIVE);
+            $methodsEntity->setMethodStatus(MethodStatus::INACTIVE);
             $this->methodsRepository->update($methodsEntity);
 
             return JSONResponse::status_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
@@ -361,7 +361,7 @@ class MethodsController implements ControllerInterface
         if ($validateResource === true) {
             $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-            $methodsEntity->setStatus(MethodStatus::ACTIVE);
+            $methodsEntity->setMethodStatus(MethodStatus::ACTIVE);
             $this->methodsRepository->update($methodsEntity);
 
             return JSONResponse::status_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");
