@@ -29,10 +29,10 @@ class PaymentsEntity implements EntityInterface
     private DateTimeImmutable $created_at; // Date and Time of Payment
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("paid", "pending", "failed")')]
-    private PaymentStatus $status; // Payment Status
+    private PaymentStatus $payment_status; // Payment Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("credit", "debit")')]
-    private PaymentType $type; // Payment Type
+    private PaymentType $payment_type; // Payment Type
 
     public function __construct()
     {
@@ -70,23 +70,23 @@ class PaymentsEntity implements EntityInterface
         return $this->created_at;
     }
 
-    public function getStatus(): PaymentStatus
+    public function getPaymentStatus(): PaymentStatus
     {
-        return $this->status;
+        return $this->payment_status;
     }
 
-    public function setStatus(PaymentStatus $status): void
+    public function setPaymentStatus(PaymentStatus $payment_status): void
     {
-        $this->status = $status;
+        $this->payment_status = $payment_status;
     }
 
-    public function getType(): PaymentType
+    public function getPaymentType(): PaymentType
     {
-        return $this->type;
+        return $this->payment_type;
     }
 
-    public function setType(PaymentType $type): void
+    public function setPaymentType(PaymentType $payment_type): void
     {
-        $this->type = $type;
+        $this->payment_type = $payment_type;
     }
 }

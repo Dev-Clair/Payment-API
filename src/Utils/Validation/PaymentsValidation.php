@@ -14,9 +14,9 @@ class PaymentsValidation extends Abs_Validation
 
     private float $amount;
 
-    private PaymentStatus $status;
+    private PaymentStatus $payment_status;
 
-    private PaymentType $type;
+    private PaymentType $payment_type;
 
     private array $sanitizedData;
 
@@ -70,32 +70,32 @@ class PaymentsValidation extends Abs_Validation
 
     private function validatePaymentStatus(): void
     {
-        $status = $this->sanitizedData['status'];
-        if (empty($status)) {
+        $payment_status = $this->sanitizedData['payment_status'];
+        if (empty($payment_status)) {
             return;
         }
 
-        if ($status !== PaymentStatus::PAID || $status !== PaymentStatus::PENDING) {
-            $this->validationError['status'] = "Please enter a valid status";
+        if ($payment_status !== PaymentStatus::PAID || $payment_status !== PaymentStatus::PENDING) {
+            $this->validationError['payment_status'] = "Please enter a valid payment status";
             return;
         }
 
-        $this->status = $this->validationResult['status'] = $status;
+        $this->payment_status = $this->validationResult['payment_status'] = $payment_status;
     }
 
     public function validatePaymentType(): void
     {
-        $type = $this->sanitizedData['type'];
-        if (empty($type)) {
+        $payment_type = $this->sanitizedData['payment_type'];
+        if (empty($payment_type)) {
             return;
         }
 
-        if ($type !== PaymentType::CREDIT || $type !== PaymentType::DEBIT) {
-            $this->validationError['type'] = "Please enter a valid payment type";
+        if ($payment_type !== PaymentType::CREDIT || $payment_type !== PaymentType::DEBIT) {
+            $this->validationError['payment_type'] = "Please enter a valid payment type";
             return;
         }
 
-        $this->type = $this->validationResult['type'] = $type;
+        $this->payment_type = $this->validationResult['payment_type'] = $payment_type;
     }
 
     public function getEntities(): PaymentsEntity
@@ -104,8 +104,8 @@ class PaymentsValidation extends Abs_Validation
 
         $this->upid ?? $paymentsEntity->setUPID($this->upid);
         $this->amount ?? $paymentsEntity->setAmount($this->amount);
-        $this->status ?? $paymentsEntity->setStatus($this->status);
-        $this->type ?? $paymentsEntity->setType($this->type);
+        $this->payment_status ?? $paymentsEntity->setPaymentStatus($this->payment_status);
+        $this->payment_type ?? $paymentsEntity->setPaymentType($this->payment_type);
 
         return $paymentsEntity;
     }

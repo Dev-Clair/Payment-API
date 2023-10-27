@@ -194,9 +194,9 @@ class PaymentsController implements ControllerInterface
         if (empty($validatePaymentEntity->validationError)) {
             $paymentsEntity->setAmount($validatePaymentEntity->validationResult['amount']);
 
-            $paymentsEntity->setStatus($validatePaymentEntity->validationResult['status']);
+            $paymentsEntity->setPaymentStatus($validatePaymentEntity->validationResult['payment_status']);
 
-            $paymentsEntity->setType($validatePaymentEntity->validationResult['type']);
+            $paymentsEntity->setPaymentType($validatePaymentEntity->validationResult['payment_type']);
 
             $this->paymentsRepository->update($paymentsEntity);
 
