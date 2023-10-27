@@ -135,6 +135,7 @@ $container->set(PaymentsController::class, function (Container $container): Paym
 
     return new PaymentsController($paymentsRepository, $logger);
 });
+
 /**
  * Register binding: Services Interface
  */
@@ -162,9 +163,7 @@ $container->set(Logger::class, function (Container $container): Logger {
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/critical.log', Level::Critical));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/error.log', Level::Error));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/warning.log', Level::Warning));
-    $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/notice.log', Level::Notice));
     $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/info.log', Level::Info));
-    $logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/debug.log', Level::Debug));
     return $logger;
 });
 

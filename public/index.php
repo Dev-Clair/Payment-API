@@ -4,12 +4,12 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Payment_API\Middleware\CustomErrorHandlerMiddleWare;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\PaymentsController;
 use Payment_API\Middleware\ContentTypeMiddleware;
 use Payment_API\Middleware\MethodTypeMiddleware;
+use Payment_API\Middleware\CustomErrorHandlerMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../container/container.php';
@@ -19,6 +19,8 @@ $dotenv->load();
 
 //Create New App Instance
 $app = AppFactory::createFromContainer(container: $container);
+
+// $app->addRoutingMiddleware();
 
 // Route to API documentation
 $app->get('/openapi', function () {
@@ -92,12 +94,12 @@ $app->group('/v1/payments', function (RouteCollectorProxy $group) {
 });
 
 // Add Error Middleware
-$displayErrors = $_ENV['APP_ENV'] != 'development';
+// $displayErrors = $_ENV['APP_ENV'] != 'development';
 
-$displayErrors = true;
-$customErrorHandler = new CustomErrorHandlerMiddleWare($app);
+// $displayErrors = true;
+// $customErrorHandler = new CustomErrorHandlerMiddleWare($app);
 
-$errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
-$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
+// $errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
+// $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 $app->run();
