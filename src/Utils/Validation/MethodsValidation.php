@@ -55,7 +55,7 @@ class MethodsValidation extends Abs_Validation
         }
 
         if (!is_string($name)) {
-            $this->validationError['amount'] = "Invalid payment method name";
+            $this->validationError['name'] = "Invalid payment method name";
             return;
         }
 

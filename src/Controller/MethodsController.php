@@ -176,6 +176,7 @@ class MethodsController implements ControllerInterface
         $requestAttribute = $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
         if ($validateResource === false) {
             return JSONResponse::status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -185,6 +186,7 @@ class MethodsController implements ControllerInterface
         if (empty($requestBody)) {
             return JSONResponse::status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
+
         $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
         $validateMethodEntity = new MethodsValidation($requestBody);
@@ -296,6 +298,7 @@ class MethodsController implements ControllerInterface
         $requestAttribute = $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
         if ($validateResource === false) {
             return JSONResponse::status_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
@@ -350,6 +353,7 @@ class MethodsController implements ControllerInterface
         $requestAttribute = $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
         if ($validateResource) {
             return JSONResponse::status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
