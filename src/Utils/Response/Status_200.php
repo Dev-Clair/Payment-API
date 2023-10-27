@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Payment_API\Utils\Trait;
+namespace Payment_API\Utils\Response;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Payment_API\Interface\EnumsInterface;
 use Slim\Psr7\Response as Response;
 
-trait Response_500_Trait
+trait Status_200
 {
-    public function response_500(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_200(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
         $status = [
             'title' => $title,
-            'status' => StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR,
+            'status' => StatusCodeInterface::STATUS_OK,
             'message' => $message,
             'resource' => $resource ?? null
         ];
 
-        $response = new Response(StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
+        $response = new Response(StatusCodeInterface::STATUS_OK);
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
