@@ -354,7 +354,7 @@ class MethodsController implements ControllerInterface
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
-        if ($validateResource) {
+        if ($validateResource === false) {
             return JSONResponse::status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 

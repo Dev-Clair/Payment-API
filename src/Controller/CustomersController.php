@@ -367,7 +367,7 @@ class CustomersController implements ControllerInterface
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
-        if ($validateResource) {
+        if ($validateResource === false) {
             return JSONResponse::status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
