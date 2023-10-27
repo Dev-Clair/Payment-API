@@ -10,6 +10,5 @@ enum PaymentStatus: string implements EnumsInterface
 {
     case PAID = "paid";
     case PENDING = "pending";
-    case INVALID = "invalid";
     case FAILED = "failed";
 }
