@@ -60,12 +60,12 @@ class PaymentsController implements ControllerInterface
         $payments = $this->paymentsRepository->findAll();
 
         if (is_array($payments)) {
-            return JSONResponse::response_200(ResponseTitle::GET, "Retrieved", $payments);
+            return JSONResponse::status_200(ResponseTitle::GET, "Retrieved", $payments);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
 
-        return JSONResponse::response_500(ResponseTitle::GET, "Internal Server Error", $payments);
+        return JSONResponse::status_500(ResponseTitle::GET, "Internal Server Error", $payments);
     }
 
 
@@ -107,7 +107,7 @@ class PaymentsController implements ControllerInterface
         $requestBody = json_decode($request->getBody()->getContents(), true);
 
         if (empty($requestBody)) {
-            return JSONResponse::response_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            return JSONResponse::status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
         $paymentsEntity = new PaymentsValidation($requestBody);
@@ -115,14 +115,14 @@ class PaymentsController implements ControllerInterface
         if (empty($paymentsEntity->validationError)) {
             $this->paymentsRepository->store($paymentsEntity->getEntities());
 
-            return JSONResponse::response_201(ResponseTitle::POST, "Created", "");
+            return JSONResponse::status_201(ResponseTitle::POST, "Created", "");
         } else {
-            return JSONResponse::response_422(ResponseTitle::POST, "Unprocessable Entity", $paymentsEntity->validationError);
+            return JSONResponse::status_422(ResponseTitle::POST, "Unprocessable Entity", $paymentsEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
 
-        return JSONResponse::response_500(ResponseTitle::POST, "Internal Server Error", "");
+        return JSONResponse::status_500(ResponseTitle::POST, "Internal Server Error", "");
     }
 
 
@@ -178,13 +178,13 @@ class PaymentsController implements ControllerInterface
         $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::response_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return JSONResponse::status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         $requestBody = json_decode($request->getBody()->getContents(), true);
 
         if (empty($requestBody)) {
-            return JSONResponse::response_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+            return JSONResponse::status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
 
         $paymentsEntity = $this->paymentsRepository->findById($requestAttribute);
@@ -200,14 +200,14 @@ class PaymentsController implements ControllerInterface
 
             $this->paymentsRepository->update($paymentsEntity);
 
-            return JSONResponse::response_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
+            return JSONResponse::status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
         } else {
-            return JSONResponse::response_422(ResponseTitle::PUT, "Unprocessable Entity", $validatePaymentEntity->validationError);
+            return JSONResponse::status_422(ResponseTitle::PUT, "Unprocessable Entity", $validatePaymentEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
 
-        return JSONResponse::response_500(ResponseTitle::PUT, "Internal Server Error", "");
+        return JSONResponse::status_500(ResponseTitle::PUT, "Internal Server Error", "");
     }
 
 
@@ -248,7 +248,7 @@ class PaymentsController implements ControllerInterface
         $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::response_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return JSONResponse::status_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -256,11 +256,11 @@ class PaymentsController implements ControllerInterface
 
             $this->paymentsRepository->remove($paymentsEntity);
 
-            return JSONResponse::response_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
+            return JSONResponse::status_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
 
-        return JSONResponse::response_500(ResponseTitle::DELETE, "Internal Server Error", "");
+        return JSONResponse::status_500(ResponseTitle::DELETE, "Internal Server Error", "");
     }
 }
