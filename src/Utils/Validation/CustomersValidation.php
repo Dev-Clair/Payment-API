@@ -111,7 +111,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->phone = $this->validationError['phone'] = $phone;
+        $this->phone = $this->validationResult['phone'] = $phone;
     }
 
     private function validateCustomerPassword(): void
