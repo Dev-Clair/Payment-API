@@ -33,7 +33,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * provides valid id values for various test cases
+     * data provider: provides valid id values for various test cases
      */
     public function validIdDataProvider(): array
     {
@@ -41,7 +41,7 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * provides invalid id values for various test cases
+     * data provider: provides invalid id values for various test cases
      */
     public function invalidIdDataProvider(): array
     {
@@ -49,16 +49,16 @@ class CustomersControllerTest extends TestCase
     }
 
     /**
-     * Helper method: validates the content type and format of the HTTP response
+     * helper method: validates the content type and format of the HTTP response
      */
     private function assertJsonContent($response): void
     {
         $contentType = $response->getHeaders()["Content-Type"][0];
 
-        // assert response header is Json
+        // asserts response header is Json
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
 
-        // assert response body is Json
+        // asserts response body is Json
         $this->assertJson($response->getBody()->getContents());
     }
 
@@ -68,6 +68,8 @@ class CustomersControllerTest extends TestCase
     public function get_endpoint_returns_status_200_response(): void
     {
         $response = $this->http->request('GET', 'v1/customers');
+
+        $this->assertEquals(200, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }

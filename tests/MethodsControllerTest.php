@@ -33,7 +33,7 @@ class MethodsControllerTest extends TestCase
     }
 
     /**
-     * provides valid id values for various test cases
+     * data provider: provides valid id values for various test cases
      */
     public function validIdDataProvider(): array
     {
@@ -41,7 +41,7 @@ class MethodsControllerTest extends TestCase
     }
 
     /**
-     * provides invalid id values for various test cases
+     * data provider: provides invalid id values for various test cases
      */
     public function invalidIdDataProvider(): array
     {
@@ -49,27 +49,17 @@ class MethodsControllerTest extends TestCase
     }
 
     /**
-     * Helper method: validates the content type and format of the HTTP response
+     * helper method: validates the content type and format of the HTTP response
      */
     private function assertJsonContent($response): void
     {
         $contentType = $response->getHeaders()["Content-Type"][0];
 
-        // assert response header is Json
+        // asserts response header is Json
         $this->assertEquals("application/json; charset=UTF-8", $contentType);
 
-        // assert response body is Json
+        // asserts response body is Json
         $this->assertJson($response->getBody()->getContents());
-    }
-
-    /**
-     * @test
-     */
-    public function get_endpoint_middleware_returns_status_405_response(): void
-    {
-        $response = $this->http->request('DELETE', 'v1/methods');
-
-        $this->assertEquals(400, $response->getStatusCode());
     }
 
     /**
@@ -79,37 +69,9 @@ class MethodsControllerTest extends TestCase
     {
         $response = $this->http->request('GET', 'v1/methods');
 
+        $this->assertEquals(200, $response->getStatusCode());
+
         $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     */
-    public function post_endpoint_middleware_returns_status_400_response(): void
-    {
-        $response = $this->http->request('POST', 'v1/methods', [
-            'headers' => [
-                'Content-Type' => 'text/html; charset=UTF-8',
-            ],
-            'body' => json_encode([]),
-        ]);
-
-        $this->assertEquals(400, $response->getStatusCode());
-    }
-
-    /**
-     * @test
-     */
-    public function post_endpoint_middleware_returns_status_405_response(): void
-    {
-        $response = $this->http->request('PUT', 'v1/methods', [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([]),
-        ]);
-
-        $this->assertEquals(405, $response->getStatusCode());
     }
 
     /**

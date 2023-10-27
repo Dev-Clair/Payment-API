@@ -33,7 +33,7 @@ class ContentTypeMiddlewareTest extends TestCase
     }
 
     /**
-     * provides method and endpoint data for various test cases
+     * data provider: provides method and endpoint values for various test cases
      */
     public function invalidContentTypes(): array
     {
