@@ -13,7 +13,7 @@ use Payment_API\Utils\Response\Status_404 as Status_404;
 use Payment_API\Utils\Response\Status_405 as Status_405;
 use Payment_API\Utils\Response\Status_422 as Status_422;
 use Payment_API\Utils\Response\Status_500 as Status_500;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Psr7\Response as Response;
 
 class JSONResponse
 {
