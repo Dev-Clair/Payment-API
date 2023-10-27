@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Payment_API\Utils\Validation;
 
 use Payment_API\Entity\CustomersEntity;
+use Payment_API\Enums\CustomerType;
 
 class CustomersValidation extends Abs_Validation
 {
@@ -19,6 +20,8 @@ class CustomersValidation extends Abs_Validation
     private string $password;
 
     private string $address;
+
+    private CustomerType $type;
 
     private array $sanitizedData;
 
@@ -42,6 +45,7 @@ class CustomersValidation extends Abs_Validation
         $this->validateCustomerPhone();
         $this->validateCustomerPassword();
         $this->validateCustomerAddress();
+        $this->validateCustomerType();
     }
 
     private function generateUCID(): void
@@ -154,6 +158,21 @@ class CustomersValidation extends Abs_Validation
         // Add extra validation using any third-party geo-location validation service
     }
 
+    public function validateCustomerType(): void
+    {
+        $type = $this->sanitizedData['type'];
+        if (empty($type)) {
+            return;
+        }
+
+        if ($type !== CustomerType::IND || $type !== CustomerType::ORG) {
+            $this->validationError['type'] = "Please enter a valid customer type";
+            return;
+        }
+
+        $this->type = $this->validationResult['type'] = $type;
+    }
+
     public function getEntities(): CustomersEntity
     {
         $customersEntity = new CustomersEntity;
@@ -164,6 +183,7 @@ class CustomersValidation extends Abs_Validation
         $this->phone ?? $customersEntity->setPhone($this->phone);
         $this->password ?? $customersEntity->setPassword($this->password);
         $this->address ?? $customersEntity->setAddress($this->address);
+        $this->type ?? $customersEntity->setType($this->type);
 
         return $customersEntity;
     }

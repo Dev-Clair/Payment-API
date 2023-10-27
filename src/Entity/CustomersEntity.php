@@ -50,7 +50,6 @@ class CustomersEntity implements EntityInterface
     {
         $this->created_at = new DateTimeImmutable('now');
         $this->status = CustomerStatus::ACTIVE;
-        $this->type = CustomerType::IND;
     }
 
     public function getID(): int
