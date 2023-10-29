@@ -37,7 +37,7 @@ class PaymentsControllerTest extends TestCase
      */
     public function validIdDataProvider(): array
     {
-        return ['1', '2', '3', '4', '5'];
+        return [['1'], ['2'], ['3'], ['4'], ['5']];
     }
 
     /**
@@ -45,7 +45,7 @@ class PaymentsControllerTest extends TestCase
      */
     public function invalidIdDataProvider(): array
     {
-        return ['a', 'b', 'c', 'd', 'e'];
+        return [['a'], ['b'], ['c'], ['d'], ['e']];
     }
 
     /**
@@ -56,7 +56,7 @@ class PaymentsControllerTest extends TestCase
         $contentType = $response->getHeaders()["Content-Type"][0];
 
         // asserts response header is Json
-        $this->assertEquals("application/json; charset=UTF-8", $contentType);
+        $this->assertSame("application/json; charset=UTF-8", $contentType);
 
         // asserts response body is Json
         $this->assertJson($response->getBody()->getContents());
@@ -69,7 +69,8 @@ class PaymentsControllerTest extends TestCase
     {
         $response = $this->http->request('GET', 'v1/payments');
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
+
         $this->assertJsonContent($response);
     }
 
@@ -85,7 +86,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertSame(201, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -102,7 +103,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertSame(400, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -119,7 +120,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -137,7 +138,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -155,7 +156,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertSame(400, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -173,7 +174,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertSame(404, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -191,7 +192,7 @@ class PaymentsControllerTest extends TestCase
             'body' => json_encode([]),
         ]);
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -204,7 +205,7 @@ class PaymentsControllerTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/payments/' . $id);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -217,7 +218,7 @@ class PaymentsControllerTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/payments/' . $id);
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertSame(404, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
