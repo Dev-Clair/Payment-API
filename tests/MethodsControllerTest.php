@@ -100,7 +100,10 @@ class MethodsControllerTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'method_name' => 1,
+                'method_type' => 12
+            ]),
         ]);
 
         $this->assertSame(422, $response->getStatusCode());
@@ -117,7 +120,10 @@ class MethodsControllerTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'method_name' => 'paypal',
+                'method_type' => 'card'
+            ]),
         ]);
 
         $this->assertSame(201, $response->getStatusCode());
@@ -171,7 +177,10 @@ class MethodsControllerTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'method_name' => 12,
+                'method_type' => 1
+            ]),
         ]);
 
         $this->assertSame(422, $response->getStatusCode());
@@ -189,7 +198,10 @@ class MethodsControllerTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'method_name' => 'testpay',
+                'method_type' => 'card'
+            ]),
         ]);
 
         $this->assertSame(200, $response->getStatusCode());

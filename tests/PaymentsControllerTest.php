@@ -77,23 +77,6 @@ class PaymentsControllerTest extends TestCase
     /**
      * @test
      */
-    public function post_endpoint_returns_status_201_response(): void
-    {
-        $response = $this->http->request('POST', 'v1/payments', [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([]),
-        ]);
-
-        $this->assertSame(201, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     */
     public function post_endpoint_returns_status_400_response(): void
     {
         $response = $this->http->request('POST', 'v1/payments', [
@@ -117,7 +100,11 @@ class PaymentsControllerTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'amount' => '755.55',
+                'payment_status' => 'paid',
+                'payment_type' => 'debit'
+            ]),
         ]);
 
         $this->assertSame(422, $response->getStatusCode());
@@ -127,18 +114,21 @@ class PaymentsControllerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider validIdDataProvider
      */
-    public function put_endpoint_returns_status_200_response($id): void
+    public function post_endpoint_returns_status_201_response(): void
     {
-        $response = $this->http->request('PUT', 'v1/payments/' . $id, [
+        $response = $this->http->request('POST', 'v1/payments', [
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'amount' => 755.50,
+                'payment_status' => 'paid',
+                'payment_type' => 'debit'
+            ]),
         ]);
 
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(201, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
@@ -193,6 +183,28 @@ class PaymentsControllerTest extends TestCase
         ]);
 
         $this->assertSame(422, $response->getStatusCode());
+
+        $this->assertJsonContent($response);
+    }
+
+    /**
+     * @test
+     * @dataProvider validIdDataProvider
+     */
+    public function put_endpoint_returns_status_200_response($id): void
+    {
+        $response = $this->http->request('PUT', 'v1/payments/' . $id, [
+            'headers' => [
+                'Content-Type' => 'application/json; charset=UTF-8',
+            ],
+            'body' => json_encode([
+                'amount' => 1200.00,
+                'payment_status' => 'pending',
+                'payment_type' => 'debit'
+            ]),
+        ]);
+
+        $this->assertSame(200, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
