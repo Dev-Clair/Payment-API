@@ -75,7 +75,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_name = $this->validationResult['customer_name'] = $customer_name;
+        $this->customer_name = $this->validationResult['customer_name'] = strtoupper($customer_name);
     }
 
     private function validateCustomerEmail(): void

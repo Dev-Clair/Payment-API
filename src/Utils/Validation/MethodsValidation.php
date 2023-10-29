@@ -59,7 +59,7 @@ class MethodsValidation extends Abs_Validation
             return;
         }
 
-        $this->method_name = $this->validationResult['method_name'] = $method_name;
+        $this->method_name = $this->validationResult['method_name'] = strtoupper($method_name);
     }
 
     public function validateMethodType(): void
