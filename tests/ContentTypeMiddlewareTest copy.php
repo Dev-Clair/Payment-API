@@ -35,10 +35,10 @@ class ContentTypeMiddlewareTest extends TestCase
     /**
      * data provider: provides method and endpoint values for various test cases
      */
-    public function invalidContentTypes(): array
+    public function valid_request_method_and_endpoints(): array
     {
         return [
-            ['POST', 'v1/methods'],
+            ['POST', 'v1/methods',],
             ['PUT', 'v1/methods/1'],
             ['POST', 'v1/customers'],
             ['PUT', 'v1/customers/1'],
@@ -48,15 +48,26 @@ class ContentTypeMiddlewareTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider invalidContentTypes
+     * data provider: provides content type values for various test cases
      */
-    public function content_type_middleware_returns_bad_request_for_invalid_content_type($method, $endpoint): void
+    public function invalid_content_type(): array
     {
-        $response = $this->http->request($method, $endpoint, [
-            'headers' => ['Content-Type' => 'text/html; charset=UTF-8']
-        ]);
+        return [
+            [[
+                'headers' => ['Content-Type' => 'text/html; charset=UTF-8']
+            ]]
+        ];
+    }
 
-        $this->assertEquals(400, $response->getStatusCode());
+    /**
+     * @test
+     * @dataProvider valid_request_method_and_endpoints
+     * @dataProvider invalid_content_types
+     */
+    public function content_type_middleware_returns_bad_request_for_invalid_content_type($method, $endpoint, $content_type): void
+    {
+        $response = $this->http->request($method, $endpoint, $content_type);
+
+        $this->assertSame(400, $response->getStatusCode());
     }
 }
