@@ -2,8 +2,8 @@
 
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response as Response;
+use Slim\Psr7\Request as Request;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\PaymentsController;
@@ -63,9 +63,9 @@ $app->group('/v1/methods', function (RouteCollectorProxy $group) {
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
-    $group->get('', [CustomersController::class, 'get'])
+    $group->get('', '\Payment_API\Controller\CustomersController:get')
         ->add(new MethodTypeMiddleware(['GET', 'POST']));
-    $group->post('', [CustomersController::class, 'post'])
+    $group->post('', '\Payment_API\Controller\CustomersController:post')
         ->add(new MethodTypeMiddleware(['GET', 'POST']))
         ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
     $group->put('/{id:[0-9]+}', [CustomersController::class, 'put'])

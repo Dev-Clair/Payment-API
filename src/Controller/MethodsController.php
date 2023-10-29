@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Payment_API\Controller;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response as Response;
+use Slim\Psr7\Request as Request;
 use Payment_API\Interface\ControllerInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Entity\MethodsEntity;
