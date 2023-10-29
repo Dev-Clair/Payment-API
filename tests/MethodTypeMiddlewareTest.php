@@ -37,7 +37,7 @@ class MethodTypeMiddlewareTest extends TestCase
      */
     public function idDataProvider(): array
     {
-        return ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+        return [['1'], ['2'], ['3'], ['4'], ['5']];
     }
 
     // ************************************* Methods Endpoint ***************************
@@ -48,7 +48,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/methods');
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -58,7 +58,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('PUT', 'v1/methods');
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -69,7 +69,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('GET', 'v1/methods/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -80,7 +80,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/methods/deactivate/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -91,7 +91,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/methods/reactivate/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -102,7 +102,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('POST', 'v1/methods/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     // ************************************* Customers Endpoint ***************************
@@ -113,7 +113,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/customers');
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -123,7 +123,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('PUT', 'v1/customers');
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -134,7 +134,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('GET', 'v1/customers/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -145,7 +145,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/customers/deactivate/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -156,7 +156,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/customers/reactivate/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -167,7 +167,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('POST', 'v1/customers/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     // ************************************* Payments Endpoint ***************************
@@ -178,7 +178,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('DELETE', 'v1/payments');
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -188,7 +188,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('PUT', 'v1/payments');
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -199,7 +199,7 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('GET', 'v1/payments/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 
     /**
@@ -210,6 +210,6 @@ class MethodTypeMiddlewareTest extends TestCase
     {
         $response = $this->http->request('POST', 'v1/payments/' . $id);
 
-        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertSame(405, $response->getStatusCode());
     }
 }
