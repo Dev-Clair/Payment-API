@@ -35,7 +35,7 @@ class PaymentsControllerTest extends TestCase
     /**
      * data provider: provides valid id values for various test cases
      */
-    public function validIdDataProvider(): array
+    public static function validIdDataProvider(): array
     {
         return [['1'], ['2'], ['3'], ['4'], ['5']];
     }
@@ -43,7 +43,7 @@ class PaymentsControllerTest extends TestCase
     /**
      * data provider: provides invalid id values for various test cases
      */
-    public function invalidIdDataProvider(): array
+    public static function invalidIdDataProvider(): array
     {
         return [['a'], ['b'], ['c'], ['d'], ['e']];
     }
@@ -179,7 +179,11 @@ class PaymentsControllerTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/json; charset=UTF-8',
             ],
-            'body' => json_encode([]),
+            'body' => json_encode([
+                'amount' => "1200.00",
+                'payment_status' => 'invalid',
+                'payment_type' => 'debit'
+            ]),
         ]);
 
         $this->assertSame(422, $response->getStatusCode());

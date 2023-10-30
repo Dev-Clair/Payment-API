@@ -35,7 +35,7 @@ class MethodsControllerTest extends TestCase
     /**
      * data provider: provides valid id values for various test cases
      */
-    public function validIdDataProvider(): array
+    public static function validIdDataProvider(): array
     {
         return [['1'], ['2'], ['3'], ['4'], ['5']];
     }
@@ -43,7 +43,7 @@ class MethodsControllerTest extends TestCase
     /**
      * data provider: provides invalid id values for various test cases
      */
-    public function invalidIdDataProvider(): array
+    public static function invalidIdDataProvider(): array
     {
         return [['a'], ['b'], ['c'], ['d'], ['e']];
     }
