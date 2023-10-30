@@ -14,10 +14,10 @@ use Payment_API\Interface\RepositoryInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Repositories\PaymentsRepository;
-use Payment_API\Interface\EntityInterface;
-use Payment_API\Entity\MethodsEntity;
-use Payment_API\Entity\CustomersEntity;
-use Payment_API\Entity\PaymentsEntity;
+// use Payment_API\Interface\EntityInterface;
+// use Payment_API\Entity\MethodsEntity;
+// use Payment_API\Entity\CustomersEntity;
+// use Payment_API\Entity\PaymentsEntity;
 use Payment_API\Interface\ControllerInterface;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\CustomersController;
@@ -30,7 +30,7 @@ use Payment_API\Services\SmsService;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__ . "/../");
-$dotenv->load();
+$dotenv->safeload();
 
 $container = new Container;
 
@@ -99,17 +99,17 @@ $container->set(PaymentsRepository::class, function (Container $container): Paym
 /**
  * Register binding: Entities
  */
-$container->set(MethodsEntity::class, function (Container $container): MethodsEntity {
-    return new MethodsEntity;
-});
+// $container->set(MethodsEntity::class, function (Container $container): MethodsEntity {
+//     return new MethodsEntity;
+// });
 
-$container->set(CustomersEntity::class, function (Container $container): CustomersEntity {
-    return new CustomersEntity;
-});
+// $container->set(CustomersEntity::class, function (Container $container): CustomersEntity {
+//     return new CustomersEntity;
+// });
 
-$container->set(PaymentsEntity::class, function (Container $container): PaymentsEntity {
-    return new PaymentsEntity;
-});
+// $container->set(PaymentsEntity::class, function (Container $container): PaymentsEntity {
+//     return new PaymentsEntity;
+// });
 
 /**
  * Register binding: Controllers
