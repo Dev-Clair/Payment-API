@@ -26,51 +26,51 @@ class JSONResponse
     use Status_422;
     use Status_500;
 
-    public static function status_200(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_200(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_200(title: $title, message: $message, resource: $resource)
+        return $this->status_200(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_201(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_201(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_201(title: $title, message: $message, resource: $resource)
+        return $this->status_201(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_400(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_400(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_400(title: $title, message: $message, resource: $resource)
+        return $this->status_400(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_401(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_401(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_401(title: $title, message: $message, resource: $resource)
+        return $this->status_401(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_404(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_404(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_404(title: $title, message: $message, resource: $resource)
+        return $this->status_404(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_405(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_405(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_405(title: $title, message: $message, resource: $resource)
+        return $this->status_405(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_422(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_422(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_422(title: $title, message: $message, resource: $resource)
+        return $this->status_422(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 
-    public static function status_500(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_500(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
     {
-        return static::status_500(title: $title, message: $message, resource: $resource)
+        return $this->status_500(title: $title, message: $message, resource: $resource)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 }
