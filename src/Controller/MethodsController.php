@@ -104,20 +104,24 @@ class MethodsController implements ControllerInterface
      */
     public function post(Request $request, Response $response, array $args): Response
     {
-        $requestBody = json_decode($request->getBody()->getContents(), true);
+        $requestContent = json_decode($request->getBody()->getContents(), true);
 
-        if (empty($requestBody)) {
+        $requestMethod = $request->getMethod();
+
+        if (empty($requestContent)) {
             return JSONResponse::status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $methodsEntity = new MethodsValidation($requestBody);
+        $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
 
-        if (empty($methodsEntity->validationError)) {
-            $this->methodsRepository->store($methodsEntity->getEntities());
+        $methodEntity = new MethodsEntity;
+
+        if (empty($validateRequestBody->validationError)) {
+            $this->methodsRepository->store($validateRequestBody->createMethodEntity($methodEntity));
 
             return JSONResponse::status_201(ResponseTitle::POST, "Created", "");
         } else {
-            return JSONResponse::status_422(ResponseTitle::POST, "Unprocessable Entity", $methodsEntity->validationError);
+            return JSONResponse::status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
@@ -181,26 +185,24 @@ class MethodsController implements ControllerInterface
             return JSONResponse::status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
-        $requestBody = json_decode($request->getBody()->getContents(), true);
+        $requestContent = json_decode($request->getBody()->getContents(), true);
 
-        if (empty($requestBody)) {
+        $requestMethod = $request->getMethod();
+
+        if (empty($requestContent)) {
             return JSONResponse::status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+        $methodEntity = $this->methodsRepository->findById($requestAttribute);
 
-        $validateMethodEntity = new MethodsValidation($requestBody);
+        $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
 
-        if (empty($validateMethodEntity->validationError)) {
-            $methodsEntity->setMethodName($validateMethodEntity->validationResult['method_name']);
-
-            $methodsEntity->setMethodType($validateMethodEntity->validationResult['method_type']);
-
-            $this->methodsRepository->update($methodsEntity);
+        if (empty($validateRequestBody->validationError)) {
+            $this->methodsRepository->update($validateRequestBody->updateMethodEntity($methodEntity));
 
             return JSONResponse::status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
         } else {
-            return JSONResponse::status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateMethodEntity->validationError);
+            return JSONResponse::status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);

@@ -9,12 +9,6 @@ use Payment_API\Enums\MethodType;
 
 class MethodsValidation extends Abs_Validation
 {
-    private string $umid;
-
-    private string $method_name;
-
-    private MethodType $method_type;
-
     private array $sanitizedData;
 
     public array $validationError;
@@ -23,7 +17,7 @@ class MethodsValidation extends Abs_Validation
 
     public MethodsEntity $methodsEntity;
 
-    public function __construct(protected array $requestContent)
+    public function __construct(protected array $requestContent, protected string $requestMethod)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
         $this->validateRequestContent();
@@ -31,9 +25,17 @@ class MethodsValidation extends Abs_Validation
 
     private function validateRequestContent(): void
     {
-        $this->generateUMID();
         $this->validateMethodName();
         $this->validateMethodType();
+    }
+
+    private function getUMID(): void
+    {
+        if ($this->requestMethod === "POST") {
+            $this->generateUMID();
+        }
+
+        return;
     }
 
     private function generateUMID(): void
@@ -44,7 +46,7 @@ class MethodsValidation extends Abs_Validation
         }
 
         $umid = 'met_' . bin2hex($method_name);
-        $this->umid = substr($umid, 0, 20);
+        $this->validationResult['umid'] = substr($umid, 0, 20);
     }
 
     private function validateMethodName(): void
@@ -59,7 +61,7 @@ class MethodsValidation extends Abs_Validation
             return;
         }
 
-        $this->method_name = $this->validationResult['method_name'] = strtoupper($method_name);
+        $this->validationResult['method_name'] = strtoupper($method_name);
     }
 
     public function validateMethodType(): void
@@ -74,17 +76,38 @@ class MethodsValidation extends Abs_Validation
             return;
         }
 
-        $this->method_type = $this->validationResult['method_type'] = $method_type;
+        $this->validationResult['method_type'] = $method_type;
     }
 
-    public function getEntities(): MethodsEntity
+    public function createMethodEntity(MethodsEntity $methodEntity): MethodsEntity
     {
-        $methodsEntity = new MethodsEntity;
+        $this->getUMID();
 
-        $this->umid ?? $methodsEntity->setUMID($this->umid);
-        $this->method_name ?? $methodsEntity->setMethodName($this->method_name);
-        $this->method_type ?? $methodsEntity->setMethodType($this->method_type);
+        if (isset($this->validationResult['umid'])) {
+            $methodEntity->setUMID($this->validationResult['umid']);
+        }
 
-        return $methodsEntity;
+        if (isset($this->validationResult['method_name'])) {
+            $methodEntity->setMethodName($this->validationResult['method_name']);
+        }
+
+        if (isset($this->validationResult['method_type'])) {
+            $methodEntity->setMethodType($this->validationResult['method_type']);
+        }
+
+        return $methodEntity;
+    }
+
+    public function updateMethodEntity(MethodsEntity $methodEntity): MethodsEntity
+    {
+        if (isset($this->validationResult['method_name'])) {
+            $methodEntity->setMethodName($this->validationResult['method_name']);
+        }
+
+        if (isset($this->validationResult['method_type'])) {
+            $methodEntity->setMethodType($this->validationResult['method_type']);
+        }
+
+        return $methodEntity;
     }
 }
