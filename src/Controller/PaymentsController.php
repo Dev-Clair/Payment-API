@@ -24,9 +24,9 @@ use OpenApi\Annotations as OA;
  */
 class PaymentsController implements ControllerInterface
 {
-    protected PaymentsRepository $paymentsRepository;
+    private PaymentsRepository $paymentsRepository;
 
-    protected Logger $logger;
+    private Logger $logger;
 
     public function __construct(
         PaymentsRepository $paymentsRepository,

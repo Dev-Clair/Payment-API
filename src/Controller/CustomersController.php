@@ -27,9 +27,11 @@ use OpenApi\Annotations as OA;
  */
 class CustomersController implements ControllerInterface
 {
-    protected SmsServiceInterface $smsService;
-    protected CustomersRepository $customersRepository;
-    protected Logger $logger;
+    private SmsServiceInterface $smsService;
+
+    private CustomersRepository $customersRepository;
+
+    private Logger $logger;
 
     public function __construct(
         SmsServiceInterface $smsService,
