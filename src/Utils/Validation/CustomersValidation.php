@@ -46,6 +46,7 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_name = $this->sanitizedData['customer_name'];
         if (empty($customer_name)) {
+            $this->validationError['customer_name'] = "Name is empty; Please enter a valid first and/or last name";
             return;
         }
 
@@ -76,6 +77,7 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_email = $this->sanitizedData['customer_email'];
         if (empty($customer_email)) {
+            $this->validationError['customer_email'] = "Please enter a valid email address";
             return;
         }
 
@@ -97,20 +99,14 @@ class CustomersValidation extends Abs_Validation
 
         $customer_phone = preg_replace("/[^0-9]/", "", $customer_phone);
 
-        if (empty($customer_phone)) {
-            $this->validationError['customer_phone'] = "Phone number is empty; Please enter a phone/mobile number";
-            return;
-        }
-
-        $regex_pattern = '/^[0-9]{11,}$/';
-
-        if (!preg_match($regex_pattern, $customer_phone)) {
+        if (strlen($customer_phone) < 11) {
             $this->validationError['customer_phone'] = "Invalid phone number format; Please enter a valid phone/mobile number";
             return;
         }
 
         $this->validationResult['customer_phone'] = (int) $customer_phone;
     }
+
 
     private function validateCustomerPassword(): void
     {
