@@ -56,7 +56,7 @@ class PaymentsValidation extends Abs_Validation
     {
         $amount = $this->sanitizedData['amount'];
         if (empty($amount)) {
-            $this->validationError['amount'] = "Invalid; amount field is empty";
+            $this->validationError['amount'] = "Amount field is empty; please enter a valid amount";
             return;
         }
 
