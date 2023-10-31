@@ -169,6 +169,8 @@ class CustomersValidation extends Abs_Validation
 
     public function createCustomerEntity(CustomersEntity $customerEntity): CustomersEntity
     {
+        $this->getUCID();
+
         if (isset($this->validationResult['ucid'])) {
             $customerEntity->setUCID($this->validationResult['ucid']);
         }
