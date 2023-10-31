@@ -7,11 +7,13 @@ namespace Payment_API\Middleware;
 use Slim\Psr7\Response as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as Handler;
-use Payment_API\HttpResponse\JSONResponse;
+use Payment_API\Utils\Response\Status_400 as Status_400;
 use Payment_API\Enums\MiddlewareResponseTitle as ResponseTitle;
 
 class ContentTypeMiddleware
 {
+    use Status_400;
+
     protected string $allowedContentType;
 
     public function __construct(string $allowedContentType)
@@ -24,7 +26,7 @@ class ContentTypeMiddleware
         $contentType = $request->getHeaderLine('Content-Type');
 
         if ($contentType !== $this->allowedContentType) {
-            return (new JSONResponse)->status_400(
+            return $this->status_400(
                 ResponseTitle::BAD_REQUEST,
                 'This endpoint does not allow the specified content type.',
                 [
