@@ -42,7 +42,7 @@ class MethodsValidation extends Abs_Validation
     {
         $method_name = $this->sanitizedData['method_name'];
         if (empty($method_name)) {
-            $this->validationError['method_name'] = "Payment method field is empty; please enter a valid method name";
+            $this->validationError['method_name'] = "Method name field is empty; please enter a valid method name";
             return;
         }
 
@@ -54,12 +54,12 @@ class MethodsValidation extends Abs_Validation
     {
         $method_name = $this->sanitizedData['method_name'];
         if (empty($method_name)) {
-            $this->validationError['method_name'] = "Payment method field is empty; please enter a valid method name";
+            $this->validationError['method_name'] = "Method name field is empty; please enter a valid method name";
             return;
         }
 
         if (!is_string($method_name)) {
-            $this->validationError['method_name'] = "Invalid payment method name";
+            $this->validationError['method_name'] = "Invalid type; payment method name is not valid";
             return;
         }
 
@@ -70,7 +70,7 @@ class MethodsValidation extends Abs_Validation
     {
         $method_type = $this->sanitizedData['method_type'];
         if (empty($method_type)) {
-            $this->validationError['method_type'] = "Payment type field is empty; please enter a valid method type";
+            $this->validationError['method_type'] = "Method type field is empty; please enter a valid method type";
             return;
         }
 
