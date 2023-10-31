@@ -1,9 +1,9 @@
 <?php
 
-use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Psr7\Response as Response;
 use Slim\Psr7\Request as Request;
+use Slim\Factory\AppFactory;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\PaymentsController;
@@ -12,15 +12,14 @@ use Payment_API\Middleware\MethodTypeMiddleware;
 use Payment_API\Middleware\CustomErrorHandlerMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
+
 require_once __DIR__ . '/../container/container.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
-$dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
+$dotenv->safeload();
 
 //Create New App Instance
-$app = AppFactory::createFromContainer(container: $container);
-
-// $app->addRoutingMiddleware();
+$app = AppFactory::createFromContainer($container);
 
 // Route to API documentation
 $app->get('/openapi', function () {
@@ -36,7 +35,7 @@ $app->get('/v1', function (Request $request, Response $response, $args) {
         "title" => "Payment API",
         "description" => "All-in-one payment gateway aggregator",
         "status" => "valid",
-        "version" => "1.0"
+        "version" => "1.0.0"
     ]));
     return $response
         ->withStatus(200, 'OK')
@@ -63,9 +62,9 @@ $app->group('/v1/methods', function (RouteCollectorProxy $group) {
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
-    $group->get('', '\Payment_API\Controller\CustomersController:get')
+    $group->get('', [CustomersController::class, 'get'])
         ->add(new MethodTypeMiddleware(['GET', 'POST']));
-    $group->post('', '\Payment_API\Controller\CustomersController:post')
+    $group->post('', [CustomersController::class, 'post'])
         ->add(new MethodTypeMiddleware(['GET', 'POST']))
         ->add(new ContentTypeMiddleware('application/json; charset=UTF-8'));
     $group->put('/{id:[0-9]+}', [CustomersController::class, 'put'])

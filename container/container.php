@@ -10,15 +10,9 @@ use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use Payment_API\Interface\RepositoryInterface;
 use Payment_API\Repositories\MethodsRepository;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Repositories\PaymentsRepository;
-// use Payment_API\Interface\EntityInterface;
-// use Payment_API\Entity\MethodsEntity;
-// use Payment_API\Entity\CustomersEntity;
-// use Payment_API\Entity\PaymentsEntity;
-use Payment_API\Interface\ControllerInterface;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\PaymentsController;
@@ -32,7 +26,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv::createImmutable(__DIR__ . "/../");
 $dotenv->safeload();
 
-$container = new Container;
+$container = new Container();
 
 const APP_ROOT = __DIR__ . "/..";
 
@@ -73,7 +67,7 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
         $settings['doctrine']['dev_mode']
     );
 
-    $conn = DriverManager::getConnection($settings['doctrine']['connection'], $config);
+    $conn = DriverManager::getConnection($settings['doctrine']['connection']);
 
     return new EntityManager($conn, $config);
 });
@@ -95,21 +89,6 @@ $container->set(PaymentsRepository::class, function (Container $container): Paym
     $entityManager = $container->get(EntityManager::class);
     return new PaymentsRepository($entityManager);
 });
-
-/**
- * Register binding: Entities
- */
-// $container->set(MethodsEntity::class, function (Container $container): MethodsEntity {
-//     return new MethodsEntity;
-// });
-
-// $container->set(CustomersEntity::class, function (Container $container): CustomersEntity {
-//     return new CustomersEntity;
-// });
-
-// $container->set(PaymentsEntity::class, function (Container $container): PaymentsEntity {
-//     return new PaymentsEntity;
-// });
 
 /**
  * Register binding: Controllers
