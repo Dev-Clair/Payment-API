@@ -17,3 +17,4 @@
 [2023-10-27T14:24:01.737098+00:00] Payment_API.CRITICAL: Not found. [] []
 [2023-10-27T14:24:28.028044+00:00] Payment_API.CRITICAL: Not found. [] []
 [2023-10-27T14:25:11.953091+00:00] Payment_API.CRITICAL: Not found. [] []
+[2023-10-31T13:57:38.866950+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
