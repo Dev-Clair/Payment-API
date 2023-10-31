@@ -109,21 +109,24 @@ class CustomersController implements ControllerInterface
      */
     public function post(Request $request, Response $response, array $args): Response
     {
-        $requestBody = json_decode($request->getBody()->getContents(), true);
-        var_dump($requestBody);
-        if (empty($requestBody)) {
+        $requestContent = json_decode($request->getBody()->getContents(), true);
+
+        $requestMethod = $request->getMethod();
+
+        if (empty($requestContent)) {
             return JSONResponse::status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $customersEntity = new CustomersValidation($requestBody);
-        var_dump($customersEntity);
+        $customerEntity = new CustomersEntity;
 
-        if (empty($customersEntity->validationError)) {
-            $this->customersRepository->store($customersEntity->getEntities());
+        $validateCustomerEntity = new CustomersValidation($requestContent, $requestMethod);
+
+        if (empty($validateCustomerEntity->validationError)) {
+            $this->customersRepository->store($validateCustomerEntity->createCustomerEntity($customerEntity));
 
             return JSONResponse::status_201(ResponseTitle::POST, "Created", "");
         } else {
-            return JSONResponse::status_422(ResponseTitle::POST, "Unprocessable Entity", $customersEntity->validationError);
+            return JSONResponse::status_422(ResponseTitle::POST, "Unprocessable Entity", $validateCustomerEntity->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
@@ -187,28 +190,20 @@ class CustomersController implements ControllerInterface
             return JSONResponse::status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
-        $requestBody = json_decode($request->getBody()->getContents(), true);
+        $requestContent = json_decode($request->getBody()->getContents(), true);
 
-        if (empty($requestBody)) {
+        $requestMethod = $request->getMethod();
+
+        if (empty($requestContent)) {
             return JSONResponse::status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
 
-        $customersEntity = $this->customersRepository->findById($requestAttribute);
+        $customerEntity = $this->customersRepository->findById($requestAttribute);
 
-        $validateCustomerEntity = new CustomersValidation($requestBody);
+        $validateCustomerEntity = new CustomersValidation($requestContent, $requestMethod);
 
         if (empty($validateCustomerEntity->validationError)) {
-            $customersEntity->setCustomerName($validateCustomerEntity->validationResult['customer_name']);
-
-            $customersEntity->setCustomerEmail($validateCustomerEntity->validationResult['customer_email']);
-
-            $customersEntity->setCustomerPhone($validateCustomerEntity->validationResult['customer_phone']);
-
-            $customersEntity->setCustomerPassword($validateCustomerEntity->validationResult['customer_password']);
-
-            $customersEntity->setCustomerAddress($validateCustomerEntity->validationResult['customer_address']);
-
-            $this->customersRepository->update($customersEntity);
+            $this->customersRepository->update($validateCustomerEntity->updateCustomerEntity($customerEntity));
 
             return JSONResponse::status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
         } else {

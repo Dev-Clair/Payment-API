@@ -9,20 +9,6 @@ use Payment_API\Enums\CustomerType;
 
 class CustomersValidation extends Abs_Validation
 {
-    private string $ucid;
-
-    private string $customer_name;
-
-    private string $customer_email;
-
-    private int $customer_phone;
-
-    private string $customer_password;
-
-    private string $customer_address;
-
-    private CustomerType $customer_type;
-
     private array $sanitizedData;
 
     public array $validationError;
@@ -31,7 +17,7 @@ class CustomersValidation extends Abs_Validation
 
     public CustomersEntity $customersEntity;
 
-    public function __construct(protected array $requestContent)
+    public function __construct(protected array $requestContent, protected string $requestMethod)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
         $this->validateRequestContent();
@@ -39,13 +25,21 @@ class CustomersValidation extends Abs_Validation
 
     private function validateRequestContent(): void
     {
-        $this->generateUCID();
         $this->validateCustomerName();
         $this->validateCustomerEmail();
         $this->validateCustomerPhone();
         $this->validateCustomerPassword();
         $this->validateCustomerAddress();
         $this->validateCustomerType();
+    }
+
+    private function getUCID(): void
+    {
+        if ($this->requestMethod === "POST") {
+            $this->generateUCID();
+        }
+
+        return;
     }
 
     private function generateUCID(): void
@@ -56,7 +50,7 @@ class CustomersValidation extends Abs_Validation
         }
 
         $ucid = 'cus_' . bin2hex($customer_name);
-        $this->ucid = substr($ucid, 0, 20);
+        $this->validationResult['ucid'] = substr($ucid, 0, 20);
     }
 
     private function validateCustomerName(): void
@@ -75,7 +69,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_name = $this->validationResult['customer_name'] = strtoupper($customer_name);
+        $this->validationResult['customer_name'] = strtoupper($customer_name);
     }
 
     private function validateCustomerEmail(): void
@@ -92,7 +86,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_email = $this->validationError['customer_email'] = $customer_email;
+        $this->validationError['customer_email'] = $customer_email;
 
         // Add extra validation using any third-party email validation service
     }
@@ -115,7 +109,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_phone = $this->validationResult['customer_phone'] = (int) $customer_phone;
+        $this->validationResult['customer_phone'] = (int) $customer_phone;
     }
 
     private function validateCustomerPassword(): void
@@ -137,7 +131,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_password = $this->validationResult['customer_password'] = $customer_password;
+        $this->validationResult['customer_password'] = $customer_password;
     }
 
     private function validateCustomerAddress(): void
@@ -153,7 +147,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_address = $this->validationResult['customer_address'] = $customer_address;
+        $this->validationResult['customer_address'] = $customer_address;
 
         // Add extra validation using any third-party geo-location validation service
     }
@@ -170,21 +164,68 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->customer_type = $this->validationResult['customer_type'] = $customer_type;
+        $this->validationResult['customer_type'] = $customer_type;
     }
 
-    public function getEntities(): CustomersEntity
+    public function createCustomerEntity(CustomersEntity $customerEntity): CustomersEntity
     {
-        $customersEntity = new CustomersEntity;
+        if (isset($this->validationResult['ucid'])) {
+            $customerEntity->setUCID($this->validationResult['ucid']);
+        }
 
-        $this->ucid ?? $customersEntity->setUCID($this->ucid);
-        $this->customer_name ?? $customersEntity->setCustomerName($this->customer_name);
-        $this->customer_email ?? $customersEntity->setCustomerEmail($this->customer_email);
-        $this->customer_phone ?? $customersEntity->setCustomerPhone($this->customer_phone);
-        $this->customer_password ?? $customersEntity->setCustomerPassword($this->customer_password);
-        $this->customer_address ?? $customersEntity->setCustomerAddress($this->customer_address);
-        $this->customer_type ?? $customersEntity->setCustomerType($this->customer_type);
+        if (isset($this->validationResult['customer_name'])) {
+            $customerEntity->setCustomerName($this->validationResult['customer_name']);
+        }
 
-        return $customersEntity;
+        if (isset($this->validationResult['customer_email'])) {
+            $customerEntity->setCustomerEmail($this->validationResult['customer_email']);
+        }
+
+        if (isset($this->validationResult['customer_phone'])) {
+            $customerEntity->setCustomerPhone($this->validationResult['customer_phone']);
+        }
+
+        if (isset($this->validationResult['customer_password'])) {
+            $customerEntity->setCustomerPassword($this->validationResult['customer_password']);
+        }
+
+        if (isset($this->validationResult['customer_address'])) {
+            $customerEntity->setCustomerAddress($this->validationResult['customer_address']);
+        }
+
+        if (isset($this->validationResult['customer_type'])) {
+            $customerEntity->setCustomerType($this->validationResult['customer_type']);
+        }
+
+        return $customerEntity;
+    }
+
+    public function updateCustomerEntity(CustomersEntity $customerEntity): CustomersEntity
+    {
+        if (isset($this->validationResult['customer_name'])) {
+            $customerEntity->setCustomerName($this->validationResult['customer_name']);
+        }
+
+        if (isset($this->validationResult['customer_email'])) {
+            $customerEntity->setCustomerEmail($this->validationResult['customer_email']);
+        }
+
+        if (isset($this->validationResult['customer_phone'])) {
+            $customerEntity->setCustomerPhone($this->validationResult['customer_phone']);
+        }
+
+        if (isset($this->validationResult['customer_password'])) {
+            $customerEntity->setCustomerPassword($this->validationResult['customer_password']);
+        }
+
+        if (isset($this->validationResult['customer_address'])) {
+            $customerEntity->setCustomerAddress($this->validationResult['customer_address']);
+        }
+
+        if (isset($this->validationResult['customer_type'])) {
+            $customerEntity->setCustomerType($this->validationResult['customer_type']);
+        }
+
+        return $customerEntity;
     }
 }
