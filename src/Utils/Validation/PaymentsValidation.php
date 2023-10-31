@@ -49,12 +49,13 @@ class PaymentsValidation extends Abs_Validation
         }
 
         $upid = 'pay_' . bin2hex($amount);
-        $this->validationResult['amount'] = substr($upid, 0, 20);
+
+        $this->validationResult['upid'] = substr($upid, 0, 20);
     }
 
     private function validatePaymentAmount(): void
     {
-        $amount = $this->sanitizedData['amount'];
+        $amount = (float) $this->sanitizedData['amount'];
         if (empty($amount)) {
             $this->validationError['amount'] = "Amount field is empty; please enter a valid amount";
             return;
@@ -74,6 +75,7 @@ class PaymentsValidation extends Abs_Validation
     {
         $payment_status = $this->sanitizedData['payment_status'];
         if (empty($payment_status)) {
+            $this->validationError['payment_status'] = "Payment status filed is empty; please enter a valid payment status";
             return;
         }
 
@@ -89,6 +91,7 @@ class PaymentsValidation extends Abs_Validation
     {
         $payment_type = $this->sanitizedData['payment_type'];
         if (empty($payment_type)) {
+            $this->validationError['payment_type'] = "Payment type filed is empty; please enter a valid payment type";
             return;
         }
 
@@ -109,7 +112,7 @@ class PaymentsValidation extends Abs_Validation
         }
 
         if (isset($this->validationResult['amount'])) {
-            $paymentEntity->setAmount($this->validationResult['amount']);
+            $paymentEntity->setAmount((float) $this->validationResult['amount']);
         }
 
         if (isset($this->validationResult['payment_status'])) {
