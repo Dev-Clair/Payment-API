@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Payment_API\Entity;
 
-use DateTimeImmutable;
+use DateTime;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\MethodStatus;
-use Payment_API\Enums\MethodType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -26,18 +25,18 @@ class MethodsEntity implements EntityInterface
     private string $method_name; // Method Name: GooglePay, ApplePay, AmazonPay
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
-    private DateTimeImmutable $created_at; // Date and Time of Method Creation
+    private DateTime $created_at; // Date and Time of Method Creation
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
-    private MethodStatus $method_status; // Method Status
+    private string $method_status; // Method Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("card", "bank")')]
-    private MethodType $method_type; // Method Type
+    private string $method_type; // Method Type
 
     public function __construct()
     {
-        $this->created_at = new DateTimeImmutable('now');
-        $this->method_status = MethodStatus::ACTIVE;
+        $this->created_at = new DateTime('now');
+        $this->method_status = MethodStatus::ACTIVE->value;
     }
 
     public function getID(): int
@@ -65,27 +64,27 @@ class MethodsEntity implements EntityInterface
         $this->method_name = $method_name;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): DateTime
     {
         return $this->created_at;
     }
 
-    public function getMethodStatus(): MethodStatus
+    public function getMethodStatus(): string
     {
         return $this->method_status;
     }
 
-    public function setMethodStatus(MethodStatus $method_status): void
+    public function setMethodStatus(string $method_status): void
     {
         $this->method_status = $method_status;
     }
 
-    public function getMethodType(): MethodType
+    public function getMethodType(): string
     {
         return $this->method_type;
     }
 
-    public function setMethodType(MethodType $method_type): void
+    public function setMethodType(string $method_type): void
     {
         $this->method_type = $method_type;
     }

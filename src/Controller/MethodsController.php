@@ -325,7 +325,7 @@ class MethodsController implements ControllerInterface
         if ($validateResource === true) {
             $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-            $methodsEntity->setMethodStatus(MethodStatus::INACTIVE);
+            $methodsEntity->setMethodStatus(MethodStatus::INACTIVE->value);
             $this->methodsRepository->update($methodsEntity);
 
             return $this->status_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
@@ -380,7 +380,7 @@ class MethodsController implements ControllerInterface
         if ($validateResource === true) {
             $methodsEntity = $this->methodsRepository->findById($requestAttribute);
 
-            $methodsEntity->setMethodStatus(MethodStatus::ACTIVE);
+            $methodsEntity->setMethodStatus(MethodStatus::ACTIVE->value);
             $this->methodsRepository->update($methodsEntity);
 
             return $this->status_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");

@@ -71,7 +71,7 @@ class MethodsValidation extends Abs_Validation
             return;
         }
 
-        if ($method_type !== MethodType::CARD || $method_type !== MethodType::BANK) {
+        if ($method_type !== MethodType::CARD->value && $method_type !== MethodType::BANK->value) {
             $this->validationError['method_type'] = "Please enter a valid method type";
             return;
         }
