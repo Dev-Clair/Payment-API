@@ -45,20 +45,13 @@ class CustomersController implements ControllerInterface
 
     private SmsServiceInterface $smsService;
 
-    private CustomersRepository $customersRepository;
-
-    private Logger $logger;
-
     public function __construct(
         SmsServiceInterface $smsService,
-        CustomersRepository $customersRepository,
-        Logger $logger
+        private CustomersRepository $customersRepository,
+        private Logger $logger
     ) {
         $this->smsService = $smsService;
-        $this->customersRepository = $customersRepository;
-        $this->logger = $logger;
     }
-
 
     /**
      * @OA\Get(

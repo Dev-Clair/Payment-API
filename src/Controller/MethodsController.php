@@ -41,18 +41,11 @@ class MethodsController implements ControllerInterface
     use Status_422;
     use Status_500;
 
-    private MethodsRepository $methodsRepository;
-
-    private Logger $logger;
-
     public function __construct(
-        MethodsRepository $methodsRepository,
-        Logger $logger
+        private MethodsRepository $methodsRepository,
+        private Logger $logger
     ) {
-        $this->methodsRepository = $methodsRepository;
-        $this->logger = $logger;
     }
-
 
     /**
      * @OA\Get(

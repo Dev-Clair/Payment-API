@@ -40,18 +40,11 @@ class PaymentsController implements ControllerInterface
     use Status_422;
     use Status_500;
 
-    private PaymentsRepository $paymentsRepository;
-
-    private Logger $logger;
-
     public function __construct(
-        PaymentsRepository $paymentsRepository,
-        Logger $logger
+        private PaymentsRepository $paymentsRepository,
+        private Logger $logger
     ) {
-        $this->paymentsRepository = $paymentsRepository;
-        $this->logger = $logger;
     }
-
 
     /**
      * @OA\Get(
