@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Payment_API\Entity;
 
-use DateTimeImmutable;
+use DateTime;
 use Payment_API\Interface\EntityInterface;
-use Payment_API\Enums\PaymentStatus;
-use Payment_API\Enums\PaymentType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -26,18 +24,18 @@ class PaymentsEntity implements EntityInterface
     private float $amount; // Total Amount Paid
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
-    private DateTimeImmutable $created_at; // Date and Time of Payment
+    private DateTime $created_at; // Date and Time of Payment
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("paid", "pending", "failed")')]
-    private PaymentStatus $payment_status; // Payment Status
+    private string $payment_status; // Payment Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("credit", "debit")')]
-    private PaymentType $payment_type; // Payment Type
+    private string $payment_type; // Payment Type
 
     public function __construct()
     {
         $this->amount = 0.00;
-        $this->created_at = new DateTimeImmutable('now');
+        $this->created_at = new DateTime('now');
     }
 
     public function getID(): int
@@ -65,27 +63,27 @@ class PaymentsEntity implements EntityInterface
         $this->amount = $amount;
     }
 
-    public function getDateTime(): DateTimeImmutable
+    public function getDateTime(): DateTime
     {
         return $this->created_at;
     }
 
-    public function getPaymentStatus(): PaymentStatus
+    public function getPaymentStatus(): string
     {
         return $this->payment_status;
     }
 
-    public function setPaymentStatus(PaymentStatus $payment_status): void
+    public function setPaymentStatus(string $payment_status): void
     {
         $this->payment_status = $payment_status;
     }
 
-    public function getPaymentType(): PaymentType
+    public function getPaymentType(): string
     {
         return $this->payment_type;
     }
 
-    public function setPaymentType(PaymentType $payment_type): void
+    public function setPaymentType(string $payment_type): void
     {
         $this->payment_type = $payment_type;
     }

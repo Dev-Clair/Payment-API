@@ -75,7 +75,7 @@ class PaymentsValidation extends Abs_Validation
             return;
         }
 
-        if ($payment_status !== PaymentStatus::PAID || $payment_status !== PaymentStatus::PENDING) {
+        if ($payment_status !== PaymentStatus::PAID->value && $payment_status !== PaymentStatus::PENDING->value) {
             $this->validationError['payment_status'] = "Please enter a valid payment status";
             return;
         }
@@ -90,7 +90,7 @@ class PaymentsValidation extends Abs_Validation
             return;
         }
 
-        if ($payment_type !== PaymentType::CREDIT || $payment_type !== PaymentType::DEBIT) {
+        if ($payment_type !== PaymentType::CREDIT->value && $payment_type !== PaymentType::DEBIT->value) {
             $this->validationError['payment_type'] = "Please enter a valid payment type";
             return;
         }
