@@ -27,10 +27,10 @@ class MethodTypeMiddlewareTest extends TestCase
     /**
      * Cleans up the HTTP client after each test case
      */
-    protected function tearDown(): void
-    {
-        $this->http = null;
-    }
+    // protected function tearDown(): void
+    // {
+    //     $this->http = null;
+    // }
 
     /**
      * provides id values for various test cases
