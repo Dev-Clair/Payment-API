@@ -10,14 +10,6 @@ use Payment_API\Enums\PaymentType;
 
 class PaymentsValidation extends Abs_Validation
 {
-    private string $upid;
-
-    private float $amount;
-
-    private PaymentStatus $payment_status;
-
-    private PaymentType $payment_type;
-
     private array $sanitizedData;
 
     public array $validationError;
@@ -26,7 +18,7 @@ class PaymentsValidation extends Abs_Validation
 
     public PaymentsEntity $paymentsEntity;
 
-    public function __construct(protected array $requestContent)
+    public function __construct(protected array $requestContent, protected string $requestMethod)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
         $this->validateRequestContent();
@@ -34,10 +26,18 @@ class PaymentsValidation extends Abs_Validation
 
     private function validateRequestContent(): void
     {
-        $this->generateUPID();
         $this->validatePaymentAmount();
         $this->validatePaymentStatus();
         $this->validatePaymentType();
+    }
+
+    private function getUPID(): void
+    {
+        if ($this->requestMethod === "POST") {
+            $this->generateUPID();
+        }
+
+        return;
     }
 
     private function generateUPID(): void
@@ -48,7 +48,7 @@ class PaymentsValidation extends Abs_Validation
         }
 
         $upid = 'pay_' . bin2hex($amount);
-        $this->upid = substr($upid, 0, 20);
+        $this->validationResult['amount'] = substr($upid, 0, 20);
     }
 
     private function validatePaymentAmount(): void
@@ -65,7 +65,7 @@ class PaymentsValidation extends Abs_Validation
             return;
         }
 
-        $this->amount = $this->validationResult['amount'] = $amount;
+        $this->validationResult['amount'] = $amount;
     }
 
     private function validatePaymentStatus(): void
@@ -80,7 +80,7 @@ class PaymentsValidation extends Abs_Validation
             return;
         }
 
-        $this->payment_status = $this->validationResult['payment_status'] = $payment_status;
+        $this->validationResult['payment_status'] = $payment_status;
     }
 
     public function validatePaymentType(): void
@@ -95,18 +95,46 @@ class PaymentsValidation extends Abs_Validation
             return;
         }
 
-        $this->payment_type = $this->validationResult['payment_type'] = $payment_type;
+        $this->validationResult['payment_type'] = $payment_type;
     }
 
-    public function getEntities(): PaymentsEntity
+    public function createPaymentEntity(PaymentsEntity $paymentEntity): PaymentsEntity
     {
-        $paymentsEntity = new PaymentsEntity;
+        $this->getUPID();
 
-        $this->upid ?? $paymentsEntity->setUPID($this->upid);
-        $this->amount ?? $paymentsEntity->setAmount($this->amount);
-        $this->payment_status ?? $paymentsEntity->setPaymentStatus($this->payment_status);
-        $this->payment_type ?? $paymentsEntity->setPaymentType($this->payment_type);
+        if (isset($this->validationResult['upid'])) {
+            $paymentEntity->setUPID($this->validationResult['upid']);
+        }
 
-        return $paymentsEntity;
+        if (isset($this->validationResult['amount'])) {
+            $paymentEntity->setAmount($this->validationResult['amount']);
+        }
+
+        if (isset($this->validationResult['payment_status'])) {
+            $paymentEntity->setPaymentStatus($this->validationResult['payment_status']);
+        }
+
+        if (isset($this->validationResult['payment_type'])) {
+            $paymentEntity->setPaymentType($this->validationResult['payment_type']);
+        }
+
+        return $paymentEntity;
+    }
+
+    public function updatePaymentEntity(PaymentsEntity $paymentEntity): PaymentsEntity
+    {
+        if (isset($this->validationResult['payment_amount'])) {
+            $paymentEntity->setAmount($this->validationResult['payment_amount']);
+        }
+
+        if (isset($this->validationResult['payment_status'])) {
+            $paymentEntity->setPaymentStatus($this->validationResult['payment_status']);
+        }
+
+        if (isset($this->validationResult['payment_type'])) {
+            $paymentEntity->setPaymentType($this->validationResult['payment_type']);
+        }
+
+        return $paymentEntity;
     }
 }
