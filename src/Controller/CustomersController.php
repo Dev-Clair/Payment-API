@@ -15,6 +15,14 @@ use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\CustomersResponseTitle as ResponseTitle;
 use Payment_API\Enums\CustomerStatus;
 use Payment_API\Utils\Validation\CustomersValidation;
+use Payment_API\Utils\Response\Status_200 as Status_200;
+use Payment_API\Utils\Response\Status_201 as Status_201;
+use Payment_API\Utils\Response\Status_400 as Status_400;
+use Payment_API\Utils\Response\Status_401 as Status_401;
+use Payment_API\Utils\Response\Status_404 as Status_404;
+use Payment_API\Utils\Response\Status_405 as Status_405;
+use Payment_API\Utils\Response\Status_422 as Status_422;
+use Payment_API\Utils\Response\Status_500 as Status_500;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
@@ -27,6 +35,15 @@ use OpenApi\Annotations as OA;
  */
 class CustomersController implements ControllerInterface
 {
+    use Status_200;
+    use Status_201;
+    use Status_400;
+    use Status_401;
+    use Status_404;
+    use Status_405;
+    use Status_422;
+    use Status_500;
+
     private SmsServiceInterface $smsService;
 
     private CustomersRepository $customersRepository;
@@ -67,12 +84,12 @@ class CustomersController implements ControllerInterface
         $customers = $this->customersRepository->findAll();
 
         if (is_array($customers)) {
-            return JSONResponse::status_200(ResponseTitle::GET, "Retrieved", $customers);
+            return $this->status_200(ResponseTitle::GET, "Retrieved", $customers);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
 
-        return JSONResponse::status_500(ResponseTitle::GET, "Internal Server Error", "");
+        return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
     }
 
 
@@ -116,7 +133,7 @@ class CustomersController implements ControllerInterface
         $requestMethod = $request->getMethod();
 
         if (empty($requestContent)) {
-            return JSONResponse::status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
         $customerEntity = new CustomersEntity;
@@ -126,14 +143,14 @@ class CustomersController implements ControllerInterface
         if (empty($validateRequestBody->validationError)) {
             $this->customersRepository->store($validateRequestBody->createCustomerEntity($customerEntity));
 
-            return JSONResponse::status_201(ResponseTitle::POST, "Created", "");
+            return $this->status_201(ResponseTitle::POST, "Created", "");
         } else {
-            return JSONResponse::status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
+            return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
 
-        return JSONResponse::status_500(ResponseTitle::POST, "Internal Server Error", "");
+        return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
     }
 
 
@@ -189,7 +206,7 @@ class CustomersController implements ControllerInterface
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return (new JSONResponse)->status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         $requestContent = json_decode($request->getBody()->getContents(), true);
@@ -197,7 +214,7 @@ class CustomersController implements ControllerInterface
         $requestMethod = $request->getMethod();
 
         if (empty($requestContent)) {
-            return JSONResponse::status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+            return (new JSONResponse)->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
         }
 
         $customerEntity = $this->customersRepository->findById($requestAttribute);
@@ -207,14 +224,14 @@ class CustomersController implements ControllerInterface
         if (empty($validateRequestBody->validationError)) {
             $this->customersRepository->update($validateRequestBody->updateCustomerEntity($customerEntity));
 
-            return JSONResponse::status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
+            return (new JSONResponse)->status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
         } else {
-            return JSONResponse::status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
+            return (new JSONResponse)->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
 
-        return JSONResponse::status_500(ResponseTitle::PUT, "Internal Server Error", "");
+        return (new JSONResponse)->status_500(ResponseTitle::PUT, "Internal Server Error", "");
     }
 
 
@@ -255,7 +272,7 @@ class CustomersController implements ControllerInterface
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::status_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return (new JSONResponse)->status_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -263,12 +280,12 @@ class CustomersController implements ControllerInterface
 
             $this->customersRepository->remove($customersEntity);
 
-            return JSONResponse::status_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
+            return (new JSONResponse)->status_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
 
-        return JSONResponse::status_500(ResponseTitle::DELETE, "Internal Server Error", "");
+        return (new JSONResponse)->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
     }
 
 
@@ -309,7 +326,7 @@ class CustomersController implements ControllerInterface
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::status_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return (new JSONResponse)->status_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -319,12 +336,12 @@ class CustomersController implements ControllerInterface
 
             $this->customersRepository->update($customersEntity);
 
-            return JSONResponse::status_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
+            return (new JSONResponse)->status_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DEACTIVATE]);
 
-        return JSONResponse::status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
+        return (new JSONResponse)->status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
     }
 
 
@@ -365,7 +382,7 @@ class CustomersController implements ControllerInterface
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return JSONResponse::status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return (new JSONResponse)->status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -375,11 +392,11 @@ class CustomersController implements ControllerInterface
 
             $this->customersRepository->update($customersEntity);
 
-            return JSONResponse::status_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");
+            return (new JSONResponse)->status_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::REACTIVATE]);
 
-        return JSONResponse::status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
+        return (new JSONResponse)->status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
     }
 }

@@ -13,6 +13,14 @@ use Payment_API\HttpResponse\JSONResponse;
 use Payment_API\Enums\MethodsResponseTitle as ResponseTitle;
 use Payment_API\Enums\MethodStatus;
 use Payment_API\Utils\Validation\MethodsValidation;
+use Payment_API\Utils\Response\Status_200 as Status_200;
+use Payment_API\Utils\Response\Status_201 as Status_201;
+use Payment_API\Utils\Response\Status_400 as Status_400;
+use Payment_API\Utils\Response\Status_401 as Status_401;
+use Payment_API\Utils\Response\Status_404 as Status_404;
+use Payment_API\Utils\Response\Status_405 as Status_405;
+use Payment_API\Utils\Response\Status_422 as Status_422;
+use Payment_API\Utils\Response\Status_500 as Status_500;
 use Monolog\Logger;
 use OpenApi\Annotations as OA;
 
@@ -25,6 +33,15 @@ use OpenApi\Annotations as OA;
  */
 class MethodsController implements ControllerInterface
 {
+    use Status_200;
+    use Status_201;
+    use Status_400;
+    use Status_401;
+    use Status_404;
+    use Status_405;
+    use Status_422;
+    use Status_500;
+
     private MethodsRepository $methodsRepository;
 
     private Logger $logger;
