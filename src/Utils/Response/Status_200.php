@@ -23,6 +23,6 @@ trait Status_200
 
         $response->getBody()->write(json_encode($status, JSON_PRETTY_PRINT));
 
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
     }
 }
