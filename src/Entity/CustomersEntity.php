@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Payment_API\Entity;
 
-use DateTimeImmutable;
+use DateTime;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\CustomerStatus;
-use Payment_API\Enums\CustomerType;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -28,7 +27,7 @@ class CustomersEntity implements EntityInterface
     #[ORM\Column(type: 'string', unique: true, length: 255)]
     private string $customer_email; // Customer Email
 
-    #[ORM\Column(type: 'integer', nullable: false, length: 20)]
+    #[ORM\Column(type: 'string', nullable: false, length: 11)]
     private int $customer_phone; // Customer Phone
 
     #[ORM\Column(type: 'string', nullable: false, length: 255)]
@@ -38,18 +37,18 @@ class CustomersEntity implements EntityInterface
     private string $customer_address; // Customer Address
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
-    private DateTimeImmutable $created_at; // Date and Time of Account Creation
+    private DateTime $created_at; // Date and Time of Account Creation
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("active", "inactive")')]
-    private CustomerStatus $customer_status; // Customer Account Status
+    private string $customer_status; // Customer Account Status
 
     #[ORM\Column(type: 'string', nullable: false, columnDefinition: 'ENUM("individual", "organization")')]
-    private CustomerType $customer_type; // Customer Type
+    private string $customer_type; // Customer Type
 
     public function __construct()
     {
-        $this->created_at = new DateTimeImmutable('now');
-        $this->customer_status = CustomerStatus::ACTIVE;
+        $this->created_at = new DateTime('now');
+        $this->customer_status = CustomerStatus::ACTIVE->value;
     }
 
     public function getID(): int
@@ -104,7 +103,7 @@ class CustomersEntity implements EntityInterface
 
     public function setCustomerPassword(string $customer_password): void
     {
-        $this->customer_password = hash(PASSWORD_BCRYPT, $customer_password);
+        $this->customer_password = password_hash($customer_password, PASSWORD_BCRYPT);
     }
 
     public function getCustomerAddress(): string
@@ -117,27 +116,27 @@ class CustomersEntity implements EntityInterface
         $this->customer_address = $customer_address;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): DateTime
     {
         return $this->created_at;
     }
 
-    public function getCustomerStatus(): CustomerStatus
+    public function getCustomerStatus(): string
     {
         return $this->customer_status;
     }
 
-    public function setCustomerStatus(CustomerStatus $customer_status): void
+    public function setCustomerStatus(string $customer_status): void
     {
         $this->customer_status = $customer_status;
     }
 
-    public function getCustomerType(): CustomerType
+    public function getCustomerType(): string
     {
         return $this->customer_type;
     }
 
-    public function setCustomerType(CustomerType $customer_type): void
+    public function setCustomerType(string $customer_type): void
     {
         $this->customer_type = $customer_type;
     }

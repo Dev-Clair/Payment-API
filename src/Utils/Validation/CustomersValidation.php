@@ -58,7 +58,7 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_name = $this->sanitizedData['customer_name'];
         if (empty($customer_name)) {
-            $this->validationError['customer_name'] = "Name is empty; Please enter a valid first and/or last name";
+            $this->validationError['customer_name'] = "Name field is empty; please enter a valid first and/or last name";
             return;
         }
 
@@ -77,7 +77,7 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_email = $this->sanitizedData['customer_email'];
         if (empty($customer_email)) {
-            $this->validationError['customer_email'] = "Please enter a valid email address";
+            $this->validationError['customer_email'] = "Email field is empty; please enter a valid email address";
             return;
         }
 
@@ -88,7 +88,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->validationError['customer_email'] = $customer_email;
+        $this->validationResult['customer_email'] = $customer_email;
 
         // Add extra validation using any third-party email validation service
     }
@@ -100,7 +100,7 @@ class CustomersValidation extends Abs_Validation
         $customer_phone = preg_replace("/[^0-9]/", "", $customer_phone);
 
         if (strlen($customer_phone) < 11) {
-            $this->validationError['customer_phone'] = "Invalid phone number format; Please enter a valid phone/mobile number";
+            $this->validationError['customer_phone'] = "Invalid phone number format; please enter a valid phone/mobile number";
             return;
         }
 
@@ -134,12 +134,12 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_address = $this->sanitizedData['customer_address'];
         if (empty($customer_address)) {
-            $this->validationError['customer_address'] = "Address field is empty; Please enter a valid home or office address";
+            $this->validationError['customer_address'] = "Customer address field is empty; please enter a valid home or office address";
             return;
         }
 
         if (!is_string($customer_address)) {
-            $this->validationError['customer_address'] = "Invalid type; Please enter a valid home or office address";
+            $this->validationError['customer_address'] = "Invalid variable type; please enter a valid home or office address";
             return;
         }
 
@@ -152,10 +152,11 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_type = $this->sanitizedData['customer_type'];
         if (empty($customer_type)) {
+            $this->validationError['customer_type'] = "Customer type field is empty; please enter a valid customer type";
             return;
         }
 
-        if ($customer_type !== CustomerType::IND || $customer_type !== CustomerType::ORG) {
+        if ($customer_type !== CustomerType::IND->value && $customer_type !== CustomerType::ORG->value) {
             $this->validationError['customer_type'] = "Please enter a valid customer type";
             return;
         }

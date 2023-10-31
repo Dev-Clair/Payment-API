@@ -132,6 +132,8 @@ class CustomersController implements ControllerInterface
         $requestMethod = $request->getMethod();
 
         if (empty($requestContent)) {
+            $this->logger->error("Bad request", [ResponseTitle::POST]);
+
             return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
         }
 
@@ -144,6 +146,8 @@ class CustomersController implements ControllerInterface
 
             return $this->status_201(ResponseTitle::POST, "Created", "");
         } else {
+            $this->logger->error("Unprocessable Entity", [ResponseTitle::POST]);
+
             return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
         }
 
@@ -331,7 +335,7 @@ class CustomersController implements ControllerInterface
         if ($validateResource === true) {
             $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $customersEntity->setCustomerStatus(CustomerStatus::INACTIVE);
+            $customersEntity->setCustomerStatus(CustomerStatus::INACTIVE->value);
 
             $this->customersRepository->update($customersEntity);
 
@@ -387,7 +391,7 @@ class CustomersController implements ControllerInterface
         if ($validateResource === true) {
             $customersEntity = $this->customersRepository->findById($requestAttribute);
 
-            $customersEntity->setCustomerStatus(CustomerStatus::ACTIVE);
+            $customersEntity->setCustomerStatus(CustomerStatus::ACTIVE->value);
 
             $this->customersRepository->update($customersEntity);
 
