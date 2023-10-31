@@ -24,7 +24,7 @@ class ContentTypeMiddleware
         $contentType = $request->getHeaderLine('Content-Type');
 
         if ($contentType !== $this->allowedContentType) {
-            return JSONResponse::status_400(
+            return (new JSONResponse)->status_400(
                 ResponseTitle::BAD_REQUEST,
                 'This endpoint does not allow the specified content type.',
                 [

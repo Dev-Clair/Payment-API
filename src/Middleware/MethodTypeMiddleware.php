@@ -24,7 +24,7 @@ class MethodTypeMiddleware
         $methodType = $request->getMethod();
 
         if (!in_array($methodType, $this->allowedMethods)) {
-            return JSONResponse::status_405(
+            return (new JSONResponse)->status_405(
                 ResponseTitle::NOT_ALLOWED,
                 'This endpoint does not allow the specified request method.',
                 [
