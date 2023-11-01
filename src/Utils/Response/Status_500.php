@@ -10,13 +10,13 @@ use Slim\Psr7\Response as Response;
 
 trait Status_500
 {
-    public function status_500(EnumsInterface $title, array|string $message, array|string|bool|null $resource): Response
+    public function status_500(EnumsInterface $title, array|string $message, object|array|string|bool|null $resource): Response
     {
         $status = [
             'title' => $title,
             'status' => StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR,
             'message' => $message,
-            'resource' => $resource ?? null
+            'resource' => $resource
         ];
 
         $response = new Response(StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
