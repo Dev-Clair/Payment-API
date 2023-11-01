@@ -26,7 +26,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
   `Method Endpoints`
 
 - `GET /v1/methods`: Get a list of all available payment methods.
-- `POST /v1/methods`: create a new payment method.
+- `POST /v1/methods`: Create a new payment method.
 - `PUT /v1/methods/{id:[0-9]+}`: Update a payment method by it's ID (Identifier).
 - `DELETE /v1/methods/{id:[0-9]+}`: Delete a payment method by it's ID (Identifier).
 - `GET /v1/methods/deactivate/{id:[0-9]+}`: Deactivate a method by it's ID (Identifier).
@@ -35,7 +35,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
   `Customer Endpoints`
 
 - `GET /v1/customers`: Get a list of all customer accounts.
-- `POST /v1/customers`: create a new customer account.
+- `POST /v1/customers`: Create a new customer account.
 - `PUT /v1/customers/{id:[0-9]+}`: Update a customer account by it's ID (Identifier).
 - `DELETE /v1/customers/{id:[0-9]+}`: Delete a customer account by it's ID (Identifier).
 - `GET /v1/customers/deactivate/{id:[0-9]+}`: Deactivate a customer account by it's ID (Identifier).
@@ -44,7 +44,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
   `Payment Endpoints`
 
 - `GET /v1/payments`: Get a list of all payment records.
-- `POST /v1/payments`: create a new paymet record.
+- `POST /v1/payments`: Create a new payment record.
 - `PUT /v1/payments/{id:[0-9]+}`: Update a payment record by it's ID (Identifier).
 - `DELETE /v1/payments/{id:[0-9]+}`: Delete a payment record by it's ID (Identifier).
 
@@ -52,7 +52,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 
 1. Clone the repository to your desktop or projects directory:
    ```bash
-   git clone https://github.com/Dev-Clair/Payment_API.git
+   git clone https://github.com/Dev-Clair/Payment-API.git
    ```
 2. Ensure you have docker desktop client installed on your desktop.
 
