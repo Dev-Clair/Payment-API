@@ -24,3 +24,6 @@
 [2023-10-31T14:24:02.441524+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
 [2023-10-31T15:01:35.385105+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
 [2023-10-31T15:03:29.816723+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
+[2023-11-01T10:51:20.959807+00:00] Payment_API.ERROR: Bad request [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
+[2023-11-01T10:51:29.311208+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
+[2023-11-01T10:51:36.847626+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
