@@ -24,7 +24,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 
 - `GET /v1`: Get API info.
 
-  `Method Endpoints`
+                `Method Endpoints:`
 
 - `GET /v1/methods`: Get a list of all available payment methods.
 - `POST /v1/methods`: Create a new payment method.
@@ -33,7 +33,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 - `GET /v1/methods/deactivate/{id:[0-9]+}`: Deactivate a method by it's ID (Identifier).
 - `GET /v1/methods/reactivate/{id:[0-9]+}`: Reactivate a method by it's ID (Identifier).
 
-  `Customer Endpoints`
+                 `Customer Endpoints:`
 
 - `GET /v1/customers`: Get a list of all customer accounts.
 - `POST /v1/customers`: Create a new customer account.
@@ -42,7 +42,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 - `GET /v1/customers/deactivate/{id:[0-9]+}`: Deactivate a customer account by it's ID (Identifier).
 - `GET /v1customers/reactivate/{id:[0-9]+}`: Reactivate a customer account by it's ID (Identifier).
 
-  `Payment Endpoints`
+                `Payment Endpoints:`
 
 - `GET /v1/payments`: Get a list of all payment records.
 - `POST /v1/payments`: Create a new payment record.
@@ -59,7 +59,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 
 3. Navigate to the project directory and open git bash within the project root:
    ```bash
-   cd Payment_API
+   cd Payment-API
    ```
 4. Launch the docker desktop client.
 5. Launch the following docker bash command to pull your container images from docker hub:
@@ -111,11 +111,11 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 5. Navigate to the tests/ directory and run the following commands with or without any of the following options ` --colors` and `--testdox`
 
 ```bash
-./vendor/bin/phpunit tests/CustomersControllerTest.php
+`./vendor/bin/phpunit tests/CustomersControllerTest.php`
 
-./vendor/bin/phpunit tests/MethodsControllerTest.php
+`./vendor/bin/phpunit tests/MethodsControllerTest.php`
 
-./vendor/bin/phpunit tests/PaymentsControllerTest.php
+`./vendor/bin/phpunit tests/PaymentsControllerTest.php`
 
 ```
 
