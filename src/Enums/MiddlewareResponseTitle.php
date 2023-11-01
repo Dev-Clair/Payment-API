@@ -10,4 +10,5 @@ enum MiddlewareResponseTitle: string implements EnumsInterface
 {
     case BAD_REQUEST = "Invalid Content Type";
     case NOT_ALLOWED = "Invalid Request Method";
+    case UNAUTHORIZED = "Unauthorized";
 }
