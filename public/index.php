@@ -7,6 +7,7 @@ use Slim\Factory\AppFactory;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\PaymentsController;
+use Payment_API\Middleware\AuthMiddleware;
 use Payment_API\Middleware\ContentTypeMiddleware;
 use Payment_API\Middleware\MethodTypeMiddleware;
 use Payment_API\Middleware\CustomErrorHandlerMiddleware;
@@ -41,6 +42,9 @@ $app->get('/v1', function (Request $request, Response $response, $args) {
         ->withStatus(200, 'OK')
         ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
+
+// Authentication Middleware
+
 
 // Methods Endpoints
 $app->group('/v1/methods', function (RouteCollectorProxy $group) {
@@ -93,12 +97,12 @@ $app->group('/v1/payments', function (RouteCollectorProxy $group) {
 });
 
 // Add Error Middleware
-// $displayErrors = $_ENV['APP_ENV'] != 'development';
+$displayErrors = $_ENV['APP_ENV'] != 'development';
 
-// $displayErrors = true;
-// $customErrorHandler = new CustomErrorHandlerMiddleWare($app);
+$displayErrors = true;
+$customErrorHandler = new CustomErrorHandlerMiddleWare($app);
 
-// $errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
-// $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
+$errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 $app->run();
