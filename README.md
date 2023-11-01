@@ -20,7 +20,7 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 - API Pagination: None.
 - API Usage Info:
 
-  `API Info`
+                `API Info:`
 
 - `GET /v1`: Get API info.
 
