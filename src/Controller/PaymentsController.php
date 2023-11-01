@@ -186,7 +186,7 @@ class PaymentsController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = $args['id'];
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
@@ -209,7 +209,7 @@ class PaymentsController implements ControllerInterface
         if (empty($validateRequestContent->validationError)) {
             $this->paymentsRepository->update($validateRequestContent->updatePaymentEntity($paymentEntity));
 
-            return $this->status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
+            return $this->status_200(ResponseTitle::PUT, "Modified Payment with ID " . $requestAttribute, "");
         } else {
             return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestContent->validationError);
         }
@@ -252,20 +252,20 @@ class PaymentsController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = $args['id'];
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::DELETE, "Resource not found for ID" . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
-            $paymentsEntity = $this->paymentsRepository->findById($requestAttribute);
+            $paymentEntity = $this->paymentsRepository->findById($requestAttribute);
 
-            $this->paymentsRepository->remove($paymentsEntity);
+            $this->paymentsRepository->remove($paymentEntity);
 
-            return $this->status_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
+            return $this->status_200(ResponseTitle::DELETE, "Deleted Payment with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);

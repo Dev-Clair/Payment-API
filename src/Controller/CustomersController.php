@@ -197,12 +197,12 @@ class CustomersController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = $args['id'];
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::PUT, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         $requestContent = json_decode($request->getBody()->getContents(), true);
@@ -220,7 +220,7 @@ class CustomersController implements ControllerInterface
         if (empty($validateRequestBody->validationError)) {
             $this->customersRepository->update($validateRequestBody->updateCustomerEntity($customerEntity));
 
-            return $this->status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
+            return $this->status_200(ResponseTitle::PUT, "Modified account with ID " . $requestAttribute, "");
         } else {
             return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
         }
@@ -263,12 +263,12 @@ class CustomersController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = $args['id'];
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::DELETE, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -276,7 +276,7 @@ class CustomersController implements ControllerInterface
 
             $this->customersRepository->remove($customersEntity);
 
-            return $this->status_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
+            return $this->status_200(ResponseTitle::DELETE, "Deleted account with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
@@ -317,12 +317,12 @@ class CustomersController implements ControllerInterface
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = $args['id'];
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::DEACTIVATE, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -332,7 +332,7 @@ class CustomersController implements ControllerInterface
 
             $this->customersRepository->update($customersEntity);
 
-            return $this->status_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
+            return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated account with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DEACTIVATE]);
@@ -373,12 +373,12 @@ class CustomersController implements ControllerInterface
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = $args['id'];
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::REACTIVATE, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -388,7 +388,7 @@ class CustomersController implements ControllerInterface
 
             $this->customersRepository->update($customersEntity);
 
-            return $this->status_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");
+            return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated account with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::REACTIVATE]);
