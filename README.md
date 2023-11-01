@@ -75,10 +75,13 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
    docker-compose up
    ```
 7. Install the required dependencies using composer via docker:
+
    ```bash
    docker-compose composer install
+
    docker-compose composer dump-autoload
    ```
+
 8. Login to your database by navigating into your mariadb container and running the following commands successively:
 
    ```bash
@@ -107,9 +110,14 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 4. All endpoints are tested and return valid `application/json` response.
 5. Navigate to the tests/ directory and run the following commands with or without any of the following options ` --colors` and `--testdox`
 
-- `./vendor/bin/phpunit tests/CustomersControllerTest.php`
-- `./vendor/bin/phpunit tests/MethodsControllerTest.php`
-- `./vendor/bin/phpunit tests/PaymentsControllerTest.php`
+```bash
+./vendor/bin/phpunit tests/CustomersControllerTest.php
+
+./vendor/bin/phpunit tests/MethodsControllerTest.php
+
+./vendor/bin/phpunit tests/PaymentsControllerTest.php
+
+```
 
 ## API Documentation
 
