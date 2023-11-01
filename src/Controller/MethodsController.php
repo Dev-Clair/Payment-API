@@ -187,7 +187,7 @@ class MethodsController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
@@ -253,7 +253,7 @@ class MethodsController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
@@ -307,7 +307,7 @@ class MethodsController implements ControllerInterface
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
@@ -362,7 +362,7 @@ class MethodsController implements ControllerInterface
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
+        $requestAttribute = (int) $args['id'];
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
