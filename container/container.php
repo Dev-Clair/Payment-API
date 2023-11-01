@@ -31,7 +31,7 @@ $container = new Container();
 const APP_ROOT = __DIR__ . "/..";
 
 /**
- *  Register binding: Configuration Settings
+ *  Register bindings: Configuration Settings
  */
 $container->set('settings', function () {
     return [
@@ -54,7 +54,7 @@ $container->set('settings', function () {
 });
 
 /**
- * Register binding: ORM EntityManager
+ * Register bindings: ORM EntityManager
  */
 $container->set(EntityManager::class, function (Container $container): EntityManager {
     /**
@@ -73,7 +73,7 @@ $container->set(EntityManager::class, function (Container $container): EntityMan
 });
 
 /**
- * Register binding: Repositories
+ * Register bindings: Repositories
  */
 $container->set(MethodsRepository::class, function (Container $container): MethodsRepository {
     $entityManager = $container->get(EntityManager::class);
@@ -91,7 +91,7 @@ $container->set(PaymentsRepository::class, function (Container $container): Paym
 });
 
 /**
- * Register binding: Controllers
+ * Register bindings: Controllers
  */
 $container->set(MethodsController::class, function (Container $container): MethodsController {
     $methodsRepository = $container->get(MethodsRepository::class);
@@ -116,7 +116,7 @@ $container->set(PaymentsController::class, function (Container $container): Paym
 });
 
 /**
- * Register binding: Services Interface
+ * Register bindings: Services Interface
  */
 $container->set(
     SmsServiceInterface::class,
@@ -133,7 +133,7 @@ $container->set(
 );
 
 /**
- * Register binding: Logger
+ * Register bindings: Logger
  */
 $container->set(Logger::class, function (Container $container): Logger {
     $logger = new Logger('Payment_API');
