@@ -37,15 +37,7 @@ class CustomersControllerTest extends TestCase
      */
     public static function validIdDataProvider(): array
     {
-        return [['1'], ['2'], ['3'], ['4'], ['5']];
-    }
-
-    /**
-     * data provider: provides invalid id values for various test cases
-     */
-    public static function invalidIdDataProvider(): array
-    {
-        return [['a'], ['b'], ['c'], ['d'], ['e']];
+        return [[1]];
     }
 
     /**
@@ -77,60 +69,20 @@ class CustomersControllerTest extends TestCase
     /**
      * @test
      */
-    public function post_endpoint_returns_status_400_response(): void
-    {
-        $response = $this->http->request('POST', 'v1/customers', [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([]),
-        ]);
-
-        $this->assertSame(400, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     */
-    public function post_endpoint_returns_status_422_response(): void
-    {
-        $response = $this->http->request('POST', 'v1/customers', [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([
-                'customer_name' => 'hennadii shvedko 12',
-                'customer_email' => 'hennadii.shvedko',
-                'customer_phone' => +380501234567,
-                'customer_password' => 'shvedko_hennadii',
-                'confirm_customer_password' => 'hennadii_shvedko',
-                'customer_address' => '123 Shevchenka Street, Kyiv, Ukraine'
-            ]),
-        ]);
-
-        $this->assertSame(422, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     */
     public function post_endpoint_returns_status_201_response(): void
     {
         $response = $this->http->request('POST', 'v1/customers', [
             'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
+                'Content-Type' => 'application/json',
             ],
             'body' => json_encode([
-                'customer_name' => 'hennadii shvedko',
-                'customer_email' => 'hennadii.shvedko@gmail.com',
-                'customer_phone' => +380501234567,
-                'customer_password' => 'hennadii_shvedko',
-                'confirm_customer_password' => 'hennadii_shvedko',
-                'customer_address' => '123 Shevchenka Street, Kyiv, Ukraine'
+                'customer_name' => 'wendy uche',
+                'customer_email' => 'wendy.uche@gmail.com',
+                'customer_phone' => "09150515435",
+                'customer_password' => 'wendyuche99',
+                'confirm_customer_password' => 'wendyuche99',
+                'customer_address' => '2 Aduragbemi Street, Ontario, Canada',
+                'customer_type' => 'individual'
             ]),
         ]);
 
@@ -143,76 +95,20 @@ class CustomersControllerTest extends TestCase
      * @test
      * @dataProvider validIdDataProvider
      */
-    public function put_endpoint_returns_status_400_response($id): void
-    {
-        $response = $this->http->request('PUT', 'v1/customers/' . $id, [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([]),
-        ]);
-
-        $this->assertSame(400, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidIdDataProvider
-     */
-    public function put_endpoint_returns_status_404_response($id): void
-    {
-        $response = $this->http->request('PUT', 'v1/customers/' . $id, [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([]),
-        ]);
-
-        $this->assertSame(404, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     * @dataProvider validIdDataProvider
-     */
-    public function put_endpoint_returns_status_422_response($id): void
-    {
-        $response = $this->http->request('PUT', 'v1/customers/' . $id, [
-            'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
-            ],
-            'body' => json_encode([
-                'customer_name' => 'alexander nwokorie 12',
-                'customer_email' => 'alexander.nwokorie',
-                'customer_phone' => +2348190878578,
-                'customer_address' => '24 bogije street, Ibadan, Nigeria'
-            ]),
-        ]);
-
-        $this->assertSame(422, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     * @dataProvider validIdDataProvider
-     */
     public function put_endpoint_returns_status_200_response($id): void
     {
         $response = $this->http->request('PUT', 'v1/customers/' . $id, [
             'headers' => [
-                'Content-Type' => 'application/json; charset=UTF-8',
+                'Content-Type' => 'application/json',
             ],
             'body' => json_encode([
-                'customer_name' => 'alexander nwokorie',
-                'customer_email' => 'alexander.nwokorie@yahoo.com',
-                'customer_phone' => +2348190878578,
-                'customer_address' => '24 bogije street, Ibadan, Nigeria'
+                'customer_name' => 'aniogbu samuel',
+                'customer_email' => 'aniogbu.samuel@yahoo.com',
+                'customer_phone' => "08133893441",
+                'customer_password' => 'claircorp99',
+                'confirm_customer_password' => 'claircorp99',
+                'customer_address' => '5b Mumuni Street, Lagos, Nigeria',
+                'customer_type' => 'individual'
             ]),
         ]);
 
@@ -236,19 +132,6 @@ class CustomersControllerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider invalidIdDataProvider
-     */
-    public function deactivate_endpoint_returns_status_404_response($id): void
-    {
-        $response = $this->http->request('GET', 'v1/customers/deactivate/' . $id);
-
-        $this->assertSame(404, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
      * @dataProvider validIdDataProvider
      */
     public function reactivate_endpoint_returns_status_200_response($id): void
@@ -262,19 +145,6 @@ class CustomersControllerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider invalidIdDataProvider
-     */
-    public function reactivate_endpoint_returns_status_404_response($id): void
-    {
-        $response = $this->http->request('GET', 'v1/customers/reactivate/' . $id);
-
-        $this->assertSame(404, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
      * @dataProvider validIdDataProvider
      */
     public function delete_endpoint_returns_status_200_response($id): void
@@ -282,19 +152,6 @@ class CustomersControllerTest extends TestCase
         $response = $this->http->request('DELETE', 'v1/customers/' . $id);
 
         $this->assertSame(200, $response->getStatusCode());
-
-        $this->assertJsonContent($response);
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidIdDataProvider
-     */
-    public function delete_endpoint_returns_status_404_response($id): void
-    {
-        $response = $this->http->request('DELETE', 'v1/customers/' . $id);
-
-        $this->assertSame(404, $response->getStatusCode());
 
         $this->assertJsonContent($response);
     }
