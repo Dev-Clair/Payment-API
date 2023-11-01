@@ -34,7 +34,6 @@ class PaymentsEntity implements EntityInterface
 
     public function __construct()
     {
-        $this->amount = 0.00;
         $this->created_at = new DateTime('now');
     }
 
