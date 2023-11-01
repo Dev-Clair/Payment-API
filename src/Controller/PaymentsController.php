@@ -186,7 +186,7 @@ class PaymentsController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
@@ -252,7 +252,7 @@ class PaymentsController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 

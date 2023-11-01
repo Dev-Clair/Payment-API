@@ -187,12 +187,12 @@ class MethodsController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::PUT, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         $requestContent = json_decode($request->getBody()->getContents(), true);
@@ -210,7 +210,7 @@ class MethodsController implements ControllerInterface
         if (empty($validateRequestBody->validationError)) {
             $this->methodsRepository->update($validateRequestBody->updateMethodEntity($methodEntity));
 
-            return $this->status_200(ResponseTitle::PUT, $requestAttribute . " Modified", "");
+            return $this->status_200(ResponseTitle::PUT, "Modified method with ID " . $requestAttribute, "");
         } else {
             return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
         }
@@ -253,12 +253,12 @@ class MethodsController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DELETE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::DELETE, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -266,7 +266,7 @@ class MethodsController implements ControllerInterface
 
             $this->methodsRepository->remove($methodsEntity);
 
-            return $this->status_200(ResponseTitle::DELETE, $requestAttribute . " Deleted", "");
+            return $this->status_200(ResponseTitle::DELETE, "Deleted method with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
@@ -307,12 +307,12 @@ class MethodsController implements ControllerInterface
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DEACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::DEACTIVATE, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -321,7 +321,7 @@ class MethodsController implements ControllerInterface
             $methodsEntity->setMethodStatus(MethodStatus::INACTIVE->value);
             $this->methodsRepository->update($methodsEntity);
 
-            return $this->status_200(ResponseTitle::DEACTIVATE, $requestAttribute . " Deactivated", "");
+            return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated method with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::DEACTIVATE]);
@@ -362,12 +362,12 @@ class MethodsController implements ControllerInterface
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
         if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::REACTIVATE, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            return $this->status_404(ResponseTitle::REACTIVATE, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
         }
 
         if ($validateResource === true) {
@@ -376,7 +376,7 @@ class MethodsController implements ControllerInterface
             $methodsEntity->setMethodStatus(MethodStatus::ACTIVE->value);
             $this->methodsRepository->update($methodsEntity);
 
-            return $this->status_200(ResponseTitle::REACTIVATE, $requestAttribute . " Reactivated", "");
+            return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated method with ID " . $requestAttribute, "");
         }
 
         $this->logger->emergency("Internal Server Error", [ResponseTitle::REACTIVATE]);

@@ -197,7 +197,7 @@ class CustomersController implements ControllerInterface
      */
     public function put(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
@@ -263,7 +263,7 @@ class CustomersController implements ControllerInterface
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
@@ -317,7 +317,7 @@ class CustomersController implements ControllerInterface
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
@@ -373,7 +373,7 @@ class CustomersController implements ControllerInterface
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
-        $requestAttribute = (int) $args['id'];
+        $requestAttribute = filter_var((int) $args['id'], FILTER_VALIDATE_INT | FILTER_SANITIZE_NUMBER_INT);
 
         $validateResource = $this->customersRepository->validateId($requestAttribute);
 
