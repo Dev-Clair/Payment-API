@@ -44,7 +44,14 @@ $app->get('/v1', function (Request $request, Response $response, $args) {
 });
 
 // Authentication Middleware
+$authMiddleware = new AuthMiddleware($_ENV['JWT_SECRET_KEY']);
 
+$app->get('/generate-token', function (Request $request, Response $response) {
+    exec('php ' . __DIR__ . '/../container/generateAuthToken.php', $output);
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(implode("\n", $output));
+    return $response;
+});
 
 // Methods Endpoints
 $app->group('/v1/methods', function (RouteCollectorProxy $group) {
@@ -62,7 +69,7 @@ $app->group('/v1/methods', function (RouteCollectorProxy $group) {
         ->add(new MethodTypeMiddleware(['GET']));
     $group->get('/reactivate/{id:[0-9]+}', [MethodsController::class, 'reactivate'])
         ->add(new MethodTypeMiddleware(['GET']));
-});
+})->add($authMiddleware);
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
@@ -80,7 +87,7 @@ $app->group('/v1/customers', function (RouteCollectorProxy $group) {
         ->add(new MethodTypeMiddleware(['GET']));
     $group->get('/reactivate/{id:[0-9]+}', [CustomersController::class, 'reactivate'])
         ->add(new MethodTypeMiddleware(['GET']));
-});
+})->add($authMiddleware);
 
 // Payments Endpoints
 $app->group('/v1/payments', function (RouteCollectorProxy $group) {
@@ -94,7 +101,7 @@ $app->group('/v1/payments', function (RouteCollectorProxy $group) {
         ->add(new ContentTypeMiddleware('application/json'));
     $group->delete('/{id:[0-9]+}', [PaymentsController::class, 'delete'])
         ->add(new MethodTypeMiddleware(['PUT', 'DELETE']));
-});
+})->add($authMiddleware);
 
 // Add Error Middleware
 $displayErrors = $_ENV['APP_ENV'] != 'development';
