@@ -75,7 +75,7 @@ class PaymentsValidation extends Abs_Validation
     {
         $payment_status = $this->sanitizedData['payment_status'];
         if (empty($payment_status)) {
-            $this->validationError['payment_status'] = "Payment status filed is empty; please enter a valid payment status";
+            $this->validationError['payment_status'] = "Payment status field is empty; please enter a valid payment status";
             return;
         }
 

@@ -46,7 +46,7 @@ class CustomersValidation extends Abs_Validation
     {
         $customer_name = $this->sanitizedData['customer_name'];
         if (empty($customer_name)) {
-            $this->validationError['customer_name'] = "Name is empty; Please enter a valid first and/or last name";
+            $this->validationError['customer_name'] = "Name field is empty; Please enter a valid first and/or last name";
             return;
         }
 
