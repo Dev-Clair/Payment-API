@@ -23,19 +23,20 @@ $dotenv->safeload();
 $app = AppFactory::createFromContainer($container);
 
 // Route to API documentation
-$app->get('/openapi', function () {
-    require __DIR__ . '/openapi/index.php';
+$app->get('/v1/openapi', function (Request $request, Response $response, $args) {
+    $output = require __DIR__ . '/openapi/index.php';
+    $response->getBody()->write(json_encode($output));
+    return $response
+        ->withStatus(200, 'OK')
+        ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
-/**
- * Routes to Application Endpoints and Middlewares for CRUD Related Operations
- */
 // API Description and Version Info
-$app->get('/v1', function (Request $request, Response $response, $args) {
+$app->get('/v1/info', function (Request $request, Response $response, $args) {
     $response->getBody()->write(json_encode([
         "title" => "Payment API",
         "description" => "All-in-one payment gateway aggregator",
-        "status" => "valid",
+        "status" => "active",
         "version" => "1.0.0"
     ]));
     return $response
@@ -43,14 +44,13 @@ $app->get('/v1', function (Request $request, Response $response, $args) {
         ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
-// Authentication Middleware
-$authMiddleware = new AuthMiddleware($_ENV['JWT_SECRET_KEY']);
-
-$app->get('/generate-token', function (Request $request, Response $response) {
-    exec('php ' . __DIR__ . '/../container/generateAuthToken.php', $output);
-    $response = $response->withHeader('Content-Type', 'application/json');
+// Generate Authorization Token
+$app->get('/v1/generate-authToken', function (Request $request, Response $response) {
+    exec('php ' . __DIR__ . '/../generateAuthToken.php', $output);
     $response->getBody()->write(implode("\n", $output));
-    return $response;
+    return $response
+        ->withStatus(200, 'Token Created')
+        ->withHeader('Content-Type', 'application/json');
 });
 
 // Methods Endpoints
@@ -69,7 +69,7 @@ $app->group('/v1/methods', function (RouteCollectorProxy $group) {
         ->add(new MethodTypeMiddleware(['GET']));
     $group->get('/reactivate/{id:[0-9]+}', [MethodsController::class, 'reactivate'])
         ->add(new MethodTypeMiddleware(['GET']));
-})->add($authMiddleware);
+})->add(new AuthMiddleware($_ENV['JWT_SECRET_KEY']));
 
 // Customers Endpoints
 $app->group('/v1/customers', function (RouteCollectorProxy $group) {
@@ -87,7 +87,7 @@ $app->group('/v1/customers', function (RouteCollectorProxy $group) {
         ->add(new MethodTypeMiddleware(['GET']));
     $group->get('/reactivate/{id:[0-9]+}', [CustomersController::class, 'reactivate'])
         ->add(new MethodTypeMiddleware(['GET']));
-})->add($authMiddleware);
+})->add(new AuthMiddleware($_ENV['JWT_SECRET_KEY']));
 
 // Payments Endpoints
 $app->group('/v1/payments', function (RouteCollectorProxy $group) {
@@ -101,12 +101,12 @@ $app->group('/v1/payments', function (RouteCollectorProxy $group) {
         ->add(new ContentTypeMiddleware('application/json'));
     $group->delete('/{id:[0-9]+}', [PaymentsController::class, 'delete'])
         ->add(new MethodTypeMiddleware(['PUT', 'DELETE']));
-})->add($authMiddleware);
+})->add(new AuthMiddleware($_ENV['JWT_SECRET_KEY']));
 
 // Add Error Middleware
 $displayErrors = $_ENV['APP_ENV'] != 'development';
 
-$displayErrors = true;
+$displayErrors = false;
 $customErrorHandler = new CustomErrorHandlerMiddleWare($app);
 
 $errorMiddleware = $app->addErrorMiddleware($displayErrors, true, true);

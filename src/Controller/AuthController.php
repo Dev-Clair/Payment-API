@@ -6,14 +6,13 @@ namespace Payment_API\Controller;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Exception;
 use stdClass;
 
 class AuthController
 {
     private string $jwtSecretKey;
-    private string $jwtIssueTime;
-    private string $jwtExpiryTime;
+    private int $jwtIssueTime;
+    private int $jwtExpiryTime;
 
     function __construct(string $jwtSecretKey)
     {
@@ -39,13 +38,8 @@ class AuthController
         return JWT::encode($authToken, $this->jwtSecretKey, 'HS256');
     }
 
-    public function decode(string $authToken): stdClass|Exception
+    public function decode(string $authToken): stdClass
     {
-        try {
-            $decode = JWT::decode($authToken, new Key($this->jwtSecretKey, 'HS256'));
-            return $decode->data;
-        } catch (Exception $e) {
-            return $e;
-        }
+        return JWT::decode($authToken, new Key($this->jwtSecretKey, 'HS256'));
     }
 }

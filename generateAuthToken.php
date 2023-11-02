@@ -18,7 +18,7 @@ $authToken = (new AuthController($jwtSecretKey))->encode($issuer, $payload);
 
 $response = [
     'token' => $authToken,
-    'expiry' => "900 secs"
+    'expires' => "900 secs"
 ];
 
 echo json_encode($response, JSON_PRETTY_PRINT);
