@@ -18,20 +18,25 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 - Logging: Monolog.
 - Caching: None (No third Party Libraries/Extensions).
 - Pagination: None.
-- Usage Info:
+- Additional Information:
 
-                API Info:
+      API Info Endpoint: GET
 
-- `GET /v1/info`: Get API info.
+                        /v1/info
 
-                Generate Auth Token:
+      Generate Bearer Authentication Token Endpoint: GET
 
-- `GET /v1/generate-authToken`: Get valid bearer token to authorize api requests.
+                        /v1/generate-authToken
 
-                Method Endpoints:
+      Method Endpoints:
 
-- `GET /v1/methods`: Get a list of all available payment methods.
-- `POST /v1/methods`: Create a new payment method. Provide the required fields in request body as json:
+- Get a list of all available payment methods: GET
+
+                       /v1/methods
+
+- Create a new payment method. Provide the required fields in request body as json: POST
+
+                       /v1/methods
 
 ```bash
 {
@@ -40,7 +45,9 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 }
 ```
 
-- `PUT /v1/methods/{id:[0-9]+}`: Update a payment method by it's ID (Identifier). Provide the required fields in request body as json:
+- Update a payment method by it's ID (Identifier). Provide the required fields in request body as json: PUT
+
+                        /v1/methods/{id:[0-9]+}
 
 ```bash
 {
@@ -49,14 +56,27 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 }
 ```
 
-- `DELETE /v1/methods/{id:[0-9]+}`: Delete a payment method by it's ID (Identifier).
-- `GET /v1/methods/deactivate/{id:[0-9]+}`: Deactivate a method by it's ID (Identifier).
-- `GET /v1/methods/reactivate/{id:[0-9]+}`: Reactivate a method by it's ID (Identifier).
+- Delete a payment method by it's ID (Identifier): DELETE
 
-                 Customer Endpoints:
+                        /v1/methods/{id:[0-9]+}
 
-- `GET /v1/customers`: Get a list of all customer accounts.
-- `POST /v1/customers`: Create a new customer account. Provide the required fields in request body as json:
+- Deactivate a method by it's ID (Identifier): GET
+
+                        /v1/methods/deactivate/{id:[0-9]+}
+
+- Reactivate a method by it's ID (Identifier): GET
+
+                        /v1/methods/reactivate/{id:[0-9]+}
+
+      Customer Endpoints:
+
+- Get a list of all customer accounts: GET
+
+                        /v1/customers
+
+- Create a new customer account. Provide the required fields in request body as json: POST
+
+                        /v1/customers
 
 ```bash
 {
@@ -70,7 +90,9 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 }
 ```
 
-- `PUT /v1/customers/{id:[0-9]+}`: Update a customer account by it's ID (Identifier). Provide the required fields in request body as json:
+- Update a customer account by it's ID (Identifier). Provide the required fields in request body as json: PUT
+
+                        /v1/customers/{id:[0-9]+}
 
 ```bash
 {
@@ -84,14 +106,27 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 }
 ```
 
-- `DELETE /v1/customers/{id:[0-9]+}`: Delete a customer account by it's ID (Identifier).
-- `GET /v1/customers/deactivate/{id:[0-9]+}`: Deactivate a customer account by it's ID (Identifier).
-- `GET /v1customers/reactivate/{id:[0-9]+}`: Reactivate a customer account by it's ID (Identifier).
+- Delete a customer account by it's ID (Identifier): DELETE
 
-                Payment Endpoints:
+                        /v1/customers/{id:[0-9]+}
 
-- `GET /v1/payments`: Get a list of all payment records.
-- `POST /v1/payments`: Create a new payment record. Provide the required fields in request body as json:
+- Deactivate a customer account by it's ID (Identifier): GET
+
+                        /v1/customers/deactivate/{id:[0-9]+}
+
+- `GET /v1customers/reactivate/{id:[0-9]+}`: Reactivate a customer account by it's ID (Identifier): GET
+
+                        /v1/customers/reactivate{id:[0-9]+}
+
+      Payment Endpoints:
+
+- Get a list of all payment records: GET
+
+                        /v1/payments
+
+- Create a new payment record. Provide the required fields in request body as json: POST
+
+                        /v1/payments
 
 ```bash
 {
@@ -101,7 +136,9 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 }
 ```
 
-- `PUT /v1/payments/{id:[0-9]+}`: Update a payment record by it's ID (Identifier). Provide the required fields in request body as json:
+- Update a payment record by it's ID (Identifier). Provide the required fields in request body as json: PUT
+
+                        /v1/payments/{id:[0-9]+}
 
 ```bash
 {
@@ -111,7 +148,9 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 }
 ```
 
-- `DELETE /v1/payments/{id:[0-9]+}`: Delete a payment record by it's ID (Identifier).
+- Delete a payment record by it's ID (Identifier): DELETE
+
+                        /v1/payments/{id:[0-9]+}
 
 ## Installation
 
