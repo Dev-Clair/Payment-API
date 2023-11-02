@@ -21,7 +21,15 @@ class MethodsControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->http = new Client(['base_uri' => 'http://localhost:26000/']);
+        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.W10.CfNad_NDnSotdIVIvZO-YEf58qe88_Na1ryAmRaCdKg';
+
+        $this->http = new Client([
+            'base_uri' => 'http://localhost:26000/',
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Content-Type' => 'application/json',
+            ],
+        ]);
     }
 
     /**
