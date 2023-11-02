@@ -32,3 +32,7 @@
 [2023-11-01T11:32:42.979372+00:00] Payment_API.ERROR: Bad request [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
 [2023-11-01T11:32:51.522921+00:00] Payment_API.ERROR: Unprocessable Entity [{"Payment_API\\Enums\\CustomersResponseTitle":"Create New Customer Account"}] []
 [2023-11-01T13:56:17.641195+00:00] Payment_API.CRITICAL: Not found. [] []
+[2023-11-02T08:32:00.338381+00:00] Payment_API.CRITICAL: Not found. [] []
+[2023-11-02T08:32:11.755276+00:00] Payment_API.CRITICAL: Not found. [] []
+[2023-11-02T08:33:35.881330+00:00] Payment_API.CRITICAL: Not found. [] []
+[2023-11-02T08:37:34.961765+00:00] Payment_API.CRITICAL: Not found. [] []
