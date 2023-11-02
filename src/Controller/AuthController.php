@@ -14,12 +14,14 @@ class AuthController
     private int $jwtIssueTime;
     private int $jwtExpiryTime;
 
+    const SECONDS = 900;
+
     function __construct(string $jwtSecretKey)
     {
         date_default_timezone_set('Europe/Munich');
         $this->jwtIssueTime = time();
 
-        $this->jwtExpiryTime = $this->jwtIssueTime + 900;
+        $this->jwtExpiryTime = $this->jwtIssueTime + static::SECONDS;
 
         $this->jwtSecretKey = $jwtSecretKey;
     }

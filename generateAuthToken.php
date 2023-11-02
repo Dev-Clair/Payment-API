@@ -8,13 +8,9 @@ require __DIR__ . '/vendor/autoload.php';
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeload();
 
-$issuer = 'Payment-API';
-
-$payload = [];
-
 $jwtSecretKey = $_ENV['JWT_SECRET_KEY'];
 
-$authToken = (new AuthController($jwtSecretKey))->encode($issuer, $payload);
+$authToken = (new AuthController($jwtSecretKey))->encode('Payment-API', []);
 
 $response = [
     'token' => $authToken,
