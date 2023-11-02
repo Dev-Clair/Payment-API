@@ -14,11 +14,8 @@ class ContentTypeMiddleware
 {
     use Status_400;
 
-    protected string $allowedContentType;
-
-    public function __construct(string $allowedContentType)
+    public function __construct(private string $allowedContentType)
     {
-        $this->allowedContentType = $allowedContentType;
     }
 
     public function __invoke(Request $request, Handler $handler): Response

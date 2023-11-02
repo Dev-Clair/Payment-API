@@ -14,11 +14,8 @@ class MethodTypeMiddleware
 {
     use Status_405;
 
-    protected array $allowedMethods;
-
-    public function __construct(array $allowedMethods)
+    public function __construct(private array $allowedMethods)
     {
-        $this->allowedMethods = $allowedMethods;
     }
 
     public function __invoke(Request $request, Handler $handler): Response
