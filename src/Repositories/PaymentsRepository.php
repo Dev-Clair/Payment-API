@@ -43,7 +43,7 @@ class PaymentsRepository implements RepositoryInterface
 
     public function remove(PaymentsEntity $paymentsEntity): void
     {
-        $this->entityManager->persist($paymentsEntity);
+        $this->entityManager->remove($paymentsEntity);
         $this->entityManager->flush();
     }
 }

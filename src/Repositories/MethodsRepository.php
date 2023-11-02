@@ -43,7 +43,7 @@ class MethodsRepository implements RepositoryInterface
 
     public function remove(MethodsEntity $methodsEntity): void
     {
-        $this->entityManager->persist($methodsEntity);
+        $this->entityManager->remove($methodsEntity);
         $this->entityManager->flush();
     }
 }

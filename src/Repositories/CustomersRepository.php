@@ -43,7 +43,7 @@ class CustomersRepository implements RepositoryInterface
 
     public function remove(CustomersEntity $customersEntity): void
     {
-        $this->entityManager->persist($customersEntity);
+        $this->entityManager->remove($customersEntity);
         $this->entityManager->flush();
     }
 }
