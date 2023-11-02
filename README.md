@@ -1,6 +1,6 @@
 # PAYMENT-API
 
-The PAYMENT API is a RESTful web service that allows you to manage payment methods, customers and payments using reliable product endpoints. This API is built using the Slim PHP framework, adheres to RESTful principles, and provides features for CRUD operations.
+The PAYMENT API is a RESTful web service that allows you to aggregate and manage payment methods, customers and payments using reliable product endpoints. This API is built using the Slim PHP framework, adheres to RESTful principles, and provides features for CRUD operations.
 
 ## Table of Contents
 
@@ -20,33 +20,93 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 - API Pagination: None.
 - API Usage Info:
 
-                `API Info:`
+                API Info:
 
 - `GET /v1`: Get API info.
 
-                `Method Endpoints:`
+                Method Endpoints:
 
 - `GET /v1/methods`: Get a list of all available payment methods.
-- `POST /v1/methods`: Create a new payment method.
-- `PUT /v1/methods/{id:[0-9]+}`: Update a payment method by it's ID (Identifier).
+- `POST /v1/methods`: Create a new payment method. Provide the required fields in request body as json:
+
+```bash
+{
+   "method_name" : "authorize.net",
+   "method_type" : "card"
+}
+```
+
+- `PUT /v1/methods/{id:[0-9]+}`: Update a payment method by it's ID (Identifier). Provide the required fields in request body as json:
+
+```bash
+{
+   "method_name" : "googlepay",
+   "method_type" : "card"
+}
+```
+
 - `DELETE /v1/methods/{id:[0-9]+}`: Delete a payment method by it's ID (Identifier).
 - `GET /v1/methods/deactivate/{id:[0-9]+}`: Deactivate a method by it's ID (Identifier).
 - `GET /v1/methods/reactivate/{id:[0-9]+}`: Reactivate a method by it's ID (Identifier).
 
-                 `Customer Endpoints:`
+                 Customer Endpoints:
 
 - `GET /v1/customers`: Get a list of all customer accounts.
-- `POST /v1/customers`: Create a new customer account.
-- `PUT /v1/customers/{id:[0-9]+}`: Update a customer account by it's ID (Identifier).
+- `POST /v1/customers`: Create a new customer account. Provide the required fields in request body as json:
+
+```bash
+{
+   "customer_name" : "john doe",
+   "customer_email" : "john.doe@domain.com",
+   "customer_password" : "john_doe25",
+   "confirm_customer_password" : "john_doe25",
+   "customer_phone" : "012345678900",
+   "customer_address" : "25 Hughes Avenue, Yaba Lagos, Nigeria",
+   "customer_type" : "individual | organization",
+}
+```
+
+- `PUT /v1/customers/{id:[0-9]+}`: Update a customer account by it's ID (Identifier). Provide the required fields in request body as json:
+
+```bash
+{
+   "customer_name" : "jane doe",
+   "customer_email" : "jane.doe@domain.com",
+   "customer_password" : "jane_doe15",
+   "confirm_customer_password" : "john_doe15",
+   "customer_phone" : "018900567234",
+   "customer_address" : "25 McCarthy Drive, Yaba Lagos, Nigeria",
+   "customer_type" : "individual | organization",
+}
+```
+
 - `DELETE /v1/customers/{id:[0-9]+}`: Delete a customer account by it's ID (Identifier).
 - `GET /v1/customers/deactivate/{id:[0-9]+}`: Deactivate a customer account by it's ID (Identifier).
 - `GET /v1customers/reactivate/{id:[0-9]+}`: Reactivate a customer account by it's ID (Identifier).
 
-                `Payment Endpoints:`
+                Payment Endpoints:
 
 - `GET /v1/payments`: Get a list of all payment records.
-- `POST /v1/payments`: Create a new payment record.
-- `PUT /v1/payments/{id:[0-9]+}`: Update a payment record by it's ID (Identifier).
+- `POST /v1/payments`: Create a new payment record. Provide the required fields in request body as json:
+
+```bash
+{
+   "amount" : 100.00,
+   "payment_status" : "paid|pending",
+   "payment_type" : "credit"
+}
+```
+
+- `PUT /v1/payments/{id:[0-9]+}`: Update a payment record by it's ID (Identifier). Provide the required fields in request body as json:
+
+```bash
+{
+   "amount" : 120.50,
+   "payment_status" : "paid|pending",
+   "payment_type" : "debit"
+}
+```
+
 - `DELETE /v1/payments/{id:[0-9]+}`: Delete a payment record by it's ID (Identifier).
 
 ## Installation
@@ -111,11 +171,11 @@ The PAYMENT API is a RESTful web service that allows you to manage payment metho
 5. Navigate to the tests/ directory and run the following commands with or without any of the following options ` --colors` and `--testdox`
 
 ```bash
-`./vendor/bin/phpunit tests/CustomersControllerTest.php`
+./vendor/bin/phpunit tests/CustomersControllerTest.php
 
-`./vendor/bin/phpunit tests/MethodsControllerTest.php`
+./vendor/bin/phpunit tests/MethodsControllerTest.php
 
-`./vendor/bin/phpunit tests/PaymentsControllerTest.php`
+./vendor/bin/phpunit tests/PaymentsControllerTest.php
 
 ```
 
@@ -130,11 +190,11 @@ This documentation provides detailed information about each endpoint, input para
 ## Technologies Used
 
 - PHP (>= 8.0)
-- PostMan as http client for making request to endpoints.
-- Guzzle as http client for testing.
-- MySQL database for data storage.
+- JWT for user authentication/authorization.
+- Docker for managing and running services.
+- Doctrine ORM for database administration.
 - Composer for dependency management.
-- MRC (Model-Request-Controller) design architecture.
+- MRC (Model-HttpRequest-Controller) design architecture.
 
 ## Contributing
 
