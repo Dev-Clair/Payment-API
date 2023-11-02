@@ -14,15 +14,19 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
 ## Features
 
-- API Authentication: JWT.
-- API Logging: Monolog.
-- API Caching: None (No third Party Libraries/Extensions).
-- API Pagination: None.
-- API Usage Info:
+- Authentication: JWT.
+- Logging: Monolog.
+- Caching: None (No third Party Libraries/Extensions).
+- Pagination: None.
+- Usage Info:
 
                 API Info:
 
-- `GET /v1`: Get API info.
+- `GET /v1/info`: Get API info.
+
+                Generate Auth Token:
+
+- `GET /v1/generate-authToken`: Get valid bearer token to authorize api requests.
 
                 Method Endpoints:
 
