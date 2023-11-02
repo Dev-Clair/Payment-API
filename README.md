@@ -1,6 +1,6 @@
 # PAYMENT-API
 
-The PAYMENT API is a RESTful web service that allows you to aggregate and manage payment methods, customers and payments using reliable product endpoints. This API is built using the Slim PHP framework, adheres to RESTful principles, and provides features for CRUD operations.
+The PAYMENT API is a RESTful web service that allows you to aggregate and manage payment methods, customers and payments using reliable resource endpoints. This API is built using the Slim PHP framework, adheres to RESTful principles, and provides features for CRUD operations.
 
 ## Table of Contents
 
