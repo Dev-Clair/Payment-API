@@ -7,4 +7,4 @@ require __DIR__ . '/../../vendor/autoload.php';
 $openapi = \OpenApi\Generator::scan(['../../src']);
 
 header('Content-Type: application/json; charset=UTF-8');
-echo $openapi->toJson();
+return $openapi->toJson();
