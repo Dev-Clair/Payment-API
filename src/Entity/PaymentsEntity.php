@@ -20,7 +20,7 @@ class PaymentsEntity implements EntityInterface
     #[ORM\Column(type: 'string', nullable: false, length: 20)]
     private string $upid; // Unique Payment Identifier
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: false, updatable: true)]
     private float $amount; // Total Amount Paid
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]

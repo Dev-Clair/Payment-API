@@ -21,16 +21,16 @@ class CustomersEntity implements EntityInterface
     #[ORM\Column(type: 'string', length: 20)]
     private string $ucid; // Unique Customer Identifier
 
-    #[ORM\Column(type: 'string', nullable: false, length: 150)]
+    #[ORM\Column(type: 'string', nullable: false, updatable: true, length: 150)]
     private string $customer_name; // Customer Name
 
-    #[ORM\Column(type: 'string', unique: true, length: 255)]
+    #[ORM\Column(type: 'string', unique: true, updatable: true, length: 255)]
     private string $customer_email; // Customer Email
 
-    #[ORM\Column(type: 'string', nullable: false, length: 11)]
-    private int $customer_phone; // Customer Phone
+    #[ORM\Column(type: 'string', nullable: false, updatable: true, length: 11)]
+    private string  $customer_phone; // Customer Phone
 
-    #[ORM\Column(type: 'string', nullable: false, length: 255)]
+    #[ORM\Column(type: 'string', nullable: false, updatable: true, length: 255)]
     private string $customer_password; // Customer Password
 
     #[ORM\Column(type: 'string', nullable: true, updatable: true, length: 255)]
@@ -86,12 +86,12 @@ class CustomersEntity implements EntityInterface
         $this->customer_email = $customer_email;
     }
 
-    public function getCustomerPhone(): int
+    public function getCustomerPhone(): string
     {
         return $this->customer_phone;
     }
 
-    public function setCustomerPhone(int $customer_phone): void
+    public function setCustomerPhone(string $customer_phone): void
     {
         $this->customer_phone = $customer_phone;
     }

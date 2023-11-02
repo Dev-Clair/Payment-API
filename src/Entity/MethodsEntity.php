@@ -21,7 +21,7 @@ class MethodsEntity implements EntityInterface
     #[ORM\Column(type: 'string', nullable: false, length: 20)]
     private string $umid; // Unique Method Identifier
 
-    #[ORM\Column(type: 'string', nullable: false, length: 150)]
+    #[ORM\Column(type: 'string', nullable: false, updatable: true, length: 150)]
     private string $method_name; // Method Name: GooglePay, ApplePay, AmazonPay
 
     #[ORM\Column(type: 'datetime', nullable: false, updatable: true)]
