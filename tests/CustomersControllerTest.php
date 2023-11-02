@@ -24,7 +24,7 @@ class CustomersControllerTest extends TestCase
         $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.W10.CfNad_NDnSotdIVIvZO-YEf58qe88_Na1ryAmRaCdKg';
 
         $this->http = new Client([
-            'base_uri' => 'http://localhost:26000/',
+            'base_uri' => 'http://localhost:26000/' ?? 'https://' . $_SERVER['HOST'],
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Content-Type' => 'application/json',
@@ -80,16 +80,13 @@ class CustomersControllerTest extends TestCase
     public function post_endpoint_returns_status_201_response(): void
     {
         $response = $this->http->request('POST', 'v1/customers', [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
             'body' => json_encode([
                 'customer_name' => 'wendy uche',
                 'customer_email' => 'wendy.uche@gmail.com',
                 'customer_phone' => "09150515435",
-                'customer_password' => 'wendyuche99',
-                'confirm_customer_password' => 'wendyuche99',
-                'customer_address' => '2 Aduragbemi Street, Ontario, Canada',
+                'customer_password' => 'wendyuche45',
+                'confirm_customer_password' => 'wendyuche45',
+                'customer_address' => '2 Aduragbemi Street Oworonshoki, Lagos, Nigeria',
                 'customer_type' => 'individual'
             ]),
         ]);
@@ -106,9 +103,6 @@ class CustomersControllerTest extends TestCase
     public function put_endpoint_returns_status_200_response($id): void
     {
         $response = $this->http->request('PUT', 'v1/customers/' . $id, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
             'body' => json_encode([
                 'customer_name' => 'aniogbu samuel',
                 'customer_email' => 'aniogbu.samuel@yahoo.com',

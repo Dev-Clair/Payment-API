@@ -24,7 +24,7 @@ class MethodsControllerTest extends TestCase
         $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.W10.CfNad_NDnSotdIVIvZO-YEf58qe88_Na1ryAmRaCdKg';
 
         $this->http = new Client([
-            'base_uri' => 'http://localhost:26000/',
+            'base_uri' => 'http://localhost:26000/' ?? 'https://' . $_SERVER['HOST'],
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,
                 'Content-Type' => 'application/json',
@@ -80,9 +80,6 @@ class MethodsControllerTest extends TestCase
     public function post_endpoint_returns_status_201_response(): void
     {
         $response = $this->http->request('POST', 'v1/methods', [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
             'body' => json_encode([
                 'method_name' => 'paypal',
                 'method_type' => 'card'
@@ -101,9 +98,6 @@ class MethodsControllerTest extends TestCase
     public function put_endpoint_returns_status_200_response($id): void
     {
         $response = $this->http->request('PUT', 'v1/methods/' . $id, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
             'body' => json_encode([
                 'method_name' => 'stripepay',
                 'method_type' => 'card'
