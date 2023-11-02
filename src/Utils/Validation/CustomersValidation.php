@@ -104,7 +104,7 @@ class CustomersValidation extends Abs_Validation
             return;
         }
 
-        $this->validationResult['customer_phone'] = (int) $customer_phone;
+        $this->validationResult['customer_phone'] = $customer_phone;
     }
 
 
