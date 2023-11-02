@@ -20,135 +20,171 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 - Pagination: None.
 - Additional Information:
 
-      API Info Endpoint: GET
+- API Info Endpoint:
+
+      GET
 
                         /v1/info
 
-      Generate Bearer Authentication Token Endpoint: GET
+- Generate Bearer Authentication Token Endpoint:
+
+      GET
 
                         /v1/generate-authToken
 
-      Method Endpoints:
+- Method Endpoints:
 
-- Get a list of all available payment methods: GET
+- Get a list of all available payment methods:
 
-                       /v1/methods
-
-- Create a new payment method. Provide the required fields in request body as json: POST
+      GET
 
                        /v1/methods
 
-```bash
-{
-   "method_name" : "authorize.net",
-   "method_type" : "card"
-}
-```
+- Create a new payment method. Provide the required fields in request body as json:
 
-- Update a payment method by it's ID (Identifier). Provide the required fields in request body as json: PUT
+      POST
 
-                        /v1/methods/{id:[0-9]+}
+                       /v1/methods
 
-```bash
-{
-   "method_name" : "googlepay",
-   "method_type" : "card"
-}
-```
+      ```bash
+      {
+         "method_name" : "authorize.net",
+         "method_type" : "card"
+      }
+      ```
 
-- Delete a payment method by it's ID (Identifier): DELETE
+- Update a payment method by it's ID (Identifier). Provide the required fields in request body as json:
+
+      PUT
 
                         /v1/methods/{id:[0-9]+}
 
-- Deactivate a method by it's ID (Identifier): GET
+      ```bash
+      {
+         "method_name" : "googlepay",
+         "method_type" : "card"
+      }
+      ```
+
+- Delete a payment method by it's ID (Identifier):
+
+      DELETE
+
+                        /v1/methods/{id:[0-9]+}
+
+- Deactivate a method by it's ID (Identifier):
+
+      GET
 
                         /v1/methods/deactivate/{id:[0-9]+}
 
-- Reactivate a method by it's ID (Identifier): GET
+- Reactivate a method by it's ID (Identifier):
+
+      GET
 
                         /v1/methods/reactivate/{id:[0-9]+}
 
-      Customer Endpoints:
+- Customer Endpoints:
 
-- Get a list of all customer accounts: GET
+- Get a list of all customer accounts:
 
-                        /v1/customers
-
-- Create a new customer account. Provide the required fields in request body as json: POST
+      GET
 
                         /v1/customers
 
-```bash
-{
-   "customer_name" : "john doe",
-   "customer_email" : "john.doe@domain.com",
-   "customer_password" : "john_doe25",
-   "confirm_customer_password" : "john_doe25",
-   "customer_phone" : "012345678900",
-   "customer_address" : "25 Hughes Avenue, Yaba Lagos, Nigeria",
-   "customer_type" : "individual | organization",
-}
-```
+- Create a new customer account. Provide the required fields in request body as json:
 
-- Update a customer account by it's ID (Identifier). Provide the required fields in request body as json: PUT
+      POST
 
-                        /v1/customers/{id:[0-9]+}
+                        /v1/customers
 
-```bash
-{
-   "customer_name" : "jane doe",
-   "customer_email" : "jane.doe@domain.com",
-   "customer_password" : "jane_doe15",
-   "confirm_customer_password" : "john_doe15",
-   "customer_phone" : "018900567234",
-   "customer_address" : "25 McCarthy Drive, Yaba Lagos, Nigeria",
-   "customer_type" : "individual | organization",
-}
-```
+      ```bash
+      {
+         "customer_name" : "john doe",
+         "customer_email" : "john.doe@domain.com",
+         "customer_password" : "john_doe25",
+         "confirm_customer_password" : "john_doe25",
+         "customer_phone" : "012345678900",
+         "customer_address" : "25 Hughes Avenue, Yaba Lagos, Nigeria",
+         "customer_type" : "individual | organization",
+      }
+      ```
 
-- Delete a customer account by it's ID (Identifier): DELETE
+- Update a customer account by it's ID (Identifier). Provide the required fields in request body as json:
+
+      PUT
 
                         /v1/customers/{id:[0-9]+}
 
-- Deactivate a customer account by it's ID (Identifier): GET
+      ```bash
+      {
+         "customer_name" : "jane doe",
+         "customer_email" : "jane.doe@domain.com",
+         "customer_password" : "jane_doe15",
+         "confirm_customer_password" : "john_doe15",
+         "customer_phone" : "018900567234",
+         "customer_address" : "25 McCarthy Drive, Yaba Lagos, Nigeria",
+         "customer_type" : "individual | organization",
+      }
+      ```
+
+- Delete a customer account by it's ID (Identifier):
+
+      DELETE
+
+                        /v1/customers/{id:[0-9]+}
+
+- Deactivate a customer account by it's ID (Identifier):
+
+      GET
 
                         /v1/customers/deactivate/{id:[0-9]+}
 
-- `GET /v1customers/reactivate/{id:[0-9]+}`: Reactivate a customer account by it's ID (Identifier): GET
+- Reactivate a customer account by it's ID (Identifier):
+
+      GET
 
                         /v1/customers/reactivate{id:[0-9]+}
 
-      Payment Endpoints:
+- Payment Endpoints:
 
-- Get a list of all payment records: GET
+- Get a list of all payment records:
 
-                        /v1/payments
-
-- Create a new payment record. Provide the required fields in request body as json: POST
+      GET
 
                         /v1/payments
 
-```bash
-{
-   "amount" : 100.00,
-   "payment_status" : "paid|pending",
-   "payment_type" : "credit"
-}
-```
+- Create a new payment record. Provide the required fields in request body as json:
 
-- Update a payment record by it's ID (Identifier). Provide the required fields in request body as json: PUT
+      POST
+
+                        /v1/payments
+
+      ```bash
+      {
+         "amount" : 100.00,
+         "payment_status" : "paid|pending",
+         "payment_type" : "credit"
+      }
+      ```
+
+- Update a payment record by it's ID (Identifier). Provide the required fields in request body as json:
+
+      PUT
 
                         /v1/payments/{id:[0-9]+}
 
-```bash
-{
-   "amount" : 120.50,
-   "payment_status" : "paid|pending",
-   "payment_type" : "debit"
-}
-```
+      ```bash
+      {
+         "amount" : 120.50,
+         "payment_status" : "paid|pending",
+         "payment_type" : "debit"
+      }
+      ```
 
-- Delete a payment record by it's ID (Identifier): DELETE
+- Delete a payment record by it's ID (Identifier):
+
+      DELETE
 
                         /v1/payments/{id:[0-9]+}
 
