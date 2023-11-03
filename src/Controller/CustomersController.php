@@ -73,15 +73,17 @@ class CustomersController implements ControllerInterface
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        $customers = $this->customersRepository->findAll();
+        try {
+            $customers = $this->customersRepository->findAll();
 
-        if (is_array($customers)) {
-            return $this->status_200(ResponseTitle::GET, "Retrieved", $customers);
+            if (is_array($customers)) {
+                return $this->status_200(ResponseTitle::GET, "Retrieved", $customers);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::GET, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
         }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
-
-        return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
     }
 
 
@@ -120,33 +122,33 @@ class CustomersController implements ControllerInterface
      */
     public function post(Request $request, Response $response, array $args): Response
     {
-        $requestContent = json_decode($request->getBody()->getContents(), true);
+        try {
+            $requestContent = json_decode($request->getBody()->getContents(), true);
 
-        $requestMethod = $request->getMethod();
+            $requestMethod = $request->getMethod();
 
-        if (empty($requestContent)) {
-            $this->logger->error("Bad request", [ResponseTitle::POST]);
+            if (empty($requestContent)) {
+                $this->logger->error("Bad request", [ResponseTitle::POST]);
 
-            return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+                return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            }
+
+            $customerEntity = new CustomersEntity;
+
+            $validateRequestBody = new CustomersValidation($requestContent, $requestMethod);
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->customersRepository->store($validateRequestBody->createCustomerEntity($customerEntity));
+
+                return $this->status_201(ResponseTitle::POST, "Created", "");
+            } else {
+                return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::POST, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
         }
-
-        $customerEntity = new CustomersEntity;
-
-        $validateRequestBody = new CustomersValidation($requestContent, $requestMethod);
-
-        if (empty($validateRequestBody->validationError)) {
-            $this->customersRepository->store($validateRequestBody->createCustomerEntity($customerEntity));
-
-            return $this->status_201(ResponseTitle::POST, "Created", "");
-        } else {
-            $this->logger->error("Unprocessable Entity", [ResponseTitle::POST]);
-
-            return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
-
-        return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
     }
 
 
@@ -199,35 +201,37 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->customersRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->customersRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::PUT, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::PUT, "Customer Account ID not found for " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            $requestContent = json_decode($request->getBody()->getContents(), true);
+
+            $requestMethod = $request->getMethod();
+
+            if (empty($requestContent)) {
+                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+            }
+
+            $customerEntity = $this->customersRepository->findById($requestAttribute);
+
+            $validateRequestBody = new CustomersValidation($requestContent, $requestMethod);
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->customersRepository->update($validateRequestBody->updateCustomerEntity($customerEntity));
+
+                return $this->status_200(ResponseTitle::PUT, "Modified account with ID " . htmlspecialchars((string) $requestAttribute), "");
+            } else {
+                return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::PUT, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
         }
-
-        $requestContent = json_decode($request->getBody()->getContents(), true);
-
-        $requestMethod = $request->getMethod();
-
-        if (empty($requestContent)) {
-            return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
-        }
-
-        $customerEntity = $this->customersRepository->findById($requestAttribute);
-
-        $validateRequestBody = new CustomersValidation($requestContent, $requestMethod);
-
-        if (empty($validateRequestBody->validationError)) {
-            $this->customersRepository->update($validateRequestBody->updateCustomerEntity($customerEntity));
-
-            return $this->status_200(ResponseTitle::PUT, "Modified account with ID " . $requestAttribute, "");
-        } else {
-            return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
-
-        return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
     }
 
 
@@ -265,23 +269,25 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->customersRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->customersRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DELETE, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DELETE, "Customer Account ID not found for " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $customersEntity = $this->customersRepository->findById($requestAttribute);
+
+                $this->customersRepository->remove($customersEntity);
+
+                return $this->status_200(ResponseTitle::DELETE, "Deleted account with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::DELETE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $customersEntity = $this->customersRepository->findById($requestAttribute);
-
-            $this->customersRepository->remove($customersEntity);
-
-            return $this->status_200(ResponseTitle::DELETE, "Deleted account with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
-
-        return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
     }
 
 
@@ -319,27 +325,28 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->customersRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->customersRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DEACTIVATE, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DEACTIVATE, "Customer Account ID not found for " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $customersEntity = $this->customersRepository->findById($requestAttribute);
+
+                $customersEntity->setCustomerStatus(CustomerStatus::INACTIVE->value);
+
+                $this->customersRepository->update($customersEntity);
+
+                return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated account with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::DEACTIVATE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $customersEntity = $this->customersRepository->findById($requestAttribute);
-
-            $customersEntity->setCustomerStatus(CustomerStatus::INACTIVE->value);
-
-            $this->customersRepository->update($customersEntity);
-
-            return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated account with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::DEACTIVATE]);
-
-        return $this->status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
     }
-
 
     /**
      * @OA\Get(
@@ -375,24 +382,26 @@ class CustomersController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->customersRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->customersRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::REACTIVATE, "Customer Account ID not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::REACTIVATE, "Customer Account ID not found for " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $customersEntity = $this->customersRepository->findById($requestAttribute);
+
+                $customersEntity->setCustomerStatus(CustomerStatus::ACTIVE->value);
+
+                $this->customersRepository->update($customersEntity);
+
+                return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated account with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::REACTIVATE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $customersEntity = $this->customersRepository->findById($requestAttribute);
-
-            $customersEntity->setCustomerStatus(CustomerStatus::ACTIVE->value);
-
-            $this->customersRepository->update($customersEntity);
-
-            return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated account with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::REACTIVATE]);
-
-        return $this->status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
     }
 }

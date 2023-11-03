@@ -67,15 +67,17 @@ class MethodsController implements ControllerInterface
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        $methods = $this->methodsRepository->findAll();
+        try {
+            $methods = $this->methodsRepository->findAll();
 
-        if (is_array($methods)) {
-            return $this->status_200(ResponseTitle::GET, "Retrieved", $methods);
+            if (is_array($methods)) {
+                return $this->status_200(ResponseTitle::GET, "Retrieved", $methods);
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::GET, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
         }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
-
-        return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
     }
 
 
@@ -114,29 +116,31 @@ class MethodsController implements ControllerInterface
      */
     public function post(Request $request, Response $response, array $args): Response
     {
-        $requestContent = json_decode($request->getBody()->getContents(), true);
+        try {
+            $requestContent = json_decode($request->getBody()->getContents(), true);
 
-        $requestMethod = $request->getMethod();
+            $requestMethod = $request->getMethod();
 
-        if (empty($requestContent)) {
-            return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            if (empty($requestContent)) {
+                return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            }
+
+            $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
+
+            $methodEntity = new MethodsEntity;
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->methodsRepository->store($validateRequestBody->createMethodEntity($methodEntity));
+
+                return $this->status_201(ResponseTitle::POST, "Created", "");
+            } else {
+                return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::POST, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
         }
-
-        $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
-
-        $methodEntity = new MethodsEntity;
-
-        if (empty($validateRequestBody->validationError)) {
-            $this->methodsRepository->store($validateRequestBody->createMethodEntity($methodEntity));
-
-            return $this->status_201(ResponseTitle::POST, "Created", "");
-        } else {
-            return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
-
-        return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
     }
 
 
@@ -189,35 +193,37 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->methodsRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::PUT, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::PUT, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            $requestContent = json_decode($request->getBody()->getContents(), true);
+
+            $requestMethod = $request->getMethod();
+
+            if (empty($requestContent)) {
+                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+            }
+
+            $methodEntity = $this->methodsRepository->findById($requestAttribute);
+
+            $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->methodsRepository->update($validateRequestBody->updateMethodEntity($methodEntity));
+
+                return $this->status_200(ResponseTitle::PUT, "Modified method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            } else {
+                return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::PUT, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
         }
-
-        $requestContent = json_decode($request->getBody()->getContents(), true);
-
-        $requestMethod = $request->getMethod();
-
-        if (empty($requestContent)) {
-            return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
-        }
-
-        $methodEntity = $this->methodsRepository->findById($requestAttribute);
-
-        $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
-
-        if (empty($validateRequestBody->validationError)) {
-            $this->methodsRepository->update($validateRequestBody->updateMethodEntity($methodEntity));
-
-            return $this->status_200(ResponseTitle::PUT, "Modified method with ID " . $requestAttribute, "");
-        } else {
-            return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
-
-        return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
     }
 
 
@@ -255,23 +261,25 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->methodsRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DELETE, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DELETE, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+                $this->methodsRepository->remove($methodsEntity);
+
+                return $this->status_200(ResponseTitle::DELETE, "Deleted method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::DELETE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $methodsEntity = $this->methodsRepository->findById($requestAttribute);
-
-            $this->methodsRepository->remove($methodsEntity);
-
-            return $this->status_200(ResponseTitle::DELETE, "Deleted method with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
-
-        return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
     }
 
 
@@ -309,24 +317,26 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->methodsRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DEACTIVATE, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DEACTIVATE, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+                $methodsEntity->setMethodStatus(MethodStatus::INACTIVE->value);
+                $this->methodsRepository->update($methodsEntity);
+
+                return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::DEACTIVATE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $methodsEntity = $this->methodsRepository->findById($requestAttribute);
-
-            $methodsEntity->setMethodStatus(MethodStatus::INACTIVE->value);
-            $this->methodsRepository->update($methodsEntity);
-
-            return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated method with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::DEACTIVATE]);
-
-        return $this->status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
     }
 
 
@@ -364,23 +374,25 @@ class MethodsController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->methodsRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::REACTIVATE, "Method not found for ID " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::REACTIVATE, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+                $methodsEntity->setMethodStatus(MethodStatus::ACTIVE->value);
+                $this->methodsRepository->update($methodsEntity);
+
+                return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::REACTIVATE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $methodsEntity = $this->methodsRepository->findById($requestAttribute);
-
-            $methodsEntity->setMethodStatus(MethodStatus::ACTIVE->value);
-            $this->methodsRepository->update($methodsEntity);
-
-            return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated method with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::REACTIVATE]);
-
-        return $this->status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
     }
 }

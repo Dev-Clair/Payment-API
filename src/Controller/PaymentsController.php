@@ -66,17 +66,18 @@ class PaymentsController implements ControllerInterface
      */
     public function get(Request $request, Response $response, array $args): Response
     {
-        $payments = $this->paymentsRepository->findAll();
+        try {
+            $payments = $this->paymentsRepository->findAll();
 
-        if (is_array($payments)) {
-            return $this->status_200(ResponseTitle::GET, "Retrieved", $payments);
+            if (is_array($payments)) {
+                return $this->status_200(ResponseTitle::GET, "Retrieved", $payments);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::GET, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
         }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::GET]);
-
-        return $this->status_500(ResponseTitle::GET, "Internal Server Error", $payments);
     }
-
 
     /**
      * @OA\Post(
@@ -113,29 +114,31 @@ class PaymentsController implements ControllerInterface
      */
     public function post(Request $request, Response $response, array $args): Response
     {
-        $requestContent = json_decode($request->getBody()->getContents(), true);
+        try {
+            $requestContent = json_decode($request->getBody()->getContents(), true);
 
-        $requestMethod = $request->getMethod();
+            $requestMethod = $request->getMethod();
 
-        if (empty($requestContent)) {
-            return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            if (empty($requestContent)) {
+                return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+            }
+
+            $paymentEntity = new PaymentsEntity;
+
+            $validateRequestBody = new PaymentsValidation($requestContent, $requestMethod);
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->paymentsRepository->store($validateRequestBody->createPaymentEntity($paymentEntity));
+
+                return $this->status_201(ResponseTitle::POST, "Created", "");
+            } else {
+                return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::POST, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
         }
-
-        $paymentEntity = new PaymentsEntity;
-
-        $validateRequestBody = new PaymentsValidation($requestContent, $requestMethod);
-
-        if (empty($validateRequestBody->validationError)) {
-            $this->paymentsRepository->store($validateRequestBody->createPaymentEntity($paymentEntity));
-
-            return $this->status_201(ResponseTitle::POST, "Created", "");
-        } else {
-            return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::POST]);
-
-        return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
     }
 
 
@@ -188,35 +191,37 @@ class PaymentsController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->paymentsRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::PUT, "Resource not found for " . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::PUT, "Resource not found for " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            $requestContent = json_decode($request->getBody()->getContents(), true);
+
+            $requestMethod = $request->getMethod();
+
+            if (empty($requestContent)) {
+                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+            }
+
+            $paymentEntity = $this->paymentsRepository->findById($requestAttribute);
+
+            $validateRequestContent = new PaymentsValidation($requestContent, $requestMethod);
+
+            if (empty($validateRequestContent->validationError)) {
+                $this->paymentsRepository->update($validateRequestContent->updatePaymentEntity($paymentEntity));
+
+                return $this->status_200(ResponseTitle::PUT, "Modified Payment with ID " . htmlspecialchars((string) $requestAttribute), "");
+            } else {
+                return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestContent->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::PUT, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
         }
-
-        $requestContent = json_decode($request->getBody()->getContents(), true);
-
-        $requestMethod = $request->getMethod();
-
-        if (empty($requestContent)) {
-            return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
-        }
-
-        $paymentEntity = $this->paymentsRepository->findById($requestAttribute);
-
-        $validateRequestContent = new PaymentsValidation($requestContent, $requestMethod);
-
-        if (empty($validateRequestContent->validationError)) {
-            $this->paymentsRepository->update($validateRequestContent->updatePaymentEntity($paymentEntity));
-
-            return $this->status_200(ResponseTitle::PUT, "Modified Payment with ID " . $requestAttribute, "");
-        } else {
-            return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestContent->validationError);
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::PUT]);
-
-        return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
     }
 
 
@@ -254,22 +259,24 @@ class PaymentsController implements ControllerInterface
     {
         $requestAttribute = (int) $args['id'];
 
-        $validateResource = $this->paymentsRepository->validateId($requestAttribute);
+        try {
+            $validateResource = $this->paymentsRepository->validateId($requestAttribute);
 
-        if ($validateResource === false) {
-            return $this->status_404(ResponseTitle::DELETE, "Resource not found for ID" . $requestAttribute, ['Invalid Resource ID' => $requestAttribute]);
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DELETE, "Resource not found for ID" . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $paymentEntity = $this->paymentsRepository->findById($requestAttribute);
+
+                $this->paymentsRepository->remove($paymentEntity);
+
+                return $this->status_200(ResponseTitle::DELETE, "Deleted Payment with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::DELETE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
         }
-
-        if ($validateResource === true) {
-            $paymentEntity = $this->paymentsRepository->findById($requestAttribute);
-
-            $this->paymentsRepository->remove($paymentEntity);
-
-            return $this->status_200(ResponseTitle::DELETE, "Deleted Payment with ID " . $requestAttribute, "");
-        }
-
-        $this->logger->emergency("Internal Server Error", [ResponseTitle::DELETE]);
-
-        return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
     }
 }
