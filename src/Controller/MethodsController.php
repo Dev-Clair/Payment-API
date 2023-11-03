@@ -122,7 +122,9 @@ class MethodsController implements ControllerInterface
             $requestMethod = $request->getMethod();
 
             if (empty($requestContent)) {
-                return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+                $this->logger->error("Bad request", [ResponseTitle::POST]);
+
+                return $this->status_400(ResponseTitle::POST, "Bad Request", ["message" => "empty request body"]);
             }
 
             $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
@@ -205,7 +207,9 @@ class MethodsController implements ControllerInterface
             $requestMethod = $request->getMethod();
 
             if (empty($requestContent)) {
-                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+                $this->logger->error("Bad request", [ResponseTitle::POST]);
+
+                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["message" => "empty request body"]);
             }
 
             $methodEntity = $this->methodsRepository->findById($requestAttribute);

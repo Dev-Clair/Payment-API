@@ -130,7 +130,7 @@ class CustomersController implements ControllerInterface
             if (empty($requestContent)) {
                 $this->logger->error("Bad request", [ResponseTitle::POST]);
 
-                return $this->status_400(ResponseTitle::POST, "Bad Request", ["request body" => "Empty"]);
+                return $this->status_400(ResponseTitle::POST, "Bad Request", ["message" => "empty request body"]);
             }
 
             $customerEntity = new CustomersEntity;
@@ -213,7 +213,9 @@ class CustomersController implements ControllerInterface
             $requestMethod = $request->getMethod();
 
             if (empty($requestContent)) {
-                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["request body" => "Empty"]);
+                $this->logger->error("Bad request", [ResponseTitle::POST]);
+
+                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["message" => "empty request body"]);
             }
 
             $customerEntity = $this->customersRepository->findById($requestAttribute);
