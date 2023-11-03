@@ -46,7 +46,6 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                        /v1/methods
 
-
       {
          "method_name" : "authorize.net",
          "method_type" : "card"
