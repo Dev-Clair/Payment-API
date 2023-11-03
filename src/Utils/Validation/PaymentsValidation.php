@@ -27,7 +27,7 @@ class PaymentsValidation extends Abs_Validation
 
     private function paymentValidationMiddleware(): void
     {
-        $expectedRequestFields = ['payment_amount', 'payment_status', 'payment_type'];
+        $expectedRequestFields = ['amount', 'payment_status', 'payment_type'];
 
         $suppliedRequestFields = array_keys($this->sanitizedData);
 
