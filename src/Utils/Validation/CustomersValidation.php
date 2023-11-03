@@ -20,7 +20,25 @@ class CustomersValidation extends Abs_Validation
     public function __construct(protected array $requestContent, protected string $requestMethod)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
-        $this->validateRequestContent();
+
+        $this->customerValidationMiddleware();
+    }
+
+    private function customerValidationMiddleware(): void
+    {
+        $expectedRequestFields = ['customer_name', 'customer_email', 'customer_phone', 'customer_password', 'confirm_customer_password', 'customer_address', 'customer_type'];
+
+        $suppliedRequestFields = array_keys($this->sanitizedData);
+
+        foreach ($suppliedRequestFields as $requestField) {
+            if (!in_array($requestField, $expectedRequestFields)) {
+                $this->validationError[$requestField] = 'missing key';
+            }
+        }
+
+        if (empty($this->validationError)) {
+            $this->validateRequestContent();
+        }
     }
 
     private function validateRequestContent(): void
@@ -31,27 +49,6 @@ class CustomersValidation extends Abs_Validation
         $this->validateCustomerPassword();
         $this->validateCustomerAddress();
         $this->validateCustomerType();
-    }
-
-    private function getUCID(): void
-    {
-        if ($this->requestMethod === "POST") {
-            $this->generateUCID();
-        }
-
-        return;
-    }
-
-    private function generateUCID(): void
-    {
-        $customer_name = $this->sanitizedData['customer_name'];
-        if (empty($customer_name)) {
-            $this->validationError['customer_name'] = "Name field is empty; Please enter a valid first and/or last name";
-            return;
-        }
-
-        $ucid = 'cus_' . bin2hex($customer_name);
-        $this->validationResult['ucid'] = substr($ucid, 0, 20);
     }
 
     private function validateCustomerName(): void
@@ -164,9 +161,30 @@ class CustomersValidation extends Abs_Validation
         $this->validationResult['customer_type'] = $customer_type;
     }
 
+    private function getCustomerUCID(): void
+    {
+        if ($this->requestMethod === "POST") {
+            $this->generateCustomerUCID();
+        }
+
+        return;
+    }
+
+    private function generateCustomerUCID(): void
+    {
+        $customer_name = $this->sanitizedData['customer_name'];
+        if (empty($customer_name)) {
+            $this->validationError['customer_name'] = "Name field is empty; Please enter a valid first and/or last name";
+            return;
+        }
+
+        $ucid = 'cus_' . bin2hex($customer_name);
+        $this->validationResult['ucid'] = substr($ucid, 0, 20);
+    }
+
     public function createCustomerEntity(CustomersEntity $customerEntity): CustomersEntity
     {
-        $this->getUCID();
+        $this->getCustomerUCID();
 
         if (isset($this->validationResult['ucid'])) {
             $customerEntity->setUCID($this->validationResult['ucid']);

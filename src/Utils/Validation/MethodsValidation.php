@@ -20,34 +20,31 @@ class MethodsValidation extends Abs_Validation
     public function __construct(protected array $requestContent, protected string $requestMethod)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
-        $this->validateRequestContent();
+
+        $this->methodValidationMiddleware();
+    }
+
+    private function methodValidationMiddleware(): void
+    {
+        $expectedRequestFields = ['method_name', 'method_type'];
+
+        $suppliedRequestFields = array_keys($this->sanitizedData);
+
+        foreach ($suppliedRequestFields as $requestField) {
+            if (!in_array($requestField, $expectedRequestFields)) {
+                $this->validationError[$requestField] = 'missing key';
+            }
+        }
+
+        if (empty($this->validationError)) {
+            $this->validateRequestContent();
+        }
     }
 
     private function validateRequestContent(): void
     {
         $this->validateMethodName();
         $this->validateMethodType();
-    }
-
-    private function getUMID(): void
-    {
-        if ($this->requestMethod === "POST") {
-            $this->generateUMID();
-        }
-
-        return;
-    }
-
-    private function generateUMID(): void
-    {
-        $method_name = $this->sanitizedData['method_name'];
-        if (empty($method_name)) {
-            $this->validationError['method_name'] = "Method name field is empty; please enter a valid method name";
-            return;
-        }
-
-        $umid = 'met_' . bin2hex($method_name);
-        $this->validationResult['umid'] = substr($umid, 0, 20);
     }
 
     private function validateMethodName(): void
@@ -82,9 +79,30 @@ class MethodsValidation extends Abs_Validation
         $this->validationResult['method_type'] = $method_type;
     }
 
+    private function getMethodUMID(): void
+    {
+        if ($this->requestMethod === "POST") {
+            $this->generateMethodUMID();
+        }
+
+        return;
+    }
+
+    private function generateMethodUMID(): void
+    {
+        $method_name = $this->sanitizedData['method_name'];
+        if (empty($method_name)) {
+            $this->validationError['method_name'] = "Method name field is empty; please enter a valid method name";
+            return;
+        }
+
+        $umid = 'met_' . bin2hex($method_name);
+        $this->validationResult['umid'] = substr($umid, 0, 20);
+    }
+
     public function createMethodEntity(MethodsEntity $methodEntity): MethodsEntity
     {
-        $this->getUMID();
+        $this->getMethodUMID();
 
         if (isset($this->validationResult['umid'])) {
             $methodEntity->setUMID($this->validationResult['umid']);

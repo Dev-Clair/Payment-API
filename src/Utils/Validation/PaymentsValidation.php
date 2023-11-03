@@ -21,7 +21,25 @@ class PaymentsValidation extends Abs_Validation
     public function __construct(protected array $requestContent, protected string $requestMethod)
     {
         $this->sanitizedData = $this->santizeData($this->requestContent);
-        $this->validateRequestContent();
+
+        $this->paymentValidationMiddleware();
+    }
+
+    private function paymentValidationMiddleware(): void
+    {
+        $expectedRequestFields = ['payment_amount', 'payment_status', 'payment_type'];
+
+        $suppliedRequestFields = array_keys($this->sanitizedData);
+
+        foreach ($suppliedRequestFields as $requestField) {
+            if (!in_array($requestField, $expectedRequestFields)) {
+                $this->validationError[$requestField] = 'missing key';
+            }
+        }
+
+        if (empty($this->validationError)) {
+            $this->validateRequestContent();
+        }
     }
 
     private function validateRequestContent(): void
@@ -29,28 +47,6 @@ class PaymentsValidation extends Abs_Validation
         $this->validatePaymentAmount();
         $this->validatePaymentStatus();
         $this->validatePaymentType();
-    }
-
-    private function getUPID(): void
-    {
-        if ($this->requestMethod === "POST") {
-            $this->generateUPID();
-        }
-
-        return;
-    }
-
-    private function generateUPID(): void
-    {
-        $amount = $this->sanitizedData['amount'];
-        if (empty($amount)) {
-            $this->validationError['amount'] = "Invalid; amount field is empty";
-            return;
-        }
-
-        $upid = 'pay_' . bin2hex($amount);
-
-        $this->validationResult['upid'] = substr($upid, 0, 20);
     }
 
     private function validatePaymentAmount(): void
@@ -103,9 +99,31 @@ class PaymentsValidation extends Abs_Validation
         $this->validationResult['payment_type'] = $payment_type;
     }
 
+    private function getPaymentUPID(): void
+    {
+        if ($this->requestMethod === "POST") {
+            $this->generatePaymentUPID();
+        }
+
+        return;
+    }
+
+    private function generatePaymentUPID(): void
+    {
+        $amount = $this->sanitizedData['amount'];
+        if (empty($amount)) {
+            $this->validationError['amount'] = "Invalid; amount field is empty";
+            return;
+        }
+
+        $upid = 'pay_' . bin2hex($amount);
+
+        $this->validationResult['upid'] = substr($upid, 0, 20);
+    }
+
     public function createPaymentEntity(PaymentsEntity $paymentEntity): PaymentsEntity
     {
-        $this->getUPID();
+        $this->getPaymentUPID();
 
         if (isset($this->validationResult['upid'])) {
             $paymentEntity->setUPID($this->validationResult['upid']);
