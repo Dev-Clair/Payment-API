@@ -33,7 +33,7 @@ class PaymentsValidation extends Abs_Validation
 
         foreach ($suppliedRequestFields as $requestField) {
             if (!in_array($requestField, $expectedRequestFields)) {
-                $this->validationError[$requestField] = 'missing key';
+                $this->validationError[] = "{$requestField} key is invalid";
             }
         }
 
