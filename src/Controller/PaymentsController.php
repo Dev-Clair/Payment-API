@@ -73,7 +73,7 @@ class PaymentsController implements ControllerInterface
                 return $this->status_200(ResponseTitle::GET, "Retrieved", $payments);
             }
         } catch (\Exception $e) {
-            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::GET, 'status' => 500, 'message' => $e->getMessage()]);
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::GET, 'status' => 500, 'message' => $e->getMessage()]);
 
             return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
         }
@@ -135,7 +135,7 @@ class PaymentsController implements ControllerInterface
                 return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
             }
         } catch (\Exception $e) {
-            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::POST, 'status' => 500, 'message' => $e->getMessage()]);
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::POST, 'status' => 500, 'message' => $e->getMessage()]);
 
             return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
         }
@@ -218,7 +218,7 @@ class PaymentsController implements ControllerInterface
                 return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestContent->validationError);
             }
         } catch (\Exception $e) {
-            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::PUT, 'status' => 500, 'message' => $e->getMessage()]);
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::PUT, 'status' => 500, 'message' => $e->getMessage()]);
 
             return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
         }
@@ -274,7 +274,7 @@ class PaymentsController implements ControllerInterface
                 return $this->status_200(ResponseTitle::DELETE, "Deleted Payment with ID " . htmlspecialchars((string) $requestAttribute), "");
             }
         } catch (\Exception $e) {
-            $this->logger->emergency("Internal Server Error", ['title' => ResponseTitle::DELETE, 'status' => 500, 'message' => $e->getMessage()]);
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::DELETE, 'status' => 500, 'message' => $e->getMessage()]);
 
             return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
         }
