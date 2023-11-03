@@ -46,12 +46,11 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                        /v1/methods
 
-      ```bash
+
       {
          "method_name" : "authorize.net",
          "method_type" : "card"
       }
-      ```
 
 - Update a payment method by it's ID (Identifier). Provide the required fields in request body as json:
 
@@ -59,12 +58,10 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                         /v1/methods/{id:[0-9]+}
 
-      ```bash
       {
          "method_name" : "googlepay",
          "method_type" : "card"
       }
-      ```
 
 - Delete a payment method by it's ID (Identifier):
 
@@ -98,7 +95,6 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                         /v1/customers
 
-      ```bash
       {
          "customer_name" : "john doe",
          "customer_email" : "john.doe@domain.com",
@@ -108,7 +104,6 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
          "customer_address" : "25 Hughes Avenue, Yaba Lagos, Nigeria",
          "customer_type" : "individual | organization",
       }
-      ```
 
 - Update a customer account by it's ID (Identifier). Provide the required fields in request body as json:
 
@@ -116,7 +111,6 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                         /v1/customers/{id:[0-9]+}
 
-      ```bash
       {
          "customer_name" : "jane doe",
          "customer_email" : "jane.doe@domain.com",
@@ -126,7 +120,6 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
          "customer_address" : "25 McCarthy Drive, Yaba Lagos, Nigeria",
          "customer_type" : "individual | organization",
       }
-      ```
 
 - Delete a customer account by it's ID (Identifier):
 
@@ -160,13 +153,11 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                         /v1/payments
 
-      ```bash
       {
          "amount" : 100.00,
          "payment_status" : "paid|pending",
          "payment_type" : "credit"
       }
-      ```
 
 - Update a payment record by it's ID (Identifier). Provide the required fields in request body as json:
 
@@ -174,13 +165,11 @@ The PAYMENT API is a RESTful web service that allows you to aggregate and manage
 
                         /v1/payments/{id:[0-9]+}
 
-      ```bash
       {
          "amount" : 120.50,
          "payment_status" : "paid|pending",
          "payment_type" : "debit"
       }
-      ```
 
 - Delete a payment record by it's ID (Identifier):
 
