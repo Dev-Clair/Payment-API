@@ -27,14 +27,28 @@ class PaymentsValidation extends Abs_Validation
 
     private function paymentValidationMiddleware(): void
     {
-        $expectedRequestFields = ['amount', 'payment_status', 'payment_type'];
+        $expectedFields = ['amount', 'payment_status', 'payment_type'];
 
-        $suppliedRequestFields = array_keys($this->sanitizedData);
+        $suppliedFields = array_keys($this->sanitizedData);
 
-        foreach ($suppliedRequestFields as $requestField) {
-            if (!in_array($requestField, $expectedRequestFields)) {
-                $this->validationError[] = "{$requestField} key is invalid";
+        foreach ($suppliedFields as $field) {
+            if (!in_array($field, $expectedFields)) {
+                $this->validationError[] = "{$field} key is invalid";
             }
+        }
+
+        if (count($suppliedFields) < count($expectedFields)) {
+            $this->validationError['bad request'] = [
+                'expected' => $expectedFields,
+                'supplied' => $suppliedFields
+            ];
+        }
+
+        if (count($suppliedFields) > count($expectedFields)) {
+            $this->validationError['bad request'] = [
+                'expected' => count($expectedFields) . "fields",
+                'supplied' => count($suppliedFields) . "fields"
+            ];
         }
 
         if (empty($this->validationError)) {

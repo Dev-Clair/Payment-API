@@ -26,14 +26,28 @@ class CustomersValidation extends Abs_Validation
 
     private function customerValidationMiddleware(): void
     {
-        $expectedRequestFields = ['customer_name', 'customer_email', 'customer_phone', 'customer_password', 'confirm_customer_password', 'customer_address', 'customer_type'];
+        $expectedFields = ['customer_name', 'customer_email', 'customer_phone', 'customer_password', 'confirm_customer_password', 'customer_address', 'customer_type'];
 
-        $suppliedRequestFields = array_keys($this->sanitizedData);
+        $suppliedFields = array_keys($this->sanitizedData);
 
-        foreach ($suppliedRequestFields as $requestField) {
-            if (!in_array($requestField, $expectedRequestFields)) {
-                $this->validationError[] = "{$requestField} key is invalid";
+        foreach ($suppliedFields as $field) {
+            if (!in_array($field, $expectedFields)) {
+                $this->validationError[] = "{$field} key is invalid";
             }
+        }
+
+        if (count($suppliedFields) < count($expectedFields)) {
+            $this->validationError['bad request'] = [
+                'expected' => $expectedFields,
+                'supplied' => $suppliedFields
+            ];
+        }
+
+        if (count($suppliedFields) > count($expectedFields)) {
+            $this->validationError['bad request'] = [
+                'expected' => count($expectedFields) . "fields",
+                'supplied' => count($suppliedFields) . "fields"
+            ];
         }
 
         if (empty($this->validationError)) {
