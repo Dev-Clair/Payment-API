@@ -23,7 +23,7 @@ $dotenv->safeload();
 $app = AppFactory::createFromContainer($container);
 
 // Route to API documentation
-$app->get('/v1/openapi', function (Request $request, Response $response, $args) {
+$app->get('/v1/docs/', function (Request $request, Response $response, $args) {
     $output = require __DIR__ . '/openapi/index.php';
     $response->getBody()->write(json_encode($output));
     return $response
