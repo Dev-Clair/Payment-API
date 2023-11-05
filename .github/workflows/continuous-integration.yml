@@ -1,4 +1,4 @@
-name: "Continuous Integration Module5"
+name: "Continuous Integration Payment-API"
 
 on:
   pull_request:
