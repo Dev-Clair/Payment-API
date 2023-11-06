@@ -32,7 +32,7 @@ class CustomersValidation extends Abs_Validation
 
         foreach ($suppliedFields as $field) {
             if (!in_array($field, $expectedFields)) {
-                $this->validationError[] = "{$field} key is invalid";
+                $this->validationError[$field] = "key is invalid";
             }
         }
 
@@ -45,8 +45,8 @@ class CustomersValidation extends Abs_Validation
 
         if (count($suppliedFields) > count($expectedFields)) {
             $this->validationError['bad request'] = [
-                'expected' => count($expectedFields) . "fields",
-                'supplied' => count($suppliedFields) . "fields"
+                'expected' => count($expectedFields) . " fields",
+                'supplied' => count($suppliedFields) . " fields"
             ];
         }
 
