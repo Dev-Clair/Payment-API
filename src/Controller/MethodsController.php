@@ -6,37 +6,46 @@ namespace Payment_API\Controller;
 
 use Slim\Psr7\Response as Response;
 use Slim\Psr7\Request as Request;
-use Payment_API\Model\MethodsModel;
+use Payment_API\Interface\ControllerInterface;
+use Payment_API\Repositories\MethodsRepository;
+use Payment_API\Entity\MethodsEntity;
+use Payment_API\Enums\MethodsResponseTitle as ResponseTitle;
+use Payment_API\Enums\MethodStatus;
+use Payment_API\Utils\Validation\MethodsValidation;
+use Payment_API\Utils\Response\Status_200;
+use Payment_API\Utils\Response\Status_201;
+use Payment_API\Utils\Response\Status_400;
+use Payment_API\Utils\Response\Status_401;
+use Payment_API\Utils\Response\Status_404;
+use Payment_API\Utils\Response\Status_405;
+use Payment_API\Utils\Response\Status_422;
+use Payment_API\Utils\Response\Status_500;
+use Monolog\Logger;
 use OpenApi\Annotations as OA;
-use Payment_API\Contracts\ControllerContract;
-use Payment_API\Trait\Response_200_Trait as Response_200;
-use Payment_API\Trait\Response_201_Trait as Response_201;
-use Payment_API\Trait\Response_400_Trait as Response_400;
-use Payment_API\Trait\Response_404_Trait as Response_404;
-use Payment_API\Trait\Response_422_Trait as Response_422;
-use Payment_API\Trait\Response_500_Trait as Response_500;
-
 
 /**
  * @OA\Info(
  *   title="Payment API",
  *   version="1.0.0",
- *   description="API for managing customer payments",
+ *   description="API endpoint for managing payment methods",
  * )
  */
-class MethodsController implements ControllerContract
+class MethodsController implements ControllerInterface
 {
-    use Response_200;
-    use Response_201;
-    use Response_400;
-    use Response_404;
-    use Response_422;
-    use Response_500;
+    use Status_200;
+    use Status_201;
+    use Status_400;
+    use Status_401;
+    use Status_404;
+    use Status_405;
+    use Status_422;
+    use Status_500;
 
-    public function __construct()
-    {
+    public function __construct(
+        private MethodsRepository $methodsRepository,
+        private Logger $logger
+    ) {
     }
-
 
     /**
      * @OA\Get(
@@ -58,6 +67,17 @@ class MethodsController implements ControllerContract
      */
     public function get(Request $request, Response $response, array $args): Response
     {
+        try {
+            $methods = $this->methodsRepository->findAll();
+
+            if (is_array($methods)) {
+                return $this->status_200(ResponseTitle::GET, "Retrieved", $methods);
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::GET, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::GET, "Internal Server Error", "");
+        }
     }
 
 
@@ -78,6 +98,11 @@ class MethodsController implements ControllerContract
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=422,
      *         description="Unprocessable Entity",
      *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
@@ -91,6 +116,33 @@ class MethodsController implements ControllerContract
      */
     public function post(Request $request, Response $response, array $args): Response
     {
+        try {
+            $requestContent = json_decode($request->getBody()->getContents(), true);
+
+            $requestMethod = $request->getMethod();
+
+            if (empty($requestContent)) {
+                $this->logger->error("Bad request", [ResponseTitle::POST]);
+
+                return $this->status_400(ResponseTitle::POST, "Bad Request", ["message" => "empty request body"]);
+            }
+
+            $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
+
+            $methodEntity = new MethodsEntity;
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->methodsRepository->store($validateRequestBody->createMethodEntity($methodEntity));
+
+                return $this->status_201(ResponseTitle::POST, "Created", "");
+            } else {
+                return $this->status_422(ResponseTitle::POST, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::POST, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::POST, "Internal Server Error", "");
+        }
     }
 
 
@@ -109,13 +161,18 @@ class MethodsController implements ControllerContract
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Updated method data",
+     *         description="Update method data",
      *         @OA\JsonContent(ref="#/components/schemas/UpdatedMethodData")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Method updated successfully",
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -136,6 +193,41 @@ class MethodsController implements ControllerContract
      */
     public function put(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = (int) $args['id'];
+
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::PUT, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            $requestContent = json_decode($request->getBody()->getContents(), true);
+
+            $requestMethod = $request->getMethod();
+
+            if (empty($requestContent)) {
+                $this->logger->error("Bad request", [ResponseTitle::POST]);
+
+                return $this->status_400(ResponseTitle::PUT, "Bad Request", ["message" => "empty request body"]);
+            }
+
+            $methodEntity = $this->methodsRepository->findById($requestAttribute);
+
+            $validateRequestBody = new MethodsValidation($requestContent, $requestMethod);
+
+            if (empty($validateRequestBody->validationError)) {
+                $this->methodsRepository->update($validateRequestBody->updateMethodEntity($methodEntity));
+
+                return $this->status_200(ResponseTitle::PUT, "Modified method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            } else {
+                return $this->status_422(ResponseTitle::PUT, "Unprocessable Entity", $validateRequestBody->validationError);
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::PUT, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::PUT, "Internal Server Error", "");
+        }
     }
 
 
@@ -160,7 +252,7 @@ class MethodsController implements ControllerContract
      *     @OA\Response(
      *         response=404,
      *         description="Not Found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=500,
@@ -171,6 +263,27 @@ class MethodsController implements ControllerContract
      */
     public function delete(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = (int) $args['id'];
+
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DELETE, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+                $this->methodsRepository->remove($methodsEntity);
+
+                return $this->status_200(ResponseTitle::DELETE, "Deleted method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::DELETE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DELETE, "Internal Server Error", "");
+        }
     }
 
 
@@ -193,6 +306,11 @@ class MethodsController implements ControllerContract
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=500,
      *         description="Internal Server Error",
      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -201,6 +319,28 @@ class MethodsController implements ControllerContract
      */
     public function deactivate(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = (int) $args['id'];
+
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::DEACTIVATE, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+                $methodsEntity->setMethodStatus(MethodStatus::INACTIVE->value);
+                $this->methodsRepository->update($methodsEntity);
+
+                return $this->status_200(ResponseTitle::DEACTIVATE, "Deactivated method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::DEACTIVATE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::DEACTIVATE, "Internal Server Error", "");
+        }
     }
 
 
@@ -223,6 +363,11 @@ class MethodsController implements ControllerContract
      *         @OA\JsonContent(ref="#/components/schemas/SuccessResponse")
      *     ),
      *     @OA\Response(
+     *         response=404,
+     *         description="Not Found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=500,
      *         description="Internal Server Error",
      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -231,5 +376,27 @@ class MethodsController implements ControllerContract
      */
     public function reactivate(Request $request, Response $response, array $args): Response
     {
+        $requestAttribute = (int) $args['id'];
+
+        try {
+            $validateResource = $this->methodsRepository->validateId($requestAttribute);
+
+            if ($validateResource === false) {
+                return $this->status_404(ResponseTitle::REACTIVATE, "Method not found for ID " . htmlspecialchars((string) $requestAttribute), ['Invalid Resource ID' => htmlspecialchars((string) $requestAttribute)]);
+            }
+
+            if ($validateResource === true) {
+                $methodsEntity = $this->methodsRepository->findById($requestAttribute);
+
+                $methodsEntity->setMethodStatus(MethodStatus::ACTIVE->value);
+                $this->methodsRepository->update($methodsEntity);
+
+                return $this->status_200(ResponseTitle::REACTIVATE, "Reactivated method with ID " . htmlspecialchars((string) $requestAttribute), "");
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical("Internal Server Error", ['title' => ResponseTitle::REACTIVATE, 'status' => 500, 'message' => $e->getMessage()]);
+
+            return $this->status_500(ResponseTitle::REACTIVATE, "Internal Server Error", "");
+        }
     }
 }
