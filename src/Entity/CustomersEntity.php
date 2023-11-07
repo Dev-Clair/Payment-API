@@ -8,10 +8,11 @@ use DateTime;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\CustomerStatus;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'customers')]
-class CustomersEntity implements EntityInterface
+class CustomersEntity implements EntityInterface, JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -139,5 +140,16 @@ class CustomersEntity implements EntityInterface
     public function setCustomerType(string $customer_type): void
     {
         $this->customer_type = $customer_type;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'customer id' => $this->id,
+            'customer name' => $this->customer_name,
+            'customer email' => $this->customer_email,
+            'customer address' => $this->customer_address,
+            'customer type' => $this->customer_type
+        ];
     }
 }

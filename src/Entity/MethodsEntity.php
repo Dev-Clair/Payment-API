@@ -8,10 +8,11 @@ use DateTime;
 use Payment_API\Interface\EntityInterface;
 use Payment_API\Enums\MethodStatus;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'methods')]
-class MethodsEntity implements EntityInterface
+class MethodsEntity implements EntityInterface, JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -87,5 +88,15 @@ class MethodsEntity implements EntityInterface
     public function setMethodType(string $method_type): void
     {
         $this->method_type = $method_type;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'unique id' => $this->id,
+            'method name' => $this->method_name,
+            'method status' => $this->method_status,
+            'method type' => $this->method_type
+        ];
     }
 }

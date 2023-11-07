@@ -7,8 +7,8 @@ namespace Payment_API\Controller;
 use Slim\Psr7\Response as Response;
 use Slim\Psr7\Request as Request;
 use Payment_API\Interface\ControllerInterface;
-use Payment_API\Interface\SmsServiceInterface;
-use Payment_API\Services\SmsService;
+use Payment_API\Interface\SmsAlertServiceInterface;
+use Payment_API\Services\SmsAlertService\TwilioSmsAlertService;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Entity\CustomersEntity;
 use Payment_API\Enums\CustomersResponseTitle as ResponseTitle;
@@ -43,14 +43,14 @@ class CustomersController implements ControllerInterface
     use Status_422;
     use Status_500;
 
-    private SmsServiceInterface $smsService;
+    private SmsAlertServiceInterface $twilioSms;
 
     public function __construct(
-        SmsServiceInterface $smsService,
+        TwilioSmsAlertService $twilioSms,
         private CustomersRepository $customersRepository,
         private Logger $logger
     ) {
-        $this->smsService = $smsService;
+        $this->twilioSms = $twilioSms;
     }
 
     /**
