@@ -16,10 +16,8 @@ use Payment_API\Repositories\PaymentsRepository;
 use Payment_API\Controller\MethodsController;
 use Payment_API\Controller\CustomersController;
 use Payment_API\Controller\PaymentsController;
-use Payment_API\Interface\EmailValidationServiceInterface;
-use Payment_API\Services\EmailValidationService;
 use Payment_API\Interface\SmsServiceInterface;
-use Payment_API\Services\SmsService;
+use Payment_API\Services\SmsAlertService\TwilioSmsAlertService;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -120,15 +118,8 @@ $container->set(PaymentsController::class, function (Container $container): Paym
  */
 $container->set(
     SmsServiceInterface::class,
-    function (Container $container): SmsService {
-        return new SmsService;
-    }
-);
-
-$container->set(
-    EmailValidationServiceInterface::class,
-    function (Container $container): EmailValidationService {
-        return new EmailValidationService;
+    function (Container $container): TwilioSmsAlertService {
+        return new TwilioSmsAlertService;
     }
 );
 
