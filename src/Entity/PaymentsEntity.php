@@ -7,10 +7,11 @@ namespace Payment_API\Entity;
 use DateTime;
 use Payment_API\Interface\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'payments')]
-class PaymentsEntity implements EntityInterface
+class PaymentsEntity implements EntityInterface, JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -85,5 +86,15 @@ class PaymentsEntity implements EntityInterface
     public function setPaymentType(string $payment_type): void
     {
         $this->payment_type = $payment_type;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'unique id' => $this->id,
+            'amount charged' => $this->amount,
+            'payment status' => $this->payment_status,
+            'payment type' => $this->payment_type
+        ];
     }
 }
