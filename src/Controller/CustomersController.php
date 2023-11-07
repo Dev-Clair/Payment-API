@@ -9,7 +9,6 @@ use Slim\Psr7\Request as Request;
 use Payment_API\Interface\ControllerInterface;
 use Payment_API\Interface\SmsAlertServiceInterface;
 use Payment_API\Services\SmsAlertService\TwilioSmsAlertService;
-use Payment_API\Interface\RepositoryInterface;
 use Payment_API\Repositories\CustomersRepository;
 use Payment_API\Entity\CustomersEntity;
 use Payment_API\Enums\CustomersResponseTitle as ResponseTitle;
