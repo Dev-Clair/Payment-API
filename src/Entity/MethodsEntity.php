@@ -93,7 +93,7 @@ class MethodsEntity implements EntityInterface, JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'unique id' => $this->id,
+            'method id' => $this->id,
             'method name' => $this->method_name,
             'method status' => $this->method_status,
             'method type' => $this->method_type

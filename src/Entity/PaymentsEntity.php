@@ -91,7 +91,7 @@ class PaymentsEntity implements EntityInterface, JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'unique id' => $this->id,
+            'payment id' => $this->id,
             'amount charged' => $this->amount,
             'payment status' => $this->payment_status,
             'payment type' => $this->payment_type
